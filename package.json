@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "dev": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^18.2.3",
+    "eslint": "^8.15.0"
+  }
+}

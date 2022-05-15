@@ -1,0 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+
+  transition: all .6s cubic-bezier(.45,1.11,.59,.95);
+}
+
+.app{
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
