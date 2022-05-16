@@ -45,29 +45,33 @@ function Element(elementId, callBack) {
   }
   if (callBack) callBack(getInnerHtml())
 
+  function changeContent(newContent) {
+    if (!newContent) return _return
+
+    element.innerHTML = newContent
+    if (!isShowing) show()
+    return _return
+  }
+
+  function changeStyle(newStyle, same) {
+    if (!same) {
+      //reset style to initial
+      revertCss()
+    }
+
+    Object.keys(newStyle).forEach(key => {
+      element.style[key] = newStyle[key]
+    })
+    if (!isShowing) show()
+    return _return
+  }
+
   const _return = {
     id,
     getInnerHtml,
     getStyle: () => style,
-    changeContent: newContent => {
-      if (!newContent) return _return
-
-      element.innerHTML = newContent
-      if (!isShowing) show()
-      return _return
-    },
-    changeStyle: (newStyle, same) => {
-      if (!same) {
-        //reset style to initial
-        revertCss()
-      }
-
-      Object.keys(newStyle).forEach(key => {
-        element.style[key] = newStyle[key]
-      })
-      if (!isShowing) show()
-      return _return
-    },
+    changeContent,
+    changeStyle: changeStyle,
   }
   return { ..._return, show }
 }

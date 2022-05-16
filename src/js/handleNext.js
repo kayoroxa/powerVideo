@@ -11,9 +11,7 @@ function next() {
 
 let indexScript = 0
 
-obs('dom').on('show', () => {
-  next()
-})
+next() //start
 
 obs('CONTROL').on('next', () => {
   next()

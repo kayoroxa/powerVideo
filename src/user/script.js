@@ -27,6 +27,7 @@ module.exports = [
     Elements('p2').changeStyle(
       {
         backgroundColor: 'pink',
+        top: '20px',
       },
       true
     )
