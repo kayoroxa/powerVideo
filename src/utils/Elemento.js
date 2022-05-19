@@ -1,5 +1,9 @@
+const obs = require('./observer')
+// const {addOnApp} = require('../')
+const fakeStyle = ['link']
+
 function Element(elementId, callBack) {
-  const style = {
+  let style = {
     position: 'absolute',
     backgroundColor: '#f00',
     height: 'fit-content',
@@ -16,6 +20,7 @@ function Element(elementId, callBack) {
   let id = elementId
   let isShowing = false
   const element = document.createElement('div')
+  element.classList.add('elemento')
 
   let initialStyle = style
   let initialElementStyle = element.style
@@ -24,12 +29,15 @@ function Element(elementId, callBack) {
     element.style = initialElementStyle
 
     Object.keys(initialStyle).forEach(key => {
+      if (fakeStyle.includes(key)) return
       element.style[key] = initialStyle[key]
     })
+
+    style = initialElementStyle
   }
 
   function show() {
-    document.querySelector('.app').appendChild(element)
+    addOnApp(element)
     Object.keys(style).forEach(key => {
       element.style[key] = style[key]
     })
@@ -49,8 +57,35 @@ function Element(elementId, callBack) {
     if (!newContent) return _return
 
     element.innerHTML = newContent
+      .split('')
+      .map(char => {
+        return `<span>${char}</span>`
+      })
+      .join('')
+
     if (!isShowing) show()
     return _return
+  }
+
+  function link(listenId) {
+    console.log(listenId)
+    // const elem = allElements.find(element => element.id === listenId).element
+    // if (!elem) return _return
+    // console.log(`${elem.offsetTop}px`, elem.style.top)
+    // element.style.top = `${elem.offsetTop - 10 + elem.offsetHeight + 10}px`
+    // element.style.left = `${elem.offsetLeft - 10 + elem.offsetWidth + 10}px`
+
+    // obs('Change_Element').on('style', ({ linkId, linkElem }) => {
+    //   console.log({ linkElem: linkElem.offsetTop })
+    //   if (listenId === linkId) {
+    //     element.style.top = `${
+    //       linkElem.offsetTop - 10 + linkElem.offsetHeight + 10
+    //     }px`
+    //     element.style.left = `${
+    //       linkElem.offsetLeft - 10 + linkElem.offsetWidth + 10
+    //     }px`
+    //   }
+    // })
   }
 
   function changeStyle(newStyle, same) {
@@ -60,18 +95,42 @@ function Element(elementId, callBack) {
     }
 
     Object.keys(newStyle).forEach(key => {
+      if (fakeStyle.includes(key)) return
+
+      // if (newStyle?.link) {
+      //   const elementLinked = allElements.find(
+      //     element => element.id === newStyle.link
+      //   )
+      //   if (elementLinked) {
+      //     console.log(elementLinked)
+      //     if (key === 'left') {
+
+      //     element.style[key] = elementLinked.getStyle()
+      //   }
+      // }
+
       element.style[key] = newStyle[key]
     })
+
+    obs('Change_Element').notify('style', { linkId: id, linkElem: element })
+
+    if (newStyle['right']) element.style['left'] = 'auto'
+    if (newStyle['left']) element.style['right'] = 'auto'
+    if (newStyle['bottom']) element.style['top'] = 'auto'
+    if (newStyle['top']) element.style['bottom'] = 'auto'
+
     if (!isShowing) show()
     return _return
   }
 
   const _return = {
+    element,
     id,
     getInnerHtml,
     getStyle: () => style,
     changeContent,
     changeStyle: changeStyle,
+    link,
   }
   return { ..._return, show }
 }
@@ -94,3 +153,5 @@ function Elements(elementId) {
 module.exports = Elements
 
 // elements()
+
+//right = window.innerWidth - obj.offsetLeft - obj.offsetWidth

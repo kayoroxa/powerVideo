@@ -1,18 +1,20 @@
-const obs = require('../utils/observer')
+// const obs = require('../utils/observer')
 const myScript = require('../user/script')
 
-function next() {
-  if (indexScript > myScript.length - 1) {
-    indexScript = 0
-    // return
-  }
-  myScript[indexScript++]()
-}
+myScript()
 
-let indexScript = 0
+// function next() {
+//   if (indexScript > myScript.length - 1) {
+//     indexScript = 0
+//     // return
+//   }
+//   myScript[indexScript++]()
+// }
 
-next() //start
+// let indexScript = 0
 
-obs('CONTROL').on('next', () => {
-  next()
-})
+// next() //start
+
+// obs('CONTROL').on('next', () => {
+//   next()
+// })

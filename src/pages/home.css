@@ -10,3 +10,26 @@
   height: 100vh;
   position: relative;
 }
+
+
+.elemento {
+  display: flex;
+}
+
+.elemento span {
+  width: 10px;
+  margin: 5px;
+  background-color: blueviolet;
+}
+
+
+.p-text {
+  display: flex;
+  gap: 5px;
+}
+
+.p-absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
