@@ -16,10 +16,12 @@ function Element(element) {
     return { x, y }
   }
 
-  function next_to(powerElement, side) {
+  function next_to(powerElement, side, margin) {
+    console.log(margin)
+    margin = margin || 10
     if (side === 'left') {
       element.style.left =
-        powerElement.htmlElem.offsetLeft - element.offsetWidth - 10 + 'px'
+        powerElement.htmlElem.offsetLeft - element.offsetWidth - margin + 'px'
 
       element.style.top =
         powerElement.htmlElem.offsetTop +
@@ -30,11 +32,11 @@ function Element(element) {
       element.style.left =
         powerElement.htmlElem.offsetLeft +
         powerElement.htmlElem.offsetWidth +
-        10 +
+        margin +
         'px'
     } else if (side === 'top') {
       element.style.top =
-        powerElement.htmlElem.offsetTop - element.offsetHeight - 10 + 'px'
+        powerElement.htmlElem.offsetTop - element.offsetHeight - margin + 'px'
 
       element.style.left =
         powerElement.htmlElem.offsetLeft +
@@ -46,7 +48,7 @@ function Element(element) {
       element.style.top =
         powerElement.htmlElem.offsetTop +
         powerElement.htmlElem.offsetHeight +
-        10 +
+        margin +
         'px'
     }
     return _return
@@ -54,11 +56,11 @@ function Element(element) {
 
   const _return = {
     htmlElem: element,
-    next_to: (powerElement, side) => {
+    next_to: (powerElement, side, margin) => {
       obs('POWER_ELEMENT').on('load', p_elem => {
         console.log(powerElement.id, ' = ', p_elem.id)
         if (p_elem.id === powerElement.id) {
-          next_to(powerElement, side)
+          next_to(powerElement, side, margin)
         }
       })
       return _return

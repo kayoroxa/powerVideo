@@ -4,6 +4,7 @@ const { Scene, FadeIn } = require('../utils/api/powerUtils')
 
 module.exports = async () => {
   const myText = Text(['Hello World', ' caio']).set_x_y({ x: 100, y: 100 })
+
   const myText2 = Text(['Hello World', ' caio rocha']).next_to(myText, 'top')
   const myText4 = Text(['Hello World', ' caio asdasdasd'])
 
