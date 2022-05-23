@@ -37,8 +37,15 @@ function Text2(texts, type = 'div') {
   }
 
   function changeText(textBefore, textAfter) {
+    textBefore.replace(new RegExp('\\s', 'g'), '&nbsp;')
     const reg = new RegExp(`(${textBefore})`, 'gi')
+    const textBeforeFind = box.innerHTML.match(reg)[0]
     console.log(box)
+    const prevOnlyText = box.innerHTML
+
+    const currentOnlyText = prevOnlyText.replace(reg, textAfter)
+    box.innerHTML = box.innerHTML.replace(/\s/, '&nbsp;')
+    // debugger
     box.innerHTML = box.innerHTML.replace(
       reg,
       `<span class="text-change">
@@ -47,7 +54,7 @@ function Text2(texts, type = 'div') {
     </span>`
     )
 
-    const beforePreview = get_tex_size(textBefore, '600 60px sans-serif')
+    const beforePreview = get_tex_size(textBeforeFind, '600 60px sans-serif')
     const nextPreview = get_tex_size(textAfter, '600 60px sans-serif')
     console.log(beforePreview, nextPreview)
 
@@ -78,6 +85,11 @@ function Text2(texts, type = 'div') {
         translateY: {
           value: [beforePreview.height + 20, 0],
           easing: 'spring(1, 80, 10, 0)',
+        },
+        complete: () => {
+          setTimeout(() => {
+            box.innerHTML = currentOnlyText
+          }, 200)
         },
       })
   }
