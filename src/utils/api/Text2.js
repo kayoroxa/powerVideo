@@ -6,15 +6,12 @@ function get_tex_size(txt, font) {
   this.element = document.createElement('canvas')
   this.context = this.element.getContext('2d')
   this.context.font = font
-  var tsize = {
+  var textSize = {
     width: this.context.measureText(txt).width,
     height: parseInt(this.context.font),
   }
-  return tsize
+  return textSize
 }
-
-// a caixa fica no centro
-// as letras são divididas by caracteres
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -38,18 +35,6 @@ function Text2(texts, type = 'div') {
   if (typeof texts === 'string') {
     box.innerHTML = texts
   }
-
-  //find biggest length of array
-  // const bigLength = _.maxBy(textGroups, group => group.length).length
-
-  // for (let i = 0; i < bigLength; i++) {
-  //   const op = textGroups.map(group => group[i]).filter(Boolean)
-  //   const span = document.createElement('span')
-  //   op.forEach((text, i) => {
-  //     span.innerHTML += `<div class='o-${i}'>${text}</div>`
-  //   })
-  //   box.appendChild(span)
-  // }
 
   function changeText(textBefore, textAfter) {
     const reg = new RegExp(`(${textBefore})`, 'gi')
@@ -108,33 +93,4 @@ function Text2(texts, type = 'div') {
 
 module.exports = {
   Text2,
-  // morphText,
 }
-
-// function morphText(boxText1, boxText2) {
-//   const child1 = boxText1.children
-//   const child2 = boxText2.children
-
-//   debugger
-
-//   function moveSpan(span1, span2) {
-//     const initialLeft = span2.htmlElem.offsetLeft
-//     const initialTop = span2.htmlElem.offsetTop
-//     const initialWidth = span2.htmlElem.offsetWidth
-//     const initialHeight = span2.htmlElem.offsetHeight
-
-//     span2.htmlElem.style.position = 'absolute'
-
-//     // clone
-
-//     span2.htmlElem.style.left = span1.htmlElem.offsetLeft + 'px'
-//     span2.htmlElem.style.top = span1.htmlElem.offsetTop + 'px'
-
-//     setInterval(() => {
-//       span2.htmlElem.style.left = initialLeft + 'px'
-//       span2.htmlElem.style.top = initialTop + 'px'
-//     }, 200)
-//   }
-
-//   moveSpan(child1[0], child2[0])
-// }
