@@ -24,19 +24,26 @@ function GrowFromCenter() {
 }
 
 function addOnApp(PowerElement) {
-  document.querySelector('.app').appendChild(PowerElement.htmlElem)
-  obs('POWER_ELEMENT').notify('load', PowerElement)
+  if (PowerElement.inApp === false) {
+    document.querySelector('.app').appendChild(PowerElement.htmlElem)
+    obs('POWER_ELEMENT').notify('load', PowerElement)
+  }
+  PowerElement.inApp = true
 }
 
-function FadeIn(PowerElement) {
-  PowerElement.htmlElem.style.opacity = 0
-  addOnApp(PowerElement)
+// obs('POWER_ELEMENT').on('create', PowerElement => {
+//   if (PowerElement.inApp === false) addOnApp(PowerElement)
+// })
 
+function FadeIn(PowerElement) {
   return {
     play: () => {
+      PowerElement.htmlElem.style.opacity = 0
+      if (PowerElement.inApp === false) addOnApp(PowerElement)
+
       setTimeout(() => {
         PowerElement.htmlElem.style.opacity = 1
-      }, 200)
+      }, 500)
     },
   }
 }
@@ -71,9 +78,45 @@ const Scene = {
   },
 }
 
+function waitForElements(selectors, callBack) {
+  let allFound = true
+
+  selectors.forEach(selector => {
+    if (!document.querySelector('#' + selector)) {
+      allFound = false
+    }
+  })
+  if (allFound) {
+    callBack()
+  } else {
+    return new Promise(resolve => {
+      const observer = new MutationObserver(() => {
+        allFound = true
+        selectors.forEach(selector => {
+          if (!document.querySelector('#' + selector)) {
+            allFound = false
+          }
+        })
+        if (allFound) {
+          callBack()
+          observer.disconnect()
+          resolve()
+        }
+      })
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      })
+    })
+  }
+}
+
 module.exports = {
   VGroup,
   GrowFromCenter,
   Scene,
   FadeIn,
+  addOnApp,
+  waitForElements,
 }

@@ -1,21 +1,33 @@
 // const Elements = require('../utils/Elemento')
-const { Text } = require('../utils/api/elements')
-const { Scene, FadeIn } = require('../utils/api/powerUtils')
+// const { Text } = require('../utils/api/elements')
+const { Scene } = require('../utils/api/powerUtils')
+const { Text2 } = require('../utils/api/Text2')
 
 module.exports = async () => {
-  const myText = Text(['Hello World', ' caio']).set_x_y({ x: 100, y: 100 })
+  const myText = Text2('hello world').set_x_y({ x: 100, y: 100 })
 
-  const myText2 = Text(['Hello World', ' caio rocha']).next_to(myText, 'top')
-  const myText4 = Text(['Hello World', ' caio asdasdasd'])
-
+  const myText2 = Text2(['Hello', 'caio']) //.next_to(myText, 'bottom')
+  // const myText4 = Text2(['Hello World', ' caio asdasdasd'])
+  // const myText1 = Text2(['Hello World', ' caio asdasdasd'])
+  console.log(myText2)
   Scene.show(myText)
+  // Scene.show(myText2)
 
-  await Scene.playClick(FadeIn(myText2))
-  await Scene.playClick(() => {})
   await Scene.playClick(() => {
-    myText.children[0].setContent('caio rocha')
+    myText.changeText('Hello', 'Oi')
   })
-  await Scene.playClick(FadeIn(myText4))
+
+  // await Scene.playClick(() => morphText(myText, myText2))
+  // await Scene.playClick(() => {
+  //   myText.transform_to(myText2)
+  // })
+  // // await Scene.playClick(() => {
+  // //   myText.children[0].setContent('caio rocha')
+  // // })
+  // await Scene.playClick(FadeIn(myText4))
+  // await Scene.playClick(() => {
+  //   myText4.transform_to(myText)
+  // })
 }
 
 // module.exports = [

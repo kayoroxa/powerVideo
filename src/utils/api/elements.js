@@ -1,68 +1,90 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
+const { waitForElements } = require('./powerUtils')
+// const { addOnApp } = require('./powerUtils')
 
-function Element(element) {
+function Element(me) {
+  let inApp = false
+
+  const { elementHtml, id, children } = me
+
   function set_x_y({ x, y }) {
-    if (x) element.style.left = x + 'px'
-    if (y) element.style.top = y + 'px'
+    if (x) elementHtml.style.left = x + 'px'
+    if (y) elementHtml.style.top = y + 'px'
 
     return _return
   }
 
   function get_x_y() {
-    const x = element.offsetLeft
-    const y = element.offsetTop
+    const x = elementHtml.offsetLeft
+    const y = elementHtml.offsetTop
 
     return { x, y }
   }
 
   function next_to(powerElement, side, margin) {
-    console.log(margin)
+    console.log(elementHtml.id, powerElement.id, 'next')
+    console.log('nexto_to')
     margin = margin || 10
     if (side === 'left') {
-      element.style.left =
-        powerElement.htmlElem.offsetLeft - element.offsetWidth - margin + 'px'
+      elementHtml.style.left =
+        powerElement.htmlElem.offsetLeft -
+        elementHtml.offsetWidth -
+        margin +
+        'px'
 
-      element.style.top =
+      elementHtml.style.top =
         powerElement.htmlElem.offsetTop +
         powerElement.htmlElem.offsetHeight / 2 -
-        element.offsetHeight / 2 +
+        elementHtml.offsetHeight / 2 +
         'px'
     } else if (side === 'right') {
-      element.style.left =
+      elementHtml.style.left =
         powerElement.htmlElem.offsetLeft +
         powerElement.htmlElem.offsetWidth +
         margin +
         'px'
-    } else if (side === 'top') {
-      element.style.top =
-        powerElement.htmlElem.offsetTop - element.offsetHeight - margin + 'px'
 
-      element.style.left =
+      elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
+    } else if (side === 'top') {
+      elementHtml.style.top =
+        powerElement.htmlElem.offsetTop -
+        elementHtml.offsetHeight -
+        margin +
+        'px'
+
+      elementHtml.style.left =
         powerElement.htmlElem.offsetLeft +
         powerElement.htmlElem.offsetWidth / 2 -
-        element.offsetWidth / 2 +
+        elementHtml.offsetWidth / 2 +
         'px'
     } else if (side === 'bottom') {
-      console.log(powerElement.htmlElem.offsetHeight)
-      element.style.top =
+      console.log(elementHtml.offsetWidth)
+      elementHtml.style.top =
         powerElement.htmlElem.offsetTop +
         powerElement.htmlElem.offsetHeight +
         margin +
+        'px'
+
+      elementHtml.style.left =
+        powerElement.htmlElem.offsetLeft +
+        powerElement.htmlElem.offsetWidth / 2 -
+        elementHtml.offsetWidth / 2 +
         'px'
     }
     return _return
   }
 
   const _return = {
-    htmlElem: element,
+    inApp,
+    ...me,
+    htmlElem: elementHtml,
     next_to: (powerElement, side, margin) => {
-      obs('POWER_ELEMENT').on('load', p_elem => {
-        console.log(powerElement.id, ' = ', p_elem.id)
-        if (p_elem.id === powerElement.id) {
-          next_to(powerElement, side, margin)
-        }
+      console.log(powerElement.id, elementHtml.id)
+      waitForElements([powerElement.id, elementHtml.id], () => {
+        next_to(powerElement, side, margin)
       })
+
       return _return
     },
     set_width: () => {},
@@ -72,17 +94,24 @@ function Element(element) {
       set_x_y({ x, y })
       return _return
     },
+    transform_to: powerElement => {
+      // powerElement.htmlElem.
+      const { x, y } = powerElement.get_x_y()
+      set_x_y({ x, y })
+      elementHtml.style.opacity = 0
+      return _return
+    },
     set_x_y,
     get_x_y,
 
     save_state: () => {},
     get_center: () =>
-      element.getBoundingClientRect().left + element.offsetWidth / 2,
+      elementHtml.getBoundingClientRect().left + elementHtml.offsetWidth / 2,
     get_right: () => {},
-    get_width: () => element.offsetWidth,
-    get_height: () => element.offsetHeight,
-    get_left: () => element.offsetLeft,
-    get_top: () => element.offsetTop,
+    get_width: () => elementHtml.offsetWidth,
+    get_height: () => elementHtml.offsetHeight,
+    get_left: () => elementHtml.offsetLeft,
+    get_top: () => elementHtml.offsetTop,
   }
 
   return _return
@@ -90,6 +119,8 @@ function Element(element) {
 
 function Text(texts, options) {
   const element = document.createElement(options?.type || 'div')
+  const id = _.uniqueId('text_')
+  element.id = id
   element.classList.add('p-text')
   if (options?.type === 'span') element.classList.add('p-spam')
   else element.classList.add('p-absolute')
@@ -112,16 +143,12 @@ function Text(texts, options) {
     })
   }
 
-  return {
-    id: _.uniqueId('text_'),
+  const _return = {
     children,
     setContent: () => {
-      if (Array.isArray(texts)) throw new Error('Text is array')
+      // if (Array.isArray(texts)) throw new Error('Text is array')
       // const prevWidth = element.offsetWidth
-      // // const afterWidth = // 10 - 5
-      //   // 15 - x
-
-      //   (element.element.width = prevWidth)
+      //  const afterWidth = element.offsetWidth
       // setTimeout(() => {
       //   element.innerHTML = text
       //   const newWidth = element.offsetWidth
@@ -130,10 +157,15 @@ function Text(texts, options) {
       //   }
       // }, 200)
     },
-    ...Element(element),
+    ...Element(element, id),
   }
+
+  obs('POWER_ELEMENT').notify('create', _return)
+
+  return _return
 }
 
 module.exports = {
   Text,
+  Element,
 }

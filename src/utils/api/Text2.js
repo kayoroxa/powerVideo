@@ -97,10 +97,11 @@ function Text2(texts, type = 'div') {
       })
   }
 
-  const _return = {
+  const _return = Element({
+    elementHtml: box,
+    id,
     changeText,
-    ...Element(box, id), // BOX methods
-  }
+  })
 
   return _return
 }
