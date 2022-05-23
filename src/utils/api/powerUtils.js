@@ -112,6 +112,22 @@ function waitForElements(selectors, callBack) {
   }
 }
 
+function measure(el, fn) {
+  var pV = el.style.visibility,
+    pP = el.style.position
+
+  el.style.visibility = 'hidden'
+  el.style.position = 'absolute'
+
+  document.body.appendChild(el)
+  var result = fn(el)
+  el.parentNode.removeChild(el)
+
+  el.style.visibility = pV
+  el.style.position = pP
+  return result
+}
+
 module.exports = {
   VGroup,
   GrowFromCenter,
@@ -119,4 +135,5 @@ module.exports = {
   FadeIn,
   addOnApp,
   waitForElements,
+  measure,
 }
