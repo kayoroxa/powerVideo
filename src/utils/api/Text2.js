@@ -32,8 +32,24 @@ function createBox(type = 'div') {
 function Text2(texts, type = 'div') {
   const { box, id } = createBox(type)
 
+  const children = []
+
   if (typeof texts === 'string') {
     box.innerHTML = texts
+  } else if (Array.isArray(texts)) {
+    texts.forEach(text => {
+      const span = document.createElement('span')
+      span.innerHTML = text.replace(/\s/g, '&nbsp;')
+      span.id = _.uniqueId('span_text_')
+      box.appendChild(span)
+
+      children.push(
+        Element({
+          elementHtml: span,
+          id: span.id,
+        })
+      )
+    })
   }
 
   function changeText(textBefore, textAfter) {
@@ -58,43 +74,47 @@ function Text2(texts, type = 'div') {
     const nextPreview = get_tex_size(textAfter, '600 60px sans-serif')
     console.log(beforePreview, nextPreview)
 
-    anime
-      .timeline()
-      .add({
-        targets: '.text-change .before',
-        opacity: [1, 0],
-        translateY: [0, -beforePreview.height],
-        duration: 300,
+    anime({
+      targets: '.text-change',
+      width: [beforePreview.width, nextPreview.width],
+      easing: 'easeInOutQuad',
+      duration: 250,
+      delay: 100,
+      // duration: 950,
+    })
+    anime.timeline().add({
+      targets: '.text-change .before',
+      opacity: [1, 0],
+      translateY: [0, -beforePreview.height],
+      translateX: [0, -beforePreview.width / 4],
+      // translateX: [0, -beforePreview.width / 2],
+      scale: [1, 0.5],
+      duration: 300,
+      easing: 'easeInOutQuad',
+    })
+    anime({
+      targets: '.text-change .after',
+      delay: 100,
+      opacity: {
+        value: [0, 1],
         easing: 'easeInOutQuad',
-      })
-      .add({
-        targets: '.text-change',
-        width: [beforePreview.width, nextPreview.width],
-        easing: 'easeInOutQuad',
-        // duration: 950,
-      })
+        duration: 100,
+      },
+      translateY: {
+        value: [beforePreview.height + 40, 0],
+        easing: 'spring(1, 80, 10, 0)',
+      },
 
-      .add({
-        targets: '.text-change .after',
-
-        opacity: {
-          value: [0, 1],
-          easing: 'easeInOutQuad',
-          duration: 300,
-        },
-        translateY: {
-          value: [beforePreview.height + 20, 0],
-          easing: 'spring(1, 80, 10, 0)',
-        },
-        complete: () => {
-          setTimeout(() => {
-            box.innerHTML = currentOnlyText
-          }, 200)
-        },
-      })
+      complete: () => {
+        setTimeout(() => {
+          box.innerHTML = currentOnlyText
+        }, 200)
+      },
+    })
   }
 
   const _return = Element({
+    children,
     elementHtml: box,
     id,
     changeText,
