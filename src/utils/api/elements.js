@@ -1,12 +1,11 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
 const { waitForElements } = require('./powerUtils')
-// const { addOnApp } = require('./powerUtils')
 
 function Element(me) {
   let inApp = false
 
-  const { elementHtml, id, children } = me
+  const { elementHtml } = me
 
   function set_x_y({ x, y }) {
     if (x) elementHtml.style.left = x + 'px'
@@ -145,18 +144,6 @@ function Text(texts, options) {
 
   const _return = {
     children,
-    setContent: () => {
-      // if (Array.isArray(texts)) throw new Error('Text is array')
-      // const prevWidth = element.offsetWidth
-      //  const afterWidth = element.offsetWidth
-      // setTimeout(() => {
-      //   element.innerHTML = text
-      //   const newWidth = element.offsetWidth
-      //   if (prevWidth !== newWidth) {
-      //     element.style.width = newWidth + 'px'
-      //   }
-      // }, 200)
-    },
     ...Element(element, id),
   }
 
