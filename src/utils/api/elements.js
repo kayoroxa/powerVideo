@@ -1,6 +1,6 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
-const { waitForElements } = require('./powerUtils')
+const { measure } = require('./powerUtils')
 
 function Element(me) {
   let inApp = false
@@ -29,56 +29,47 @@ function Element(me) {
     }
   }
 
-  function next_to(powerElement, side, margin) {
-    console.log(elementHtml.id, powerElement.id, 'next')
-    console.log('nexto_to')
-    margin = margin || 10
-    if (side === 'left') {
-      elementHtml.style.left =
-        powerElement.htmlElem.offsetLeft -
-        elementHtml.offsetWidth -
-        margin +
-        'px'
+  function next_to(powerElement, side, margin = 0) {
+    const { x, y } = powerElement.get_x_y()
+    measure(elementHtml, measureEl => {
+      if (side === 'left') {
+        elementHtml.style.left = x - measureEl.offsetWidth - margin + 'px'
 
-      elementHtml.style.top =
-        powerElement.htmlElem.offsetTop +
-        powerElement.htmlElem.offsetHeight / 2 -
-        elementHtml.offsetHeight / 2 +
-        'px'
-    } else if (side === 'right') {
-      elementHtml.style.left =
-        powerElement.htmlElem.offsetLeft +
-        powerElement.htmlElem.offsetWidth +
-        margin +
-        'px'
+        elementHtml.style.top =
+          y +
+          powerElement.htmlElem.offsetHeight / 2 -
+          measureEl.offsetHeight / 2 +
+          'px'
+      } else if (side === 'right') {
+        elementHtml.style.left =
+          powerElement.htmlElem.offsetLeft +
+          powerElement.htmlElem.offsetWidth +
+          margin +
+          'px'
 
-      elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
-    } else if (side === 'top') {
-      elementHtml.style.top =
-        powerElement.htmlElem.offsetTop -
-        elementHtml.offsetHeight -
-        margin +
-        'px'
+        elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
+      } else if (side === 'top') {
+        elementHtml.style.top = y - measureEl.offsetHeight - margin + 'px'
 
-      elementHtml.style.left =
-        powerElement.htmlElem.offsetLeft +
-        powerElement.htmlElem.offsetWidth / 2 -
-        elementHtml.offsetWidth / 2 +
-        'px'
-    } else if (side === 'bottom') {
-      console.log(elementHtml.offsetWidth)
-      elementHtml.style.top =
-        powerElement.htmlElem.offsetTop +
-        powerElement.htmlElem.offsetHeight +
-        margin +
-        'px'
+        elementHtml.style.left =
+          x +
+          powerElement.htmlElem.offsetWidth / 2 -
+          measureEl.offsetWidth / 2 +
+          'px'
+      } else if (side === 'bottom') {
+        elementHtml.style.top =
+          powerElement.htmlElem.offsetTop +
+          powerElement.htmlElem.offsetHeight +
+          margin +
+          'px'
 
-      elementHtml.style.left =
-        powerElement.htmlElem.offsetLeft +
-        powerElement.htmlElem.offsetWidth / 2 -
-        elementHtml.offsetWidth / 2 +
-        'px'
-    }
+        elementHtml.style.left =
+          x +
+          powerElement.htmlElem.offsetWidth / 2 -
+          measureEl.offsetWidth / 2 +
+          'px'
+      }
+    })
     return _return
   }
 
@@ -86,14 +77,8 @@ function Element(me) {
     inApp,
     ...me,
     htmlElem: elementHtml,
-    next_to: (powerElement, side, margin) => {
-      console.log(powerElement.id, elementHtml.id)
-      waitForElements([powerElement.id, elementHtml.id], () => {
-        next_to(powerElement, side, margin)
-      })
 
-      return _return
-    },
+    next_to,
     set_width: () => {},
     move_to: powerElement => {
       // powerElement.htmlElem.
