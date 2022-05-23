@@ -1,4 +1,5 @@
 const obs = require('../observer')
+const anime = require('animejs')
 
 function VGroup() {
   const _return = {
@@ -69,8 +70,8 @@ const Scene = {
               }
               animation.play()
             })
+            resolve()
           }
-          resolve()
         },
         { once: true }
       )
@@ -128,6 +129,83 @@ function measure(el, fn) {
   return result
 }
 
+function get_tex_size(txt, font) {
+  this.element = document.createElement('canvas')
+  this.context = this.element.getContext('2d')
+  this.context.font = font
+  var textSize = {
+    width: this.context.measureText(txt).width,
+    height: parseInt(this.context.font),
+  }
+  return textSize
+}
+
+function changeTextTo(powerElement, textAfter, style) {
+  const box = powerElement.htmlElem
+
+  const textBefore = box.innerHTML
+  textBefore.replace(new RegExp('\\s', 'g'), '&nbsp;')
+  const reg = new RegExp(`(${textBefore})`, 'gi')
+  const textBeforeFind = box.innerHTML.match(reg)[0]
+  console.log(box)
+  // const prevOnlyText = box.innerHTML
+
+  // const currentOnlyText = prevOnlyText.replace(reg, textAfter)
+  box.innerHTML = box.innerHTML.replace(/\s/, '&nbsp;')
+  // debugger
+  box.classList.add('text-change')
+
+  box.innerHTML = box.innerHTML.replace(
+    reg,
+    `<div class="before">$1</div>
+    <div class="after" style="opacity: 0">${textAfter}</div>`
+  )
+
+  const beforePreview = get_tex_size(textBeforeFind, '600 60px sans-serif')
+  const nextPreview = get_tex_size(textAfter, '600 60px sans-serif')
+  console.log(beforePreview, nextPreview)
+
+  anime({
+    targets: '.text-change',
+    width: [beforePreview.width, nextPreview.width],
+    easing: 'easeInOutQuad',
+    duration: 250,
+    delay: 100,
+    // duration: 950,
+  })
+  anime.timeline().add({
+    targets: '.text-change .before',
+    opacity: [1, 0],
+    translateY: [0, -beforePreview.height],
+    translateX: [0, -beforePreview.width / 4],
+    // translateX: [0, -beforePreview.width / 2],
+    scale: [1, 0.5],
+    duration: 300,
+    easing: 'easeInOutQuad',
+  })
+  anime({
+    targets: '.text-change .after',
+    color: style.color,
+    backgroundColor: style.backgroundColor,
+    delay: 100,
+    opacity: {
+      value: [0, 1],
+      easing: 'easeInOutQuad',
+      duration: 100,
+    },
+    translateY: {
+      value: [beforePreview.height + 40, 0],
+      easing: 'spring(1, 80, 10, 0)',
+    },
+
+    // complete: () => {
+    //   setTimeout(() => {
+    //     box.innerHTML = currentOnlyText
+    //   }, 200)
+    // },
+  })
+}
+
 module.exports = {
   VGroup,
   GrowFromCenter,
@@ -136,4 +214,5 @@ module.exports = {
   addOnApp,
   waitForElements,
   measure,
+  changeTextTo,
 }
