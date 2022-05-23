@@ -14,11 +14,19 @@ function Element(me) {
     return _return
   }
 
-  function get_x_y() {
-    const x = elementHtml.offsetLeft
-    const y = elementHtml.offsetTop
+  function get_x_y(offset = false) {
+    if (offset) {
+      const x = elementHtml.offsetLeft
+      const y = elementHtml.offsetTop
 
-    return { x, y }
+      return { x, y }
+    } else {
+      const elRect = elementHtml.getBoundingClientRect()
+      return {
+        x: elRect.left,
+        y: elRect.top,
+      }
+    }
   }
 
   function next_to(powerElement, side, margin) {
