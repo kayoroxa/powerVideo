@@ -72,8 +72,8 @@ const Scene = {
             })
             resolve()
           }
-        },
-        { once: true }
+        }
+        // { once: true }
       )
     })
   },
@@ -185,7 +185,7 @@ function changeTextTo(powerElement, textAfter, style) {
   })
   anime({
     targets: '.text-change .after',
-    color: style.color,
+    color: [style.color, style.color],
     backgroundColor: style.backgroundColor,
     delay: 100,
     opacity: {
