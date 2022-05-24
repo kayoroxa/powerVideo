@@ -88,6 +88,7 @@ function Element(me) {
     htmlElem: elementHtml,
     refresh,
     next_to,
+    style: elementHtml.style,
     set_width: () => {},
     move_to: powerElement => {
       // powerElement.htmlElem.
