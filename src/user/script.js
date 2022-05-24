@@ -1,12 +1,8 @@
-const { Scene } = require('../utils/api/powerUtils')
-const { Text2 } = require('../utils/api/Text2')
+/* eslint-disable */
 
-module.exports = async () => {
-  const myText = Text2('hello world').set_x_y({ x: 100, y: 100 })
+const sublinhar = require('./script-sublinhar')
+const changeMultiText = require('./script-changeMultiText')
+const nextTo = require('./script-nextTo')
+const changeText = require('./script-changeText')
 
-  Scene.show(myText)
-
-  await Scene.playClick(() => {
-    myText.changeText('Hello', 'Oi')
-  })
-}
+module.exports = sublinhar
