@@ -18,6 +18,7 @@ function createBox(type = 'div') {
 
 function Line(powerElement, op = {}) {
   const { box, id } = createBox()
+
   let { left, top, width, height } = powerElement.get_props()
 
   op.color = op.color || 'rgba(0, 200, 0, 0.5)'
