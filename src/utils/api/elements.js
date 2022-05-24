@@ -29,6 +29,11 @@ function Element(me) {
     }
   }
 
+  function get_props() {
+    const elRect = elementHtml.getBoundingClientRect()
+    return elRect
+  }
+
   function next_to(powerElement, side, margin = 0) {
     const { x, y } = powerElement.get_x_y()
     measure(elementHtml, measureEl => {
@@ -73,11 +78,15 @@ function Element(me) {
     return _return
   }
 
+  function refresh() {
+    return _return
+  }
+
   const _return = {
     inApp,
     ...me,
     htmlElem: elementHtml,
-
+    refresh,
     next_to,
     set_width: () => {},
     move_to: powerElement => {
@@ -95,7 +104,7 @@ function Element(me) {
     },
     set_x_y,
     get_x_y,
-
+    get_props,
     save_state: () => {},
     get_center: () =>
       elementHtml.getBoundingClientRect().left + elementHtml.offsetWidth / 2,
