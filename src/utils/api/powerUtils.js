@@ -77,6 +77,11 @@ const Scene = {
       )
     })
   },
+  playClicks: async animations => {
+    for (let i = 0; i < animations.length; i++) {
+      await Scene.playClick(animations[i])
+    }
+  },
 }
 
 function waitForElements(selectors, callBack) {
