@@ -214,10 +214,16 @@ function changeTextTo(powerElement, textAfter, style) {
 function Enfase(powerTexts, smallSize, bigSize) {
   return {
     select: index => {
-      powerTexts.forEach(powerText => {
-        powerText.style.fontSize = smallSize
+      powerTexts.forEach((powerText, p_index) => {
+        anime({
+          targets: powerText.htmlElem,
+          fontSize: index === p_index ? bigSize : smallSize,
+
+          change: () => {
+            obs('update').notify(powerText.id)
+          },
+        })
       })
-      powerTexts[index].style.fontSize = bigSize
     },
   }
 }
