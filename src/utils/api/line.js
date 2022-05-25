@@ -20,24 +20,8 @@ function createBox(type = 'div') {
 function Line(powerElement, op = {}) {
   const { box, id } = createBox()
 
-  // Observe(
-  //   '#' + powerElement.id,
-  //   {
-  //     attributesList: ['style'], // Only the "style" attribute
-  //     attributeOldValue: true, // Report also the oldValue
-  //   },
-  //   m => {
-  //     console.log({ m }) // Mutation object
-  //     // setInterval(() => {
-  //     refresh()
-  //     // }, 1)
-  //     // setTimeout(() => {
-  //     // }, 280)
-  //   }
-  // )
-
-  //listen getBoundingClientRect change
-  obs('update').on(powerElement.id, () => refresh())
+  // delete update event when change
+  obs('update').on(powerElement.id, () => refresh(), id)
 
   op.color = op.color || 'rgba(0, 200, 0, 0.5)'
   op.padding = isNumber(op.padding) ? op.padding : 10
@@ -48,18 +32,14 @@ function Line(powerElement, op = {}) {
     powerElement.htmlElem.zIndex || powerElement.htmlElem.parentNode.zIndex || 0
 
   function refresh(rect = false) {
+    obs('update').remove(id)
+    obs('update').on(powerElement.id, () => refresh(), id)
+
     const elem = document.querySelector('#' + powerElement.id)
 
     let { left, top, width, height } = rect || elem.getBoundingClientRect()
 
-    // box.style.position = 'absolute'
-    // box.style.top = `${top - op.paddingY}px`
-    // box.style.left = `${left - op.padding}px`
-    // box.style.width = `${width + op.padding * 2}px`
-    // box.style.height = `${height + op.paddingY * 2}px`
-    // box.style.background = op.color
     box.style.zIndex = zIndex - 1
-    // box.style.borderRadius = `${op.radius}px`
 
     anime({
       targets: box,
@@ -96,8 +76,10 @@ function Line(powerElement, op = {}) {
     return _return
   }
 
-  function move_animate_to(powerElement, op) {
-    let { left, width, height, top } = powerElement.get_props()
+  function move_animate_to(newPowerElement, op = {}) {
+    powerElement = newPowerElement
+
+    let { left, width, height, top } = newPowerElement.get_props()
     const highLight = op.height ? true : false
 
     op.color = op.color || 'rgba(0, 200, 0, 0.5)'
