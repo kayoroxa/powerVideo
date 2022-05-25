@@ -23,16 +23,17 @@ function Line(powerElement, op = {}) {
 
   op.color = op.color || 'rgba(0, 200, 0, 0.5)'
   op.padding = isNumber(op.padding) ? op.padding : 10
+  op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
   op.radius = isNumber(op.radius) ? op.radius : 5
 
   const zIndex =
     powerElement.htmlElem.zIndex || powerElement.htmlElem.parentNode.zIndex || 0
 
   box.style.position = 'absolute'
-  box.style.top = `${top}px`
+  box.style.top = `${top - op.paddingY}px`
   box.style.left = `${left - op.padding}px`
   box.style.width = `${width + op.padding * 2}px`
-  box.style.height = `${height}px`
+  box.style.height = `${height + op.paddingY * 2}px`
   box.style.background = op.color
   box.style.zIndex = zIndex - 1
   box.style.borderRadius = `${op.radius}px`
@@ -60,6 +61,7 @@ function Line(powerElement, op = {}) {
 
     op.color = op.color || 'rgba(0, 200, 0, 0.5)'
     op.padding = isNumber(op.padding) ? op.padding : 10
+    op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
     op.radius = isNumber(op.radius) ? op.radius : 5
     op.height = isNumber(op.height) ? op.height : height
 
@@ -77,12 +79,12 @@ function Line(powerElement, op = {}) {
       left: [prevLeft, left - op.padding],
       width: [prevWidth, width + op.padding * 2],
       height: {
-        value: [prevHeight, op.height],
+        value: [prevHeight, op.height + op.paddingY * 2],
 
         // duration: 200,
       },
       top: {
-        value: [prevTop, highLight ? top + height : top],
+        value: [prevTop, highLight ? top + height : top - op.paddingY],
         // easing: 'spring(1, 80, 10, 0)',
       },
       easing: 'easeInOutCubic',
