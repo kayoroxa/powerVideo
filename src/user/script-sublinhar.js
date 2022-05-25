@@ -1,3 +1,5 @@
+const Group = require('../utils/api/Group')
+
 module.exports = async ({ Text2, Scene, Line }) => {
   const myText2 = Text2(['você ', 'tem', ' ', 'feito']).set_x_y({
     x: 400,
@@ -39,9 +41,13 @@ module.exports = async ({ Text2, Scene, Line }) => {
       height: 10,
     })
   })
+
+  const group1 = Group(myText2, myText3)
+
   await Scene.playClick(() => {
-    myLine.move_animate_to(myText3.children[2], {
-      padding: 8,
+    myLine.move_animate_to(group1, {
+      padding: 30,
+      paddingY: 60,
       color: '#ffff',
       // height: 10,
     })
