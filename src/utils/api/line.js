@@ -2,6 +2,7 @@ const { Element } = require('./elements')
 const _ = require('lodash')
 const anime = require('animejs')
 const { isNumber } = require('lodash')
+const obs = require('../../utils/observer')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -19,7 +20,24 @@ function createBox(type = 'div') {
 function Line(powerElement, op = {}) {
   const { box, id } = createBox()
 
-  let { left, top, width, height } = powerElement.get_props()
+  // Observe(
+  //   '#' + powerElement.id,
+  //   {
+  //     attributesList: ['style'], // Only the "style" attribute
+  //     attributeOldValue: true, // Report also the oldValue
+  //   },
+  //   m => {
+  //     console.log({ m }) // Mutation object
+  //     // setInterval(() => {
+  //     refresh()
+  //     // }, 1)
+  //     // setTimeout(() => {
+  //     // }, 280)
+  //   }
+  // )
+
+  //listen getBoundingClientRect change
+  obs('update').on(powerElement.id, () => refresh())
 
   op.color = op.color || 'rgba(0, 200, 0, 0.5)'
   op.padding = isNumber(op.padding) ? op.padding : 10
@@ -29,14 +47,36 @@ function Line(powerElement, op = {}) {
   const zIndex =
     powerElement.htmlElem.zIndex || powerElement.htmlElem.parentNode.zIndex || 0
 
-  box.style.position = 'absolute'
-  box.style.top = `${top - op.paddingY}px`
-  box.style.left = `${left - op.padding}px`
-  box.style.width = `${width + op.padding * 2}px`
-  box.style.height = `${height + op.paddingY * 2}px`
-  box.style.background = op.color
-  box.style.zIndex = zIndex - 1
-  box.style.borderRadius = `${op.radius}px`
+  function refresh(rect = false) {
+    const elem = document.querySelector('#' + powerElement.id)
+
+    let { left, top, width, height } = rect || elem.getBoundingClientRect()
+
+    // box.style.position = 'absolute'
+    // box.style.top = `${top - op.paddingY}px`
+    // box.style.left = `${left - op.padding}px`
+    // box.style.width = `${width + op.padding * 2}px`
+    // box.style.height = `${height + op.paddingY * 2}px`
+    // box.style.background = op.color
+    box.style.zIndex = zIndex - 1
+    // box.style.borderRadius = `${op.radius}px`
+
+    anime({
+      targets: box,
+      top: [`${top - op.paddingY}px`, `${top - op.paddingY}px`],
+      left: [`${left - op.padding}px`, `${left - op.padding}px`],
+      width: [`${width + op.padding * 2}px`, `${width + op.padding * 2}px`],
+      height: [
+        `${height + op.paddingY * 2}px`,
+        `${height + op.paddingY * 2}px`,
+      ],
+      background: [op.color, op.color],
+      borderRadius: `${op.radius}px`,
+      easing: 'linear',
+    })
+  }
+
+  refresh()
 
   const _return = Element({
     elementHtml: box,
@@ -46,6 +86,7 @@ function Line(powerElement, op = {}) {
   })
 
   function animate() {
+    let { width } = powerElement.get_props()
     anime({
       targets: box,
       width: [0, width + op.padding * 2],
