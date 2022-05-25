@@ -211,6 +211,19 @@ function changeTextTo(powerElement, textAfter, style) {
   })
 }
 
+function Enfase(powerTexts, smallSize, bigSize) {
+  return {
+    select: index => {
+      powerTexts.forEach(powerText => {
+        powerText.style.fontSize = smallSize
+      })
+      powerTexts[index].style.fontSize = bigSize
+    },
+  }
+}
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 module.exports = {
   VGroup,
   GrowFromCenter,
@@ -220,4 +233,6 @@ module.exports = {
   waitForElements,
   measure,
   changeTextTo,
+  Enfase,
+  sleep,
 }

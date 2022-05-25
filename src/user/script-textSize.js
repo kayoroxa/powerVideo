@@ -1,3 +1,5 @@
+const { Enfase, sleep } = require('../utils/api/powerUtils')
+
 module.exports = async ({ Text2, Scene, Line }) => {
   const myText1 = Text2(['você ', 'tem', ' ', 'feito']).set_x_y({
     x: 400,
@@ -22,17 +24,4 @@ module.exports = async ({ Text2, Scene, Line }) => {
   await Scene.playClick(() => {
     Scene.show(line1.animate())
   })
-}
-
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-function Enfase(powerTexts, smallSize, bigSize) {
-  return {
-    select: index => {
-      powerTexts.forEach(powerText => {
-        powerText.style.fontSize = smallSize
-      })
-      powerTexts[index].style.fontSize = bigSize
-    },
-  }
 }
