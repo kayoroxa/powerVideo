@@ -1,15 +1,39 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
 const { measure } = require('./powerUtils')
+const { isNumber } = require('lodash')
 
 function Element(me) {
   let inApp = false
 
   const { elementHtml } = me
 
-  function set_x_y({ x, y }) {
-    if (x) elementHtml.style.left = x + 'px'
-    if (y) elementHtml.style.top = y + 'px'
+  function set_x_y(op) {
+    if (typeof op === 'string') {
+      if (op === 'center') {
+        // measure(elementHtml, e => {
+        // const { height, width } = e.getBoundingClientRect()
+        elementHtml.style.left = `${window.innerWidth / 2}px`
+        elementHtml.style.top = `${window.innerHeight / 2}px`
+        // })
+      }
+    } else {
+      const { x, y } = op
+      if (x === 'center') {
+        // measure(elementHtml, e => {
+        // const { width } = e.getBoundingClientRect()
+        elementHtml.style.left = `${window.innerWidth / 2}px`
+        // })
+      }
+      if (y === 'center') {
+        // measure(elementHtml, e => {
+        // const { height } = e.getBoundingClientRect()
+        elementHtml.style.top = `${window.innerHeight / 2}px`
+        // })
+      }
+      if (isNumber(x)) elementHtml.style.left = x + 'px'
+      if (isNumber(y)) elementHtml.style.top = y + 'px'
+    }
 
     return _return
   }
@@ -27,6 +51,16 @@ function Element(me) {
         y: elRect.top,
       }
     }
+  }
+
+  function box_style(style) {
+    Object.keys(style).forEach(key => {
+      if (key === 'anchor') {
+        if (style[key] === 'left') elementHtml.classList.remove('anchor-center')
+      }
+      elementHtml.style[key] = style[key]
+    })
+    return _return
   }
 
   function get_props() {
@@ -114,6 +148,7 @@ function Element(me) {
     get_height: () => elementHtml.offsetHeight,
     get_left: () => elementHtml.offsetLeft,
     get_top: () => elementHtml.offsetTop,
+    box_style,
   }
 
   return _return

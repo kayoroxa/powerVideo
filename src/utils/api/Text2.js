@@ -31,6 +31,8 @@ function createBox(type = 'div') {
 
 function Text2(texts, type = 'div') {
   const { box, id } = createBox(type)
+  box.style.justifyContent = 'center'
+  box.classList.add('anchor-center')
 
   const children = []
 
