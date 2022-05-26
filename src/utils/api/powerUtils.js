@@ -32,10 +32,6 @@ function addOnApp(PowerElement) {
   PowerElement.inApp = true
 }
 
-// obs('POWER_ELEMENT').on('create', PowerElement => {
-//   if (PowerElement.inApp === false) addOnApp(PowerElement)
-// })
-
 function FadeIn(PowerElement) {
   return {
     play: () => {
@@ -153,9 +149,7 @@ function changeTextTo(powerElement, textAfter, style) {
   const reg = new RegExp(`(${textBefore})`, 'gi')
   const textBeforeFind = box.innerHTML.match(reg)[0]
   console.log(box)
-  // const prevOnlyText = box.innerHTML
 
-  // const currentOnlyText = prevOnlyText.replace(reg, textAfter)
   box.innerHTML = box.innerHTML.replace(/\s/, '&nbsp;')
   // debugger
   box.classList.add('text-change')
