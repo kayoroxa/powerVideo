@@ -45,13 +45,16 @@ function Text2(texts, type = 'div') {
       span.id = _.uniqueId('span_text_')
       box.appendChild(span)
 
-      children.push(
-        Element({
-          elementHtml: span,
-          id: span.id,
-          changeTextTo,
-        })
-      )
+      if (text !== ' ') {
+        children.push(
+          Element({
+            elementHtml: span,
+            text,
+            id: span.id,
+            changeTextTo,
+          })
+        )
+      }
     })
   }
 
