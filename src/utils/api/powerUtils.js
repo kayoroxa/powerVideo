@@ -130,6 +130,22 @@ function measure(el, fn) {
   return result
 }
 
+async function measureSync(el) {
+  var pV = el.style.visibility,
+    pP = el.style.position
+
+  el.style.visibility = 'hidden'
+  el.style.position = 'absolute'
+
+  document.body.appendChild(el)
+  var result = el.getBoundingClientRect()
+  el.parentNode.removeChild(el)
+
+  el.style.visibility = pV
+  el.style.position = pP
+  return result
+}
+
 function get_tex_size(txt, font) {
   this.element = document.createElement('canvas')
   this.context = this.element.getContext('2d')
@@ -224,6 +240,12 @@ function Enfase(powerTexts, smallSize, bigSize) {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+function morphText(powerElement1, powerElement2) {
+  powerElement1.children.forEach(child => {
+    console.log(child.text)
+  })
+}
+
 module.exports = {
   VGroup,
   GrowFromCenter,
@@ -232,7 +254,9 @@ module.exports = {
   addOnApp,
   waitForElements,
   measure,
+  measureSync,
   changeTextTo,
   Enfase,
   sleep,
+  morphText,
 }

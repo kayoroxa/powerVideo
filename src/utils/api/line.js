@@ -3,6 +3,7 @@ const _ = require('lodash')
 const anime = require('animejs')
 const { isNumber } = require('lodash')
 const obs = require('../../utils/observer')
+const { measureSync } = require('./powerUtils')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -27,17 +28,20 @@ function Line(powerElement, op = {}) {
   op.padding = isNumber(op.padding) ? op.padding : 10
   op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
   op.radius = isNumber(op.radius) ? op.radius : 5
-
+  // debugger
   const zIndex =
-    powerElement.htmlElem.zIndex || powerElement.htmlElem.parentNode.zIndex || 0
+    powerElement.htmlElem.zIndex ||
+    powerElement.htmlElem.parentNode?.zIndex ||
+    0
 
-  function refresh(rect = false) {
+  async function refresh(rect = false) {
     obs('update').remove(id)
     obs('update').on(powerElement.id, () => refresh(), id)
 
-    const elem = document.querySelector('#' + powerElement.id)
+    const elemRect = await measureSync(powerElement.htmlElem)
 
-    let { left, top, width, height } = rect || elem.getBoundingClientRect()
+    // debugger
+    let { left, top, width, height } = rect || elemRect
 
     box.style.zIndex = zIndex - 1
 
