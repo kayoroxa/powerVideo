@@ -29,6 +29,7 @@ function addOnApp(PowerElement) {
     document.querySelector('.app').appendChild(PowerElement.htmlElem)
     obs('POWER_ELEMENT').notify('load', PowerElement)
   }
+
   PowerElement.inApp = true
 }
 
@@ -241,8 +242,73 @@ function Enfase(powerTexts, smallSize, bigSize) {
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 function morphText(powerElement1, powerElement2) {
+  powerElement2.children.forEach(child => {
+    child.style.opacity = 0
+  })
+
+  Scene.show(powerElement2)
+
+  const pares = []
+  const del = []
+
   powerElement1.children.forEach(child => {
-    console.log(child.text)
+    const child2Same = powerElement2.children.find(
+      child2 => child2.text === child.text
+    )
+    if (child2Same) {
+      pares.push({
+        child1: child,
+        child2: child2Same,
+      })
+    } else {
+      del.push(child)
+    }
+  })
+
+  const children2NotInPares = powerElement2.children.filter(
+    child => !pares.find(pair => pair.child2 === child)
+  )
+
+  anime({
+    targets: children2NotInPares.map(v => v.htmlElem),
+    opacity: [0, 1],
+    duration: 500,
+    easing: 'easeInOutQuad',
+  })
+
+  pares.forEach(({ child1, child2 }) => {
+    const child1Rect = child1.htmlElem.getBoundingClientRect()
+    const child2Rect = child2.htmlElem.getBoundingClientRect()
+
+    anime
+      .timeline()
+      .add({
+        targets: child1.htmlElem,
+        translateX: child2Rect.left - child1Rect.left,
+        translateY: child2Rect.top - child1Rect.top,
+        duration: 500,
+
+        easing: 'easeInOutQuad',
+      })
+      .add({
+        targets: child2.htmlElem,
+        opacity: [0, 1],
+        delay: 200,
+
+        complete: () => {
+          child1.htmlElem.remove()
+          // child2.htmlElem.remove()
+        },
+      })
+  })
+
+  del.forEach(child => {
+    anime({
+      targets: child.htmlElem,
+      opacity: [1, 0],
+      duration: 1000,
+      easing: 'easeInOutQuad',
+    })
   })
 }
 
