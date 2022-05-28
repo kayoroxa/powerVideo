@@ -296,7 +296,7 @@ function morphText(powerElement1, powerElement2) {
         delay: 200,
 
         complete: () => {
-          child1.htmlElem.remove()
+          powerElement1.htmlElem.remove()
           // child2.htmlElem.remove()
         },
       })
