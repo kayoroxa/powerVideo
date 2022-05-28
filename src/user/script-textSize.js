@@ -1,7 +1,13 @@
 const { Enfase, sleep } = require('../utils/api/powerUtils')
 
+const space = texts =>
+  texts.reduce((acc, text, index) => {
+    if (index >= texts.length - 1) return [...acc, text]
+    return [...acc, text, ' ']
+  }, [])
+
 module.exports = async ({ Text2, Scene, Line }) => {
-  const myText1 = Text2(['você ', 'tem', ' ', 'feito'])
+  const myText1 = Text2(space(['você', 'tem', 'feito']))
     .box_style({
       // minWidth: '600px',
       // justifyContent: 'center',
@@ -11,7 +17,7 @@ module.exports = async ({ Text2, Scene, Line }) => {
       y: 'center',
     })
 
-  const myText3 = Text2(['have you', ' ', 'ever']).set_x_y({
+  const myText3 = Text2(space(['have you', 'ever'])).set_x_y({
     x: 'center',
     y: 450,
   })
@@ -34,7 +40,7 @@ module.exports = async ({ Text2, Scene, Line }) => {
       myText1.children[0].style.color = '#ff0000'
     },
     () => enfase.select(1),
-    () => enfase.select(3),
+    () => enfase.select(0),
   ])
 
   await sleep(600)

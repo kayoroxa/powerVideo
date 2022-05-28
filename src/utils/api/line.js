@@ -3,7 +3,8 @@ const _ = require('lodash')
 const anime = require('animejs')
 const { isNumber } = require('lodash')
 const obs = require('../../utils/observer')
-const { measureSync } = require('./powerUtils')
+const { measureSync, measureNew } = require('./powerUtils')
+const sound = require('sound-play')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -34,33 +35,40 @@ function Line(powerElement, op = {}) {
     powerElement.htmlElem.parentNode?.zIndex ||
     0
 
-  async function refresh(rect = false) {
+  async function refresh(rect = false, start) {
     obs('update').remove(id)
     obs('update').on(powerElement.id, () => refresh(), id)
 
     const elemRect = await measureSync(powerElement.htmlElem)
 
-    // debugger
     let { left, top, width, height } = rect || elemRect
 
-    box.style.zIndex = zIndex - 1
+    // debugger
 
+    box.style.zIndex = zIndex - 1
+    // box.style.opacity = 0
     anime({
       targets: box,
       top: [`${top - op.paddingY}px`, `${top - op.paddingY}px`],
       left: [`${left - op.padding}px`, `${left - op.padding}px`],
-      width: [`${width + op.padding * 2}px`, `${width + op.padding * 2}px`],
+      width: start
+        ? 0
+        : [`${width + op.padding * 2}px`, `${width + op.padding * 2}px`],
       height: [
         `${height + op.paddingY * 2}px`,
         `${height + op.paddingY * 2}px`,
       ],
       background: [op.color, op.color],
       borderRadius: `${op.radius}px`,
-      easing: 'linear',
+      // easing: 'linear',
+      begin: () => {
+        console.log('begin - line')
+      },
     })
+    console.log({ width, height })
   }
 
-  refresh()
+  refresh(null, true)
 
   const _return = Element({
     elementHtml: box,
@@ -70,12 +78,26 @@ function Line(powerElement, op = {}) {
   })
 
   function animate() {
-    let { width } = powerElement.get_props()
+    const elemRect = measureNew(powerElement.htmlElem)
+
+    let { width } = elemRect
+
+    // let { width } = powerElement.get_props()
     anime({
       targets: box,
-      width: [0, width + op.padding * 2],
-      duration: 500,
-      easing: 'easeInOutQuad',
+      width: {
+        value: [0, width + op.padding * 2],
+        duration: 300,
+      },
+      // delay: 100,
+      endDelay: 800,
+      easing: 'easeInOutQuart',
+      begin: () => {
+        console.log('begin - animate')
+        const path = require('path')
+        const filePath = path.join(__dirname, '../../audios/pen-fast.wav')
+        sound.play(filePath)
+      },
     })
     return _return
   }
@@ -117,6 +139,9 @@ function Line(powerElement, op = {}) {
       easing: 'easeInOutCubic',
       duration: 300,
       opacity: 1,
+      begin: () => {
+        console.log('begin - move_animate_to')
+      },
     })
     return _return
   }

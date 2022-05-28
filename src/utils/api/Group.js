@@ -1,6 +1,6 @@
 const { Element } = require('./elements')
 const _ = require('lodash')
-const { Scene } = require('./powerUtils')
+const { Scene, measureNew } = require('./powerUtils')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -22,13 +22,15 @@ module.exports = (...powerElements) => {
   const { box, id } = createBox()
 
   const childrenProps = powerElements.map(({ htmlElem }) => {
+    const childRect = measureNew(htmlElem)
+
     return {
-      left: htmlElem.offsetLeft,
-      top: htmlElem.offsetTop,
-      width: htmlElem.offsetWidth,
-      height: htmlElem.offsetHeight,
-      right: htmlElem.offsetLeft + htmlElem.offsetWidth,
-      bottom: htmlElem.offsetTop + htmlElem.offsetHeight,
+      left: childRect.left,
+      top: childRect.top,
+      width: childRect.width,
+      height: childRect.height,
+      right: childRect.left + childRect.width,
+      bottom: childRect.top + childRect.height,
     }
   })
 

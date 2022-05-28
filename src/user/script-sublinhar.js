@@ -13,7 +13,7 @@ module.exports = async ({ Text2, Scene, Line }) => {
   Scene.show(myText2)
   Scene.show(myText3)
 
-  const myLine = Line(myText2.children[3], { padding: 8 })
+  const myLine = Line(myText2.children[1], { padding: 8 })
   Scene.show(myLine.animate())
 
   const myLine2 = Line(myText3.children[0], {
