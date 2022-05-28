@@ -147,6 +147,42 @@ async function measureSync(el) {
   return result
 }
 
+function measureNew(el) {
+  var pV = el.style.visibility,
+    pP = el.style.position
+
+  el.style.visibility = 'hidden'
+  el.style.position = 'absolute'
+
+  document.body.appendChild(el)
+  var result = el.getBoundingClientRect()
+  el.parentNode.removeChild(el)
+
+  el.style.visibility = pV
+  el.style.position = pP
+  return result
+}
+function measureChildren(el) {
+  var pV = el.style.visibility,
+    pP = el.style.position
+
+  el.style.visibility = 'hidden'
+  el.style.position = 'absolute'
+
+  document.body.appendChild(el)
+
+  const measureChildren = [...el.children].map(child => {
+    return child.getBoundingClientRect()
+  })
+
+  el.parentNode.removeChild(el)
+
+  el.style.visibility = pV
+  el.style.position = pP
+
+  return measureChildren
+}
+
 function get_tex_size(txt, font) {
   this.element = document.createElement('canvas')
   this.context = this.element.getContext('2d')
@@ -241,12 +277,10 @@ function Enfase(powerTexts, smallSize, bigSize) {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-function morphText(powerElement1, powerElement2) {
-  powerElement2.children.forEach(child => {
-    child.style.opacity = 0
-  })
-
-  Scene.show(powerElement2)
+async function morphText(powerElement1, powerElement2) {
+  // powerElement2.children.forEach(child => {
+  //   child.style.opacity = 0
+  // })
 
   const pares = []
   const del = []
@@ -255,6 +289,7 @@ function morphText(powerElement1, powerElement2) {
     const child2Same = powerElement2.children.find(
       child2 => child2.text === child.text
     )
+    child.htmlElem.classList.add('morph')
     if (child2Same) {
       pares.push({
         child1: child,
@@ -276,40 +311,38 @@ function morphText(powerElement1, powerElement2) {
     easing: 'easeInOutQuad',
   })
 
-  pares.forEach(({ child1, child2 }) => {
+  const childrenRect2 = powerElement2.rectChildren()
+
+  pares.forEach(async ({ child1, child2 }) => {
     const child1Rect = child1.htmlElem.getBoundingClientRect()
-    const child2Rect = child2.htmlElem.getBoundingClientRect()
+    const child2Rect = childrenRect2[child2.numberChild]
 
-    anime
-      .timeline()
-      .add({
-        targets: child1.htmlElem,
-        translateX: child2Rect.left - child1Rect.left,
-        translateY: child2Rect.top - child1Rect.top,
-        duration: 500,
-
-        easing: 'easeInOutQuad',
-      })
-      .add({
-        targets: child2.htmlElem,
-        opacity: [0, 1],
-        delay: 200,
-
-        complete: () => {
-          powerElement1.htmlElem.remove()
-          // child2.htmlElem.remove()
-        },
-      })
-  })
-
-  del.forEach(child => {
     anime({
-      targets: child.htmlElem,
-      opacity: [1, 0],
-      duration: 1000,
+      targets: child2.htmlElem,
+      translateX: [child1Rect.left - child2Rect.left, 0],
+      translateY: [child1Rect.top - child2Rect.top, 0],
+      // delay: 5000,
+      duration: 500,
+      easing: 'easeInOutQuad',
+    })
+
+    anime({
+      targets: child1.htmlElem,
+      translateX: [0, child2Rect.left - child1Rect.left],
+      translateY: [0, child2Rect.top - child1Rect.top],
+      duration: 500,
       easing: 'easeInOutQuad',
     })
   })
+
+  anime({
+    targets: powerElement1.htmlElem,
+    opacity: [1, 0],
+    duration: 500,
+    easing: 'easeInOutQuad',
+  })
+
+  Scene.show(powerElement2)
 }
 
 module.exports = {
@@ -321,6 +354,8 @@ module.exports = {
   waitForElements,
   measure,
   measureSync,
+  measureNew,
+  measureChildren,
   changeTextTo,
   Enfase,
   sleep,

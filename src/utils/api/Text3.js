@@ -47,12 +47,13 @@ function Text3(texts, type = 'div') {
     })
 
     box.innerHTML = spanTransform
-    ;[...box.children].forEach(child => {
+    ;[...box.children].forEach((child, index) => {
       children.push(
         Element({
           elementHtml: child,
           text: child.innerHTML,
           id: child.id,
+          numberChild: index,
           changeTextTo,
         })
       )
@@ -60,7 +61,7 @@ function Text3(texts, type = 'div') {
 
     // box.innerHTML = texts
   } else if (Array.isArray(texts)) {
-    texts.forEach(text => {
+    texts.forEach((text, index) => {
       const span = document.createElement('span')
       span.innerHTML = text.replace(/\s/g, '&nbsp;')
       span.id = _.uniqueId('span_text_')
@@ -73,6 +74,7 @@ function Text3(texts, type = 'div') {
             elementHtml: span,
             text,
             id: span.id,
+            numberChild: index,
             changeTextTo,
           })
         )

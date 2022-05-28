@@ -1,6 +1,6 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
-const { measure } = require('./powerUtils')
+const { measure, measureChildren } = require('./powerUtils')
 const { isNumber } = require('lodash')
 
 function Element(me) {
@@ -116,12 +116,17 @@ function Element(me) {
     return _return
   }
 
+  function rectChildren() {
+    return measureChildren(elementHtml)
+  }
+
   const _return = {
     inApp,
     ...me,
     htmlElem: elementHtml,
     refresh,
     next_to,
+    rectChildren,
     style: elementHtml.style,
     set_width: () => {},
     move_to: powerElement => {
