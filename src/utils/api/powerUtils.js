@@ -278,10 +278,6 @@ function Enfase(powerTexts, smallSize, bigSize) {
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 async function morphText(powerElement1, powerElement2) {
-  // powerElement2.children.forEach(child => {
-  //   child.style.opacity = 0
-  // })
-
   const pares = []
   const del = []
 
@@ -300,17 +296,6 @@ async function morphText(powerElement1, powerElement2) {
     }
   })
 
-  const children2NotInPares = powerElement2.children.filter(
-    child => !pares.find(pair => pair.child2 === child)
-  )
-
-  anime({
-    targets: children2NotInPares.map(v => v.htmlElem),
-    opacity: [0, 1],
-    duration: 500,
-    easing: 'easeInOutQuad',
-  })
-
   const childrenRect2 = powerElement2.rectChildren()
 
   pares.forEach(async ({ child1, child2 }) => {
@@ -321,6 +306,7 @@ async function morphText(powerElement1, powerElement2) {
       targets: child2.htmlElem,
       translateX: [child1Rect.left - child2Rect.left, 0],
       translateY: [child1Rect.top - child2Rect.top, 0],
+
       // delay: 5000,
       duration: 500,
       easing: 'easeInOutQuad',
@@ -338,6 +324,12 @@ async function morphText(powerElement1, powerElement2) {
   anime({
     targets: powerElement1.htmlElem,
     opacity: [1, 0],
+    duration: 500,
+    easing: 'easeInOutQuad',
+  })
+  anime({
+    targets: powerElement2.htmlElem,
+    opacity: [0, 1],
     duration: 500,
     easing: 'easeInOutQuad',
   })
