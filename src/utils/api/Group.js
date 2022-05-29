@@ -21,8 +21,8 @@ function createBox(type = 'div') {
 module.exports = (...powerElements) => {
   const { box, id } = createBox()
 
-  const childrenProps = powerElements.map(({ htmlElem }) => {
-    const childRect = measureNew(htmlElem)
+  const childrenProps = powerElements.map(powerElement => {
+    const childRect = powerElement.getRect()
 
     return {
       left: childRect.left,
