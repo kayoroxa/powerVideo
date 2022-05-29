@@ -1,7 +1,7 @@
 const { Element } = require('../elements')
 const _ = require('lodash')
 const { createBox, changeTextTo, changeText } = require('./methods')
-const { measureChildren, addOnApp } = require('../powerUtils')
+const { addOnApp } = require('../powerUtils')
 const bug = require('../../bug')
 
 function generateSpanElement(child, index) {
@@ -41,10 +41,6 @@ function Text3(texts) {
     })
 
     box.innerHTML = spanTransform
-
-    const childrenRect = measureChildren(box)
-
-    bug(childrenRect.left !== 0, 'Text3: childrenRect.left !== 0')
     ;[...box.children].forEach((child, index) => {
       children.push(generateSpanElement(child, index))
     })

@@ -1,6 +1,5 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
-const { measure, measureChildren } = require('./powerUtils')
 const { isNumber } = require('lodash')
 
 function Element(me) {
@@ -70,45 +69,45 @@ function Element(me) {
 
   function next_to(powerElement, side, margin = 0) {
     const { x, y } = powerElement.get_x_y()
-    measure(elementHtml, measureEl => {
-      if (side === 'left') {
-        elementHtml.style.left = x - measureEl.offsetWidth - margin + 'px'
+    const rectElem = elementHtml.getBoundingClientRect()
 
-        elementHtml.style.top =
-          y +
-          powerElement.htmlElem.offsetHeight / 2 -
-          measureEl.offsetHeight / 2 +
-          'px'
-      } else if (side === 'right') {
-        elementHtml.style.left =
-          powerElement.htmlElem.offsetLeft +
-          powerElement.htmlElem.offsetWidth +
-          margin +
-          'px'
+    if (side === 'left') {
+      elementHtml.style.left = x - rectElem.offsetWidth - margin + 'px'
 
-        elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
-      } else if (side === 'top') {
-        elementHtml.style.top = y - measureEl.offsetHeight - margin + 'px'
+      elementHtml.style.top =
+        y +
+        powerElement.htmlElem.offsetHeight / 2 -
+        rectElem.offsetHeight / 2 +
+        'px'
+    } else if (side === 'right') {
+      elementHtml.style.left =
+        powerElement.htmlElem.offsetLeft +
+        powerElement.htmlElem.offsetWidth +
+        margin +
+        'px'
 
-        elementHtml.style.left =
-          x +
-          powerElement.htmlElem.offsetWidth / 2 -
-          measureEl.offsetWidth / 2 +
-          'px'
-      } else if (side === 'bottom') {
-        elementHtml.style.top =
-          powerElement.htmlElem.offsetTop +
-          powerElement.htmlElem.offsetHeight +
-          margin +
-          'px'
+      elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
+    } else if (side === 'top') {
+      elementHtml.style.top = y - rectElem.offsetHeight - margin + 'px'
 
-        elementHtml.style.left =
-          x +
-          powerElement.htmlElem.offsetWidth / 2 -
-          measureEl.offsetWidth / 2 +
-          'px'
-      }
-    })
+      elementHtml.style.left =
+        x +
+        powerElement.htmlElem.offsetWidth / 2 -
+        rectElem.offsetWidth / 2 +
+        'px'
+    } else if (side === 'bottom') {
+      elementHtml.style.top =
+        powerElement.htmlElem.offsetTop +
+        powerElement.htmlElem.offsetHeight +
+        margin +
+        'px'
+
+      elementHtml.style.left =
+        x +
+        powerElement.htmlElem.offsetWidth / 2 -
+        rectElem.offsetWidth / 2 +
+        'px'
+    }
     return _return
   }
 
@@ -117,7 +116,9 @@ function Element(me) {
   }
 
   function rectChildren() {
-    return measureChildren(elementHtml)
+    return [...elementHtml.children].map(child => {
+      return child.getBoundingClientRect()
+    })
   }
 
   const _return = {
