@@ -61,7 +61,21 @@ function Line(powerElement, op = {}) {
     })
   }
 
-  refresh(null, true)
+  function initPosition() {
+    let { left, top, height } = powerElement.getRect()
+
+    anime.set(box, {
+      top: `${top - op.paddingY}px`,
+      left: `${left - op.padding}px`,
+      width: 0,
+      height: `${height + op.paddingY * 2}px`,
+      background: op.color,
+      borderRadius: `${op.radius}px`,
+      zIndex: zIndex - 1,
+    })
+  }
+
+  initPosition()
 
   const _return = Element({
     elementHtml: box,
@@ -71,25 +85,15 @@ function Line(powerElement, op = {}) {
   })
 
   function animate() {
-    const elemRect = powerElement.getRect()
+    let { width } = powerElement.getRect()
 
-    let { width } = elemRect
-
-    // let { width } = powerElement.get_props()
     anime({
       targets: box,
       width: {
-        value: [0, width + op.padding * 2],
+        value: width + op.padding * 2,
         duration: 300,
       },
-      // delay: 100,
-      endDelay: 800,
       easing: 'easeInOutQuart',
-      begin: () => {
-        // const path = require('path')
-        // const filePath = path.join(__dirname, '../../audios/pen-fast.wav')
-        // sound.play(filePath)
-      },
     })
     return _return
   }
@@ -106,34 +110,24 @@ function Line(powerElement, op = {}) {
     op.radius = isNumber(op.radius) ? op.radius : 5
     op.height = isNumber(op.height) ? op.height : height
 
-    box.style.background = op.color
-    box.style.borderRadius = `${op.radius}px`
-
-    const prevLeft = box.offsetLeft
-    const prevTop = box.offsetTop
-    const prevHeight = box.offsetHeight
-    const prevWidth = box.offsetWidth
-
     anime({
       targets: box,
-
-      left: [prevLeft, left - op.padding],
-      width: [prevWidth, width + op.padding * 2],
+      background: op.color,
+      left: left - op.padding,
+      width: width + op.padding * 2,
+      borderRadius: `${op.radius}px`,
       height: {
-        value: [prevHeight, op.height + op.paddingY * 2],
+        value: op.height + op.paddingY * 2,
 
         // duration: 200,
       },
       top: {
-        value: [prevTop, highLight ? top + height : top - op.paddingY],
+        value: highLight ? top + height : top - op.paddingY,
         // easing: 'spring(1, 80, 10, 0)',
       },
       easing: 'easeInOutCubic',
       duration: 300,
       opacity: 1,
-      begin: () => {
-        console.log('begin - move_animate_to')
-      },
     })
     return _return
   }
