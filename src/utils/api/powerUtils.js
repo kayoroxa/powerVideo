@@ -368,21 +368,48 @@ async function morphText(powerElement1, powerElement2) {
 }
 
 function distributeOnScreen(powerElements, op = {}) {
-  // let y_gap = op?.y.includes('gap') ? op?.y.match(/\d+/)[0] : false
-  // let x_gap = op?.x.includes('gap') ? op?.x.match(/\d+/)[0] : false
+  function getInitialY(gap) {
+    const windowHeight = window.innerHeight
+    const centerY = windowHeight / 2
 
-  const windowWidth = window.innerWidth
-  const windowHeight = window.innerHeight
+    const totalHeightContent = powerElements.reduce((acc, powerElement) => {
+      return acc + powerElement.htmlElem.getBoundingClientRect().height
+    }, 0)
+
+    const totalWithPadding =
+      totalHeightContent + (powerElements.length - 1) * gap
+
+    return centerY - totalWithPadding / 2
+  }
+
+  function getInitialX(gap) {
+    const windowWidth = window.innerWidth
+    const centerX = windowWidth / 2
+
+    const totalWidthContent = powerElements.reduce((acc, powerElement) => {
+      return acc + powerElement.htmlElem.getBoundingClientRect().width
+    }, 0)
+
+    const totalWithPadding =
+      totalWidthContent + (powerElements.length - 1) * gap
+
+    return centerX - totalWithPadding / 2
+  }
+
+  const gap = op.gap || 20
+
+  const initialY = getInitialY(gap)
+  const initialX = getInitialX(gap)
 
   powerElements.forEach((powerElement, index) => {
-    const divider = windowHeight / powerElements.length // 1000 / 5 = 200
-    const initialTop = divider * (index + 1) //200 / 400 / 600 / 800 / 1000
-    const centerInInitialTop = initialTop - divider / 2 // 100 / 300 / 500 / 700 / 900
-    const y = centerInInitialTop - powerElement.htmlElem.offsetHeight / 2 // 100 - elemHeight / 2 .... center
+    const powerElementRect = powerElement.htmlElem.getBoundingClientRect()
+
+    const yCenter = initialY + index * (powerElementRect.height + gap)
+    const xCenter = initialX + index * (powerElementRect.width + gap)
 
     powerElement.set_x_y({
-      x: op?.x,
-      y,
+      x: op.align === 'row' ? xCenter : 'center',
+      y: op.align === 'column' ? yCenter : 'center',
     })
   })
 }
