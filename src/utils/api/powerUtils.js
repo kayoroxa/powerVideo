@@ -72,8 +72,8 @@ const Scene = {
             })
             resolve()
           }
-        }
-        // { once: true }
+        },
+        { once: true }
       )
     })
   },
