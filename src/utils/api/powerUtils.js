@@ -284,6 +284,12 @@ async function morphText(powerElement1, powerElement2) {
   const pares = []
   const del = []
 
+  powerElement2.show()
+
+  anime.set(powerElement2.htmlElem, {
+    opacity: 0,
+  })
+
   powerElement1.children.forEach(child => {
     const child2Same = powerElement2.children.find(
       child2 => child2.text === child.text
@@ -305,37 +311,49 @@ async function morphText(powerElement1, powerElement2) {
     const child1Rect = child1.htmlElem.getBoundingClientRect()
     const child2Rect = childrenRect2[child2.numberChild]
 
-    anime({
-      targets: child2.htmlElem,
-      translateX: [child1Rect.left - child2Rect.left, 0],
-      translateY: [child1Rect.top - child2Rect.top, 0],
+    const timeline = anime.timeline()
 
-      // delay: 5000,
+    timeline
+      .add({
+        targets: child2.htmlElem,
+        translateX: [child1Rect.left - child2Rect.left, 0],
+        translateY: [child1Rect.top - child2Rect.top, 0],
+
+        // delay: 5000,
+        duration: 700,
+        easing: 'easeInOutCubic',
+      })
+
+      .add(
+        {
+          targets: child1.htmlElem,
+          translateX: [0, child2Rect.left - child1Rect.left],
+          translateY: [0, child2Rect.top - child1Rect.top],
+          duration: 700,
+          easing: 'easeInOutCubic',
+        },
+        0
+      )
+  })
+
+  const timeline = anime.timeline()
+
+  timeline
+    .add({
+      targets: powerElement1.htmlElem,
+      opacity: [1, 0],
       duration: 500,
       easing: 'easeInOutQuad',
     })
-
-    anime({
-      targets: child1.htmlElem,
-      translateX: [0, child2Rect.left - child1Rect.left],
-      translateY: [0, child2Rect.top - child1Rect.top],
-      duration: 500,
-      easing: 'easeInOutQuad',
-    })
-  })
-
-  anime({
-    targets: powerElement1.htmlElem,
-    opacity: [1, 0],
-    duration: 500,
-    easing: 'easeInOutQuad',
-  })
-  anime({
-    targets: powerElement2.htmlElem,
-    opacity: [0, 1],
-    duration: 500,
-    easing: 'easeInOutQuad',
-  })
+    .add(
+      {
+        targets: powerElement2.htmlElem,
+        opacity: 1,
+        duration: 500,
+        easing: 'easeInOutQuad',
+      },
+      0
+    )
 
   Scene.show(powerElement2)
 }
