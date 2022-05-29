@@ -1,6 +1,6 @@
 const { Element } = require('./elements')
 const _ = require('lodash')
-const { Scene, measureNew } = require('./powerUtils')
+const { Scene } = require('./powerUtils')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
