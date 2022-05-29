@@ -1,7 +1,5 @@
-const Group = require('../utils/api/Group')
+const { distributeOnScreen } = require('../utils/api/powerUtils')
 const { Text3 } = require('../utils/api/Text3')
-const anime = require('animejs')
-const { morphText } = require('../utils/api/powerUtils')
 
 const titleStyle = {
   fontSize: '90px',
@@ -16,20 +14,12 @@ module.exports = async ({ Scene, Line }) => {
     y: 100,
   })
 
-  const texts = [
-    Text3('1. Continua escutando'),
-    Text3('2. Quando tiver tempo olha a tradução'),
-    Text3('3. Ainda não entendeu, assista a aula'),
-  ]
+  const texts = [Text3('1'), Text3('2'), Text3('3')]
 
   title.show()
 
-  texts.forEach((text, index) =>
-    text.set_x_y({
-      x: 'center',
-      y: 260 + index * 100,
-    })
-  )
+  distributeOnScreen(texts, { align: 'row', gap: 100 })
+
   texts.forEach(text => text.show())
 
   const myLine = Line(title, { padding: 8, zIndex: '-50' })
@@ -37,7 +27,7 @@ module.exports = async ({ Scene, Line }) => {
   Scene.show(myLine.animate())
 
   await Scene.playClicks(
-    texts.map((text, index) => () => {
+    texts.map((_, index) => () => {
       myLine.move_animate_to(texts.slice(0, index + 1), {
         padding: 30,
         paddingY: 30,
