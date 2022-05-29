@@ -46,20 +46,6 @@ module.exports = async ({ Scene, Line }) => {
 
   const group1 = Group(myText2, myText3)
 
-  await Scene.playClick(() => {
-    group1.set_x_y({
-      x: 0,
-      y: 0,
-    })
-  })
-
-  await Scene.playClick(() => {
-    group1.set_x_y({
-      y: 400,
-      x: 300,
-    })
-  })
-
   await Scene.delay(() => {
     myLine.move_animate_to(group1, {
       padding: 30,
