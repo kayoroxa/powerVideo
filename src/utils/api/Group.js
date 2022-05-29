@@ -4,25 +4,18 @@ const { Scene } = require('./powerUtils')
 const { isNumber } = require('lodash')
 const anime = require('animejs')
 
-function createBox(type = 'div') {
-  const box = document.createElement(type)
+function createBox() {
+  const box = document.createElement('div')
   let id = false
-  box.classList.add('p-text')
-  if (type === 'div') {
-    box.classList.add('p-absolute')
-    id = _.uniqueId('box_text_')
-    box.id = id
-  } else {
-    id = _.uniqueId('span_text_')
-    box.id = id
-  }
+  box.classList.add('p-group')
+  box.classList.add('p-absolute')
+  id = _.uniqueId('box_group_')
+  box.id = id
 
   return { box, id }
 }
 
-function initBox(powerElements) {
-  const { box, id } = createBox()
-
+function refreshStyle(powerElements, box, id) {
   const childrenProps = powerElements.map(powerElement => {
     const childRect = powerElement.getRect()
 
@@ -85,7 +78,9 @@ function set_x_y(elementHtml, children, op) {
 }
 
 module.exports = (...powerElements) => {
-  const { box, id } = initBox(powerElements)
+  const { box, id } = createBox()
+
+  refreshStyle(powerElements, box, id)
 
   const children = powerElements
 
@@ -95,6 +90,9 @@ module.exports = (...powerElements) => {
     children,
     set_x_y: op => {
       set_x_y(box, children, op)
+    },
+    refresh_to: (...powerElements) => {
+      refreshStyle(powerElements, box, id)
     },
   })
 
