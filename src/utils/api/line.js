@@ -98,7 +98,7 @@ function Line(powerElement, op = {}) {
     return _return
   }
 
-  function move_animate_to(newPowerElement, op = {}) {
+  async function move_animate_to(newPowerElement, op = {}, delay = 0) {
     powerElement = newPowerElement
 
     let { left, width, height, top } = newPowerElement.get_props()
@@ -112,6 +112,7 @@ function Line(powerElement, op = {}) {
 
     anime({
       targets: box,
+      delay: delay,
       background: op.color,
       left: left - op.padding,
       width: width + op.padding * 2,
@@ -126,7 +127,7 @@ function Line(powerElement, op = {}) {
         // easing: 'spring(1, 80, 10, 0)',
       },
       easing: 'easeInOutCubic',
-      duration: 300,
+      duration: 500,
       opacity: 1,
     })
     return _return
