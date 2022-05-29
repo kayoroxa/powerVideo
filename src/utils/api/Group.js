@@ -1,6 +1,8 @@
 const { Element } = require('./elements')
 const _ = require('lodash')
 const { Scene } = require('./powerUtils')
+const { isNumber } = require('lodash')
+const anime = require('animejs')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -51,6 +53,37 @@ function initBox(powerElements) {
   return { box, id }
 }
 
+function set_x_y(elementHtml, children, op) {
+  if (typeof op === 'string') {
+    if (op === 'center') {
+      elementHtml.style.left = `${window.innerWidth / 2}px`
+      elementHtml.style.top = `${window.innerHeight / 2}px`
+    }
+  } else {
+    const { x, y } = op
+    if (x === 'center') {
+      elementHtml.style.left = `${window.innerWidth / 2}px`
+    }
+    if (y === 'center') {
+      elementHtml.style.top = `${window.innerHeight / 2}px`
+    }
+
+    const timeline = anime.timeline({
+      // easing: 'easeOutExpo',
+      duration: 500,
+    })
+
+    timeline.add(
+      {
+        targets: [elementHtml, ...children.map(child => child.htmlElem)],
+        translateY: isNumber(y) ? y - elementHtml.offsetTop : null,
+        translateX: isNumber(x) ? x - elementHtml.offsetLeft : null,
+      },
+      0
+    )
+  }
+}
+
 module.exports = (...powerElements) => {
   const { box, id } = initBox(powerElements)
 
@@ -60,6 +93,9 @@ module.exports = (...powerElements) => {
     elementHtml: box,
     id,
     children,
+    set_x_y: op => {
+      set_x_y(box, children, op)
+    },
   })
 
   Scene.show(me)
