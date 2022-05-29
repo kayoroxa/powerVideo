@@ -137,6 +137,12 @@ function Element(me) {
     next_to,
     rectChildren,
     style: elementHtml.style,
+    setStyle: newStyle => {
+      Object.keys(newStyle).forEach(k => {
+        elementHtml.style[k] = newStyle[k]
+      })
+      return _return
+    },
     set_width: () => {},
     move_to: powerElement => {
       // powerElement.htmlElem.
