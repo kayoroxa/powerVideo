@@ -3,7 +3,6 @@ const _ = require('lodash')
 const anime = require('animejs')
 const { isNumber } = require('lodash')
 const obs = require('../../utils/observer')
-const { measureSync, measureNew } = require('./powerUtils')
 // const sound = require('sound-play')
 
 function createBox(type = 'div') {

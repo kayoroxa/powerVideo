@@ -1,4 +1,3 @@
-const Group = require('../utils/api/Group')
 const { Text3 } = require('../utils/api/Text3')
 
 module.exports = async ({ Scene, Line }) => {
