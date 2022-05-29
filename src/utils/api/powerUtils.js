@@ -82,6 +82,15 @@ const Scene = {
       await Scene.playClick(animations[i])
     }
   },
+  delay: async (animation, ms = 1000) => {
+    await sleep(ms)
+
+    if (typeof animation === 'function') {
+      animation()
+      return
+    }
+    animation.play()
+  },
 }
 
 function waitForElements(selectors, callBack) {
