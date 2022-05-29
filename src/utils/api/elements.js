@@ -10,39 +10,66 @@ function Element(me) {
   function set_x_y(op) {
     if (typeof op === 'string') {
       if (op === 'center') {
-        // measure(elementHtml, e => {
-        // const { height, width } = e.getBoundingClientRect()
         elementHtml.style.left = `${
           window.innerWidth / 2 - elementHtml.offsetWidth / 2
         }px`
         elementHtml.style.top = `${
           window.innerHeight / 2 - elementHtml.offsetHeight / 2
         }px`
-        // })
       }
     } else {
       const { x, y } = op
       if (x === 'center') {
-        // measure(elementHtml, e => {
-        // const { width } = e.getBoundingClientRect()
         elementHtml.style.left = `${
           window.innerWidth / 2 - elementHtml.offsetWidth / 2
         }px`
-        // })
       }
       if (y === 'center') {
-        // measure(elementHtml, e => {
-        // const { height } = e.getBoundingClientRect()
         elementHtml.style.top = `${
           window.innerHeight / 2 - elementHtml.offsetHeight / 2
         }px`
-        // })
       }
       if (isNumber(x)) elementHtml.style.left = x + 'px'
       if (isNumber(y)) elementHtml.style.top = y + 'px'
     }
 
     return _return
+  }
+
+  function getTransform(powerElement) {
+    return window.getComputedStyle(powerElement.htmlElem).transform
+  }
+
+  function set_x_y_translate(op) {
+    if (typeof op === 'string') {
+      if (op === 'center') {
+        elementHtml.style.transform = `translate(${
+          window.innerWidth / 2 - elementHtml.offsetWidth / 2
+        }px, ${window.innerHeight / 2 - elementHtml.offsetHeight / 2}px)`
+      }
+    } else {
+      const { x, y } = op
+      const translate = {}
+      if (x === 'center') {
+        translate.x = `${window.innerWidth / 2 - elementHtml.offsetWidth / 2}px`
+      }
+      if (y === 'center') {
+        translate.y = `${
+          window.innerHeight / 2 - elementHtml.offsetHeight / 2
+        }px`
+      }
+      const rect = elementHtml.getBoundingClientRect()
+      if (isNumber(x)) {
+        translate.x = `${x - rect.left}px`
+      }
+      if (isNumber(y)) {
+        translate.x = `${y - rect.top}px`
+      }
+
+      elementHtml.style.transform = `translate(${
+        translate.x || getTransform(elementHtml).x
+      }, ${translate.y || getTransform(elementHtml).y})`
+    }
   }
 
   function get_x_y(offset = false) {
@@ -158,6 +185,7 @@ function Element(me) {
       return _return
     },
     set_x_y,
+    set_x_y_translate,
     get_x_y,
     get_props,
     save_state: () => {},
