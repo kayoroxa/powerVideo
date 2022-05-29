@@ -47,6 +47,20 @@ module.exports = async ({ Scene, Line }) => {
   const group1 = Group(myText2, myText3)
 
   await Scene.playClick(() => {
+    group1.set_x_y({
+      x: 0,
+      y: 0,
+    })
+  })
+
+  await Scene.playClick(() => {
+    group1.set_x_y({
+      y: 400,
+      x: 300,
+    })
+  })
+
+  await Scene.playClick(() => {
     anime({
       targets: [myText3.elementHtml.children, myText2.elementHtml.children],
       color: 'hsl(100, 100%, 99%)',
