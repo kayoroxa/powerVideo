@@ -2,7 +2,6 @@ const { Element } = require('./elements')
 const _ = require('lodash')
 const anime = require('animejs')
 const { isNumber } = require('lodash')
-const obs = require('../../utils/observer')
 // const sound = require('sound-play')
 
 function createBox(type = 'div') {
@@ -22,7 +21,7 @@ function Line(powerElement, op = {}) {
   const { box, id } = createBox()
 
   // delete update event when change
-  obs('update').on(powerElement.id, () => refresh(), id)
+  // obs('update').on(powerElement.id, () => refresh(), id)
 
   op.color = op.color || 'rgba(0, 200, 0, 0.5)'
   op.padding = isNumber(op.padding) ? op.padding : 10
@@ -33,33 +32,6 @@ function Line(powerElement, op = {}) {
     powerElement.htmlElem.zIndex ||
     powerElement.htmlElem.parentNode?.zIndex ||
     0
-
-  async function refresh(rect = false, start) {
-    obs('update').remove(id)
-    obs('update').on(powerElement.id, () => refresh(), id)
-
-    const elemRect = powerElement.getRect()
-
-    let { left, top, width, height } = rect || elemRect
-
-    box.style.zIndex = zIndex - 1
-    // box.style.opacity = 0
-    anime({
-      targets: box,
-      top: [`${top - op.paddingY}px`, `${top - op.paddingY}px`],
-      left: [`${left - op.padding}px`, `${left - op.padding}px`],
-      width: start
-        ? 0
-        : [`${width + op.padding * 2}px`, `${width + op.padding * 2}px`],
-      height: [
-        `${height + op.paddingY * 2}px`,
-        `${height + op.paddingY * 2}px`,
-      ],
-      background: [op.color, op.color],
-      borderRadius: `${op.radius}px`,
-      // easing: 'linear',
-    })
-  }
 
   function initPosition() {
     let { left, top, height } = powerElement.getRect()
