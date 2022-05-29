@@ -1,7 +1,8 @@
 const { Element } = require('./elements')
 const _ = require('lodash')
 const anime = require('animejs')
-const { isNumber } = require('lodash')
+const { isNumber, isArray } = require('lodash')
+const Group = require('./Group')
 // const sound = require('sound-play')
 
 function createBox(type = 'div') {
@@ -18,6 +19,7 @@ function createBox(type = 'div') {
 }
 
 function Line(powerElement, op = {}) {
+  let group = false
   const { box, id } = createBox()
 
   // delete update event when change
@@ -28,7 +30,9 @@ function Line(powerElement, op = {}) {
   op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
   op.radius = isNumber(op.radius) ? op.radius : 5
   // debugger
+
   const zIndex =
+    op?.zIndex ||
     powerElement.htmlElem.zIndex ||
     powerElement.htmlElem.parentNode?.zIndex ||
     0
@@ -54,6 +58,11 @@ function Line(powerElement, op = {}) {
     id,
     animate,
     move_animate_to,
+    link_to: powerElement => {
+      powerElement.onChange(() => {
+        initPosition()
+      })
+    },
   })
 
   function animate() {
@@ -71,9 +80,21 @@ function Line(powerElement, op = {}) {
   }
 
   async function move_animate_to(newPowerElement, op = {}, delay = 0) {
-    powerElement = newPowerElement
+    let rect
+    // debugger
+    if (isArray(newPowerElement)) {
+      if (!group) {
+        group = Group(...newPowerElement)
+        rect = group.htmlElem.getBoundingClientRect()
+      } else {
+        group.refresh_to(...newPowerElement)
+        rect = group.htmlElem.getBoundingClientRect()
+      }
+    } else {
+      rect = newPowerElement.htmlElem.getBoundingClientRect()
+    }
 
-    let { left, width, height, top } = newPowerElement.get_props()
+    let { left, width, height, top } = rect
     const highLight = op.height ? true : false
 
     op.color = op.color || 'rgba(0, 200, 0, 0.5)'
