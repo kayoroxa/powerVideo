@@ -408,8 +408,8 @@ function distributeOnScreen(powerElements, op = {}) {
     const xCenter = initialX + index * (powerElementRect.width + gap)
 
     powerElement.set_x_y({
-      x: op.align === 'row' ? xCenter : 'center',
-      y: op.align === 'column' ? yCenter : 'center',
+      x: op.direction === 'row' ? xCenter : 'center',
+      y: op.direction === 'column' ? yCenter : 'center',
     })
   })
 }
