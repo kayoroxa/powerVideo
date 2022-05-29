@@ -18,7 +18,7 @@ function createBox(type = 'div') {
   return { box, id }
 }
 
-module.exports = (...powerElements) => {
+function initBox(powerElements) {
   const { box, id } = createBox()
 
   const childrenProps = powerElements.map(powerElement => {
@@ -47,6 +47,12 @@ module.exports = (...powerElements) => {
   box.style.position = 'absolute'
   // box.style.background = 'hsl(344, 100%, 54%)'
   box.style.zIndex = -5
+
+  return { box, id }
+}
+
+module.exports = (...powerElements) => {
+  const { box, id } = initBox(powerElements)
 
   const children = powerElements
 
