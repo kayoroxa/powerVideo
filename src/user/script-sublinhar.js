@@ -60,6 +60,15 @@ module.exports = async ({ Scene, Line }) => {
     })
   })
 
+  await Scene.delay(() => {
+    myLine.move_animate_to(group1, {
+      padding: 30,
+      paddingY: 60,
+      color: '#ffff',
+      // height: 10,
+    })
+  }, 30)
+
   await Scene.playClick(() => {
     anime({
       targets: [myText3.elementHtml.children, myText2.elementHtml.children],
