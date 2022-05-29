@@ -12,8 +12,12 @@ function Element(me) {
       if (op === 'center') {
         // measure(elementHtml, e => {
         // const { height, width } = e.getBoundingClientRect()
-        elementHtml.style.left = `${window.innerWidth / 2}px`
-        elementHtml.style.top = `${window.innerHeight / 2}px`
+        elementHtml.style.left = `${
+          window.innerWidth / 2 - elementHtml.offsetWidth / 2
+        }px`
+        elementHtml.style.top = `${
+          window.innerHeight / 2 - elementHtml.offsetHeight / 2
+        }px`
         // })
       }
     } else {
@@ -21,13 +25,17 @@ function Element(me) {
       if (x === 'center') {
         // measure(elementHtml, e => {
         // const { width } = e.getBoundingClientRect()
-        elementHtml.style.left = `${window.innerWidth / 2}px`
+        elementHtml.style.left = `${
+          window.innerWidth / 2 - elementHtml.offsetWidth / 2
+        }px`
         // })
       }
       if (y === 'center') {
         // measure(elementHtml, e => {
         // const { height } = e.getBoundingClientRect()
-        elementHtml.style.top = `${window.innerHeight / 2}px`
+        elementHtml.style.top = `${
+          window.innerHeight / 2 - elementHtml.offsetHeight / 2
+        }px`
         // })
       }
       if (isNumber(x)) elementHtml.style.left = x + 'px'
@@ -123,7 +131,7 @@ function Element(me) {
 
   const _return = {
     inApp,
-    ...me,
+
     htmlElem: elementHtml,
     refresh,
     next_to,
@@ -155,6 +163,7 @@ function Element(me) {
     get_left: () => elementHtml.offsetLeft,
     get_top: () => elementHtml.offsetTop,
     box_style,
+    ...me,
   }
 
   return _return
