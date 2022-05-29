@@ -367,6 +367,26 @@ async function morphText(powerElement1, powerElement2) {
   Scene.show(powerElement2)
 }
 
+function distributeOnScreen(powerElements, op = {}) {
+  // let y_gap = op?.y.includes('gap') ? op?.y.match(/\d+/)[0] : false
+  // let x_gap = op?.x.includes('gap') ? op?.x.match(/\d+/)[0] : false
+
+  const windowWidth = window.innerWidth
+  const windowHeight = window.innerHeight
+
+  powerElements.forEach((powerElement, index) => {
+    const divider = windowHeight / powerElements.length // 1000 / 5 = 200
+    const initialTop = divider * (index + 1) //200 / 400 / 600 / 800 / 1000
+    const centerInInitialTop = initialTop - divider / 2 // 100 / 300 / 500 / 700 / 900
+    const y = centerInInitialTop - powerElement.htmlElem.offsetHeight / 2 // 100 - elemHeight / 2 .... center
+
+    powerElement.set_x_y({
+      x: op?.x,
+      y,
+    })
+  })
+}
+
 module.exports = {
   VGroup,
   GrowFromCenter,
@@ -382,4 +402,5 @@ module.exports = {
   Enfase,
   sleep,
   morphText,
+  distributeOnScreen,
 }
