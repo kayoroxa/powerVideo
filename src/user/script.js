@@ -8,4 +8,4 @@ const textSize = require('./script-textSize')
 const traduçãoParcelada = require('./tradução-parcelada')
 const bible = require('./bible')
 
-module.exports = bible
+module.exports = sublinhar

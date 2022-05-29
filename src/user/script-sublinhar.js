@@ -1,17 +1,19 @@
 const Group = require('../utils/api/Group')
+const { Text3 } = require('../utils/api/Text3')
 
-module.exports = async ({ Text2, Scene, Line }) => {
-  const myText2 = Text2(['você ', 'tem', ' ', 'feito']).set_x_y({
-    x: 400,
+module.exports = async ({ Scene, Line }) => {
+  const myText2 = Text3('{Hello} {words} {man}').set_x_y({
+    x: 'center',
     y: 300,
   })
-  const myText3 = Text2(['have you', ' ', 'ever']).set_x_y({
-    x: 400,
+
+  const myText3 = Text3('{Hello} {words} {man}').set_x_y({
+    x: 'center',
     y: 400,
   })
 
-  Scene.show(myText2)
-  Scene.show(myText3)
+  myText2.show()
+  myText3.show()
 
   const myLine = Line(myText2.children[1], { padding: 8 })
   Scene.show(myLine.animate())
@@ -23,46 +25,46 @@ module.exports = async ({ Text2, Scene, Line }) => {
   Scene.show(myLine2.animate())
 
   await Scene.playClick(() => {
-    myLine.move_animate_to(myText2.children[1], {
+    myLine.move_animate_to(myText2.children[0], {
       padding: 0,
       color: '#ffff',
       height: 10,
     })
-    myLine2.move_animate_to(myText3.children[0], {
+    myLine2.move_animate_to(myText3.children[1], {
       padding: 0,
       color: 'hsl(197, 37%, 24%)',
       height: 10,
     })
   })
-  await Scene.playClick(() => {
-    myLine.move_animate_to(myText2, {
-      padding: 0,
-      color: '#ffff',
-      height: 10,
-    })
-  })
+  // await Scene.playClick(() => {
+  //   myLine.move_animate_to(myText2, {
+  //     padding: 0,
+  //     color: '#ffff',
+  //     height: 10,
+  //   })
+  // })
 
-  const group1 = Group(myText2, myText3)
+  // const group1 = Group(myText2, myText3)
 
-  await Scene.playClick(() => {
-    myLine.move_animate_to(group1, {
-      padding: 30,
-      paddingY: 60,
-      color: '#ffff',
-      // height: 10,
-    })
-    myLine2.move_animate_to(myText2.children[1], {
-      padding: 0,
-      color: 'hsl(197, 37%, 24%)',
-      height: 10,
-    })
-  })
-  await Scene.playClick(() => {
-    myLine.move_animate_to(myText2.children[1], {
-      padding: 8,
-      color: '#ff1453',
-    })
-    console.log(myText2.children[1])
-    myText2.children[1].htmlElem.style.color = '#ffff'
-  })
+  // await Scene.playClick(() => {
+  //   myLine.move_animate_to(group1, {
+  //     padding: 30,
+  //     paddingY: 60,
+  //     color: '#ffff',
+  //     // height: 10,
+  //   })
+  //   myLine2.move_animate_to(myText2.children[1], {
+  //     padding: 0,
+  //     color: 'hsl(197, 37%, 24%)',
+  //     height: 10,
+  //   })
+  // })
+  // await Scene.playClick(() => {
+  //   myLine.move_animate_to(myText2.children[1], {
+  //     padding: 8,
+  //     color: '#ff1453',
+  //   })
+  //   console.log(myText2.children[1])
+  //   myText2.children[1].htmlElem.style.color = '#ffff'
+  // })
 }

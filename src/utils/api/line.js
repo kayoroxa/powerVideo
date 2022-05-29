@@ -4,7 +4,7 @@ const anime = require('animejs')
 const { isNumber } = require('lodash')
 const obs = require('../../utils/observer')
 const { measureSync, measureNew } = require('./powerUtils')
-const sound = require('sound-play')
+// const sound = require('sound-play')
 
 function createBox(type = 'div') {
   const box = document.createElement(type)
@@ -39,11 +39,9 @@ function Line(powerElement, op = {}) {
     obs('update').remove(id)
     obs('update').on(powerElement.id, () => refresh(), id)
 
-    const elemRect = await measureSync(powerElement.htmlElem)
+    const elemRect = powerElement.getRect()
 
     let { left, top, width, height } = rect || elemRect
-
-    // debugger
 
     box.style.zIndex = zIndex - 1
     // box.style.opacity = 0
@@ -61,11 +59,7 @@ function Line(powerElement, op = {}) {
       background: [op.color, op.color],
       borderRadius: `${op.radius}px`,
       // easing: 'linear',
-      begin: () => {
-        console.log('begin - line')
-      },
     })
-    console.log({ width, height })
   }
 
   refresh(null, true)
@@ -78,7 +72,7 @@ function Line(powerElement, op = {}) {
   })
 
   function animate() {
-    const elemRect = measureNew(powerElement.htmlElem)
+    const elemRect = powerElement.getRect()
 
     let { width } = elemRect
 
@@ -93,10 +87,9 @@ function Line(powerElement, op = {}) {
       endDelay: 800,
       easing: 'easeInOutQuart',
       begin: () => {
-        console.log('begin - animate')
-        const path = require('path')
-        const filePath = path.join(__dirname, '../../audios/pen-fast.wav')
-        sound.play(filePath)
+        // const path = require('path')
+        // const filePath = path.join(__dirname, '../../audios/pen-fast.wav')
+        // sound.play(filePath)
       },
     })
     return _return

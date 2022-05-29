@@ -9,6 +9,7 @@
 }
 
 
+
 body {
   background: #e9c46a;
 }
@@ -17,6 +18,11 @@ body {
   width: 100vw;
   height: 100vh;
   position: relative;
+}
+
+
+.hide {
+  visibility: hidden;
 }
 
 

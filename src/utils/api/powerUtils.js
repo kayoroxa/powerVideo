@@ -25,12 +25,16 @@ function GrowFromCenter() {
 }
 
 function addOnApp(PowerElement) {
-  if (PowerElement.inApp === false) {
-    document.querySelector('.app').appendChild(PowerElement.htmlElem)
+  const isDomElement = PowerElement instanceof HTMLElement
+  const isInApp = document.querySelector('#' + PowerElement.id)
+  if (!isInApp) {
+    document
+      .querySelector('.app')
+      .appendChild(isDomElement ? PowerElement : PowerElement.htmlElem)
+
     obs('POWER_ELEMENT').notify('load', PowerElement)
   }
-
-  PowerElement.inApp = true
+  if (!isDomElement) PowerElement.inApp = true
 }
 
 function FadeIn(PowerElement) {
@@ -49,7 +53,6 @@ function FadeIn(PowerElement) {
 const Scene = {
   show: (...PowerElements) => {
     PowerElements.forEach(PowerElement => {
-      console.log(PowerElement)
       addOnApp(PowerElement)
     })
   },
@@ -163,22 +166,22 @@ function measureNew(el) {
   return result
 }
 function measureChildren(el) {
-  var pV = el.style.visibility,
-    pP = el.style.position
+  // var pV = el.style.visibility,
+  //   pP = el.style.position
 
-  el.style.visibility = 'hidden'
-  el.style.position = 'absolute'
+  // el.style.visibility = 'hidden'
+  // el.style.position = 'absolute'
 
-  document.body.appendChild(el)
+  // document.body.appendChild(el)
 
   const measureChildren = [...el.children].map(child => {
     return child.getBoundingClientRect()
   })
 
-  el.parentNode.removeChild(el)
+  // el.parentNode.removeChild(el)
 
-  el.style.visibility = pV
-  el.style.position = pP
+  // el.style.visibility = pV
+  // el.style.position = pP
 
   return measureChildren
 }

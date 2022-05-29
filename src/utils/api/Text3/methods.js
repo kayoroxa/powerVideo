@@ -1,6 +1,5 @@
-const { Element } = require('./elements')
-const _ = require('lodash')
 const anime = require('animejs')
+const _ = require('lodash')
 
 function get_tex_size(txt, font) {
   this.element = document.createElement('canvas')
@@ -13,75 +12,7 @@ function get_tex_size(txt, font) {
   return textSize
 }
 
-function createBox(type = 'div') {
-  const box = document.createElement(type)
-  let id = false
-  box.classList.add('p-text-block')
-  if (type === 'div') {
-    box.classList.add('p-absolute')
-    id = _.uniqueId('box_text_')
-    box.id = id
-  } else {
-    id = _.uniqueId('span_text_')
-    box.id = id
-  }
-
-  return { box, id }
-}
-
-function Text3(texts, type = 'div') {
-  const { box, id } = createBox(type)
-  box.style.justifyContent = 'center'
-  box.classList.add('anchor-center')
-
-  const children = []
-
-  if (typeof texts === 'string') {
-    const spanTransform = texts.replace(/\{(.*?)\}/g, (match, p1) => {
-      const span = document.createElement('span')
-      span.innerHTML = p1
-      span.id = _.uniqueId('span_text_')
-      span.classList.add('inline-block')
-
-      return span.outerHTML
-    })
-
-    box.innerHTML = spanTransform
-    ;[...box.children].forEach((child, index) => {
-      children.push(
-        Element({
-          elementHtml: child,
-          text: child.innerHTML,
-          id: child.id,
-          numberChild: index,
-          changeTextTo,
-        })
-      )
-    })
-
-    // box.innerHTML = texts
-  } else if (Array.isArray(texts)) {
-    texts.forEach((text, index) => {
-      const span = document.createElement('span')
-      span.innerHTML = text.replace(/\s/g, '&nbsp;')
-      span.id = _.uniqueId('span_text_')
-      span.classList.add('inline-block')
-      box.appendChild(span)
-
-      if (text !== ' ') {
-        children.push(
-          Element({
-            elementHtml: span,
-            text,
-            id: span.id,
-            numberChild: index,
-            changeTextTo,
-          })
-        )
-      }
-    })
-  }
-
+function TextMethods(box) {
   function changeText(textBefore, textAfter) {
     textBefore.replace(new RegExp('\\s', 'g'), '&nbsp;')
     const reg = new RegExp(`(${textBefore})`, 'gi')
@@ -95,9 +26,9 @@ function Text3(texts, type = 'div') {
     box.innerHTML = box.innerHTML.replace(
       reg,
       `<span class="text-change">
-      <div class="before">$1</div>
-      <div class="after" style="opacity: 0">${textAfter}</div>
-    </span>`
+        <div class="before">$1</div>
+        <div class="after" style="opacity: 0">${textAfter}</div>
+      </span>`
     )
 
     const beforePreview = get_tex_size(textBeforeFind, '600 60px sans-serif')
@@ -160,7 +91,7 @@ function Text3(texts, type = 'div') {
     box.innerHTML = box.innerHTML.replace(
       reg,
       `<div class="before">$1</div>
-      <div class="after" style="opacity: 0">${textAfter}</div>`
+        <div class="after" style="opacity: 0">${textAfter}</div>`
     )
 
     const beforePreview = get_tex_size(textBeforeFind, '600 60px sans-serif')
@@ -206,16 +137,29 @@ function Text3(texts, type = 'div') {
     })
   }
 
-  const _return = Element({
-    children,
-    elementHtml: box,
-    id,
+  return {
     changeText,
-  })
+    changeTextTo,
+  }
+}
 
-  return _return
+function createBox(type = 'div') {
+  const box = document.createElement(type)
+  let id = false
+  box.classList.add('p-text-block')
+  if (type === 'div') {
+    box.classList.add('p-absolute')
+    id = _.uniqueId('box_text_')
+    box.id = id
+  } else {
+    id = _.uniqueId('span_text_')
+    box.id = id
+  }
+
+  return { box, id }
 }
 
 module.exports = {
-  Text3,
+  TextMethods,
+  createBox,
 }
