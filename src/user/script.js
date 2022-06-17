@@ -1,12 +1,13 @@
 /* eslint-disable */
 
+const changeText = require('./script-changeText') //bug
+const changeMultiText = require('./script-changeMultiText') //bug
+const nextTo = require('./script-nextTo') //bug
+const textSize = require('./script-textSize') //bug
+const traduçãoParcelada = require('./tradução-parcelada') //bug
+
 const sublinhar = require('./script-sublinhar')
-const changeMultiText = require('./script-changeMultiText')
-const nextTo = require('./script-nextTo')
-const changeText = require('./script-changeText')
-const textSize = require('./script-textSize')
-const traduçãoParcelada = require('./tradução-parcelada')
 const bible = require('./bible')
 const scriptAudioTextoVideo = require('./script-audio-texto-video')
 
-module.exports = scriptAudioTextoVideo
+module.exports = sublinhar
