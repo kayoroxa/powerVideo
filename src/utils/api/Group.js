@@ -3,6 +3,7 @@ const _ = require('lodash')
 const { Scene } = require('./powerUtils')
 const { isNumber } = require('lodash')
 const anime = require('animejs')
+const bug = require('../bug')
 
 function createBox() {
   const box = document.createElement('div')
@@ -93,6 +94,11 @@ module.exports = (...powerElements) => {
     },
     refresh_to: (...powerElements) => {
       refreshStyle(powerElements, box, id)
+    },
+    getRect: () => {
+      const rect = box.getBoundingClientRect()
+      bug(rect.left > 0, 'box: childrenRect[index] > 0')
+      return rect
     },
   })
 
