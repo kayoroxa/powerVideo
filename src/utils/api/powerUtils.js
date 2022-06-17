@@ -53,7 +53,11 @@ function FadeIn(PowerElement) {
 const Scene = {
   show: (...PowerElements) => {
     PowerElements.forEach(PowerElement => {
-      addOnApp(PowerElement)
+      if (PowerElement.show) {
+        PowerElement.show()
+      } else {
+        addOnApp(PowerElement)
+      }
     })
   },
   playClick: (...animations) => {
