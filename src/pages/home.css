@@ -5,9 +5,23 @@
   font-family: sans-serif;
   font-weight: 600;
   color: #264653;
-  /* transition: all .6s cubic-bezier(.45,1.11,.59,.95); */
 }
 
+*::selection {
+  /* background: pink; */
+
+  color: #fff;
+
+
+}
+
+.p-group {
+  pointer-events: none;
+}
+
+.p-line {
+  pointer-events: none;
+}
 
 
 body {
@@ -69,10 +83,10 @@ body {
 }
 
 
-span div {
+/* span div {
   position: absolute;
-}
+} */
 
-span div:nth-child(2) {
+/* span div:nth-child(2) {
   opacity: 0;
-}
+} */
