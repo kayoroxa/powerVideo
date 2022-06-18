@@ -48,34 +48,36 @@ function refreshStyle(powerElements, box, id) {
 }
 
 function set_x_y(elementHtml, children, op) {
+  let x = null
+  let y = null
+
   if (typeof op === 'string') {
     if (op === 'center') {
-      elementHtml.style.left = `${window.innerWidth / 2}px`
-      elementHtml.style.top = `${window.innerHeight / 2}px`
+      x = 'center'
+      y = 'center'
     }
-  } else {
-    const { x, y } = op
-    if (x === 'center') {
-      elementHtml.style.left = `${window.innerWidth / 2}px`
-    }
-    if (y === 'center') {
-      elementHtml.style.top = `${window.innerHeight / 2}px`
-    }
-
-    const timeline = anime.timeline({
-      // easing: 'easeOutExpo',
-      duration: 500,
-    })
-
-    timeline.add(
-      {
-        targets: [elementHtml, ...children.map(child => child.htmlElem)],
-        translateY: isNumber(y) ? y - elementHtml.offsetTop : null,
-        translateX: isNumber(x) ? x - elementHtml.offsetLeft : null,
-      },
-      0
-    )
   }
+
+  if (x === 'center') {
+    x = window.innerWidth / 2 - elementHtml.offsetWidth / 2
+  }
+  if (y === 'center') {
+    y = window.innerHeight / 2 - elementHtml.getBoundingClientRect().height / 2
+  }
+
+  const timeline = anime.timeline({
+    // easing: 'easeOutExpo',
+    duration: 500,
+  })
+
+  timeline.add(
+    {
+      targets: [elementHtml, ...children.map(child => child.htmlElem)],
+      translateY: isNumber(y) ? y - elementHtml.offsetTop : null,
+      translateX: isNumber(x) ? x - elementHtml.offsetLeft : null,
+    },
+    0
+  )
 }
 
 module.exports = (...powerElements) => {
