@@ -63,6 +63,7 @@ function Line(powerElement, op = {}) {
         initPosition()
       })
     },
+    close,
   })
 
   function animate() {
@@ -74,6 +75,15 @@ function Line(powerElement, op = {}) {
         value: width + op.padding * 2,
         duration: 300,
       },
+      easing: 'easeInOutQuart',
+    })
+    return _return
+  }
+
+  function close() {
+    anime({
+      targets: box,
+      width: 0,
       easing: 'easeInOutQuart',
     })
     return _return
