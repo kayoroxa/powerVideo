@@ -16,7 +16,7 @@ function createBox() {
   return { box, id }
 }
 
-function refreshStyle(powerElements, box, id) {
+function refreshStyle(powerElements, box, id, start = false) {
   const childrenProps = powerElements.map(powerElement => {
     const childRect = powerElement.getRect()
 
@@ -38,16 +38,27 @@ function refreshStyle(powerElements, box, id) {
 
   box.style.width = `${childrenPropsMaxX.right - childrenPropsMinX.left}px`
   box.style.height = `${childrenPropsMaxY.bottom - childrenPropsMinY.top}px`
-  box.style.top = `${childrenPropsMinY.top}px`
-  box.style.left = `${childrenPropsMinX.left}px`
+
+  if (start) {
+    box.style.top = `${childrenPropsMinY.top}px`
+    box.style.left = `${childrenPropsMinX.left}px`
+  }
+  // box.style.transform = `translate(0px, 0px)`
+  else {
+    anime.set(box, {
+      translateY: childrenPropsMinY.top - box.offsetTop,
+      translateX: childrenPropsMinY.left - box.offsetLeft,
+    })
+  }
+
   box.style.position = 'absolute'
-  // box.style.background = 'hsl(344, 100%, 54%)'
+  // box.style.border = '1px solid red'
   box.style.zIndex = -5
 
   return { box, id }
 }
 
-function set_x_y(elementHtml, children, op) {
+async function set_x_y(elementHtml, children, op, easing) {
   let x = null
   let y = null
 
@@ -70,20 +81,56 @@ function set_x_y(elementHtml, children, op) {
     duration: 500,
   })
 
-  timeline.add(
-    {
-      targets: [elementHtml, ...children.map(child => child.htmlElem)],
+  if (easing === false) {
+    anime.set([elementHtml, ...children.map(child => child.htmlElem)], {
       translateY: isNumber(y) ? y - elementHtml.offsetTop : null,
       translateX: isNumber(x) ? x - elementHtml.offsetLeft : null,
-    },
-    0
-  )
+    })
+
+    return
+  } else {
+    timeline.add(
+      {
+        targets: [elementHtml, ...children.map(child => child.htmlElem)],
+        translateY: isNumber(y) ? y - elementHtml.offsetTop : null,
+        translateX: isNumber(x) ? x - elementHtml.offsetLeft : null,
+      },
+      0
+    )
+
+    await timeline.finished
+  }
+}
+
+async function setStyle(elementHtml, children, newStyle, { eachDelay }) {
+  const timeline = anime.timeline({
+    easing: 'easeOutExpo',
+    duration: 500,
+  })
+
+  timeline.add({
+    targets: [
+      elementHtml,
+      ...children.map(({ id }) =>
+        document.querySelectorAll(`#${id} *, #${id}`)
+      ),
+    ],
+    ...newStyle,
+
+    delay: eachDelay
+      ? function (_, i) {
+          return i * 2
+        }
+      : 0,
+  })
+
+  await timeline.finished
 }
 
 module.exports = (...powerElements) => {
   const { box, id } = createBox()
 
-  refreshStyle(powerElements, box, id)
+  refreshStyle(powerElements, box, id, true)
 
   const children = powerElements
 
@@ -91,8 +138,12 @@ module.exports = (...powerElements) => {
     elementHtml: box,
     id,
     children,
-    set_x_y: op => {
-      set_x_y(box, children, op)
+    set_x_y: (op, easing = true) => {
+      set_x_y(box, children, op, easing)
+    },
+    setStyle(newStyle, each) {
+      setStyle(box, children, newStyle, each)
+      refreshStyle(powerElements, box, id)
     },
     refresh_to: (...powerElements) => {
       refreshStyle(powerElements, box, id)
