@@ -10,5 +10,6 @@ const sublinhar = require('./script-sublinhar')
 const bible = require('./bible')
 const scriptAudioTextoVideo = require('./script-audio-texto-video')
 const textMorph = require('./script-text-morph')
+const morphLetters = require('./script-morph-letters')
 
-module.exports = textMorph
+module.exports = morphLetters
