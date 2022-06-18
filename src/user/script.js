@@ -9,5 +9,6 @@ const traduçãoParcelada = require('./tradução-parcelada') //bug
 const sublinhar = require('./script-sublinhar')
 const bible = require('./bible')
 const scriptAudioTextoVideo = require('./script-audio-texto-video')
+const textMorph = require('./script-text-morph')
 
-module.exports = sublinhar
+module.exports = textMorph
