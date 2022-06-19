@@ -105,43 +105,28 @@ function Element(me) {
   function next_to(powerElement, side, margin = 0) {
     const { x, y } = powerElement.get_x_y()
     const rectElem = elementHtml.getBoundingClientRect()
+    const powerElementRect = powerElement.htmlElem.getBoundingClientRect()
 
     if (side === 'left') {
-      elementHtml.style.left = x - rectElem.offsetWidth - margin + 'px'
+      elementHtml.style.left = x - rectElem.width - margin + 'px'
 
       elementHtml.style.top =
-        y +
-        powerElement.htmlElem.offsetHeight / 2 -
-        rectElem.offsetHeight / 2 +
-        'px'
+        y + powerElementRect.height / 2 - rectElem.height / 2 + 'px'
     } else if (side === 'right') {
       elementHtml.style.left =
-        powerElement.htmlElem.offsetLeft +
-        powerElement.htmlElem.offsetWidth +
-        margin +
-        'px'
+        powerElementRect.left + powerElementRect.width + margin + 'px'
 
-      elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
+      elementHtml.style.top = powerElementRect.top + 'px'
     } else if (side === 'top') {
-      elementHtml.style.top = y - rectElem.offsetHeight - margin + 'px'
+      elementHtml.style.top = y - rectElem.height - margin + 'px'
 
       elementHtml.style.left =
-        x +
-        powerElement.htmlElem.offsetWidth / 2 -
-        rectElem.offsetWidth / 2 +
-        'px'
+        x + powerElementRect.width / 2 - rectElem.width / 2 + 'px'
     } else if (side === 'bottom') {
-      elementHtml.style.top =
-        powerElement.htmlElem.offsetTop +
-        powerElement.htmlElem.offsetHeight +
-        margin +
-        'px'
+      elementHtml.style.top = powerElementRect.bottom + margin + 'px'
 
       elementHtml.style.left =
-        x +
-        powerElement.htmlElem.offsetWidth / 2 -
-        rectElem.offsetWidth / 2 +
-        'px'
+        x + powerElementRect.width / 2 - rectElem.width / 2 + 'px'
     }
     return _return
   }
