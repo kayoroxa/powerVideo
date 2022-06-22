@@ -5,18 +5,39 @@
   font-family: sans-serif;
   font-weight: 600;
   color: #264653;
-  /* transition: all .6s cubic-bezier(.45,1.11,.59,.95); */
+}
+
+*::selection {
+  /* background: pink; */
+
+  color: #fff;
+
+
+}
+
+.p-group {
+  pointer-events: none;
+}
+
+.p-line {
+  pointer-events: none;
 }
 
 
 body {
   background: #e9c46a;
+  overflow: hidden;
 }
 
 .app{
   width: 100vw;
   height: 100vh;
   position: relative;
+}
+
+
+.hide {
+  visibility: hidden;
 }
 
 
@@ -44,9 +65,9 @@ body {
 
 
 .anchor-center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  /* top: 50%;
+  left: 50%; */
+  /* transform: translate(200); */
 }
 
 
@@ -62,10 +83,10 @@ body {
 }
 
 
-span div {
+/* span div {
   position: absolute;
-}
+} */
 
-span div:nth-child(2) {
+/* span div:nth-child(2) {
   opacity: 0;
-}
+} */
