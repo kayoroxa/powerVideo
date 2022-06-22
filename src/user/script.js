@@ -11,5 +11,6 @@ const bible = require('./bible')
 const scriptAudioTextoVideo = require('./script-audio-texto-video')
 const textMorph = require('./script-text-morph')
 const morphLetters = require('./script-morph-letters')
+const pronounce = require('./script-pronounce')
 
-module.exports = morphLetters
+module.exports = pronounce
