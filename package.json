@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "animejs": "^3.2.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "play-sound": "^1.1.5",
+    "sound-play": "^1.1.0"
   }
 }

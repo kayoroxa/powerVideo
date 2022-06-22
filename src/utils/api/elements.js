@@ -1,6 +1,5 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
-const { measure, measureChildren } = require('./powerUtils')
 const { isNumber } = require('lodash')
 
 function Element(me) {
@@ -11,31 +10,66 @@ function Element(me) {
   function set_x_y(op) {
     if (typeof op === 'string') {
       if (op === 'center') {
-        // measure(elementHtml, e => {
-        // const { height, width } = e.getBoundingClientRect()
-        elementHtml.style.left = `${window.innerWidth / 2}px`
-        elementHtml.style.top = `${window.innerHeight / 2}px`
-        // })
+        elementHtml.style.left = `${
+          window.innerWidth / 2 - elementHtml.offsetWidth / 2
+        }px`
+        elementHtml.style.top = `${
+          window.innerHeight / 2 - elementHtml.offsetHeight / 2
+        }px`
       }
     } else {
       const { x, y } = op
       if (x === 'center') {
-        // measure(elementHtml, e => {
-        // const { width } = e.getBoundingClientRect()
-        elementHtml.style.left = `${window.innerWidth / 2}px`
-        // })
+        elementHtml.style.left = `${
+          window.innerWidth / 2 - elementHtml.offsetWidth / 2
+        }px`
       }
       if (y === 'center') {
-        // measure(elementHtml, e => {
-        // const { height } = e.getBoundingClientRect()
-        elementHtml.style.top = `${window.innerHeight / 2}px`
-        // })
+        elementHtml.style.top = `${
+          window.innerHeight / 2 - elementHtml.offsetHeight / 2
+        }px`
       }
       if (isNumber(x)) elementHtml.style.left = x + 'px'
       if (isNumber(y)) elementHtml.style.top = y + 'px'
     }
 
     return _return
+  }
+
+  function getTransform(powerElement) {
+    return window.getComputedStyle(powerElement.htmlElem).transform
+  }
+
+  function set_x_y_translate(op) {
+    if (typeof op === 'string') {
+      if (op === 'center') {
+        elementHtml.style.transform = `translate(${
+          window.innerWidth / 2 - elementHtml.offsetWidth / 2
+        }px, ${window.innerHeight / 2 - elementHtml.offsetHeight / 2}px)`
+      }
+    } else {
+      const { x, y } = op
+      const translate = {}
+      if (x === 'center') {
+        translate.x = `${window.innerWidth / 2 - elementHtml.offsetWidth / 2}px`
+      }
+      if (y === 'center') {
+        translate.y = `${
+          window.innerHeight / 2 - elementHtml.offsetHeight / 2
+        }px`
+      }
+      const rect = elementHtml.getBoundingClientRect()
+      if (isNumber(x)) {
+        translate.x = `${x - rect.left}px`
+      }
+      if (isNumber(y)) {
+        translate.x = `${y - rect.top}px`
+      }
+
+      elementHtml.style.transform = `translate(${
+        translate.x || getTransform(elementHtml).x
+      }, ${translate.y || getTransform(elementHtml).y})`
+    }
   }
 
   function get_x_y(offset = false) {
@@ -70,45 +104,30 @@ function Element(me) {
 
   function next_to(powerElement, side, margin = 0) {
     const { x, y } = powerElement.get_x_y()
-    measure(elementHtml, measureEl => {
-      if (side === 'left') {
-        elementHtml.style.left = x - measureEl.offsetWidth - margin + 'px'
+    const rectElem = elementHtml.getBoundingClientRect()
+    const powerElementRect = powerElement.htmlElem.getBoundingClientRect()
 
-        elementHtml.style.top =
-          y +
-          powerElement.htmlElem.offsetHeight / 2 -
-          measureEl.offsetHeight / 2 +
-          'px'
-      } else if (side === 'right') {
-        elementHtml.style.left =
-          powerElement.htmlElem.offsetLeft +
-          powerElement.htmlElem.offsetWidth +
-          margin +
-          'px'
+    if (side === 'left') {
+      elementHtml.style.left = x - rectElem.width - margin + 'px'
 
-        elementHtml.style.top = powerElement.htmlElem.offsetTop + 'px'
-      } else if (side === 'top') {
-        elementHtml.style.top = y - measureEl.offsetHeight - margin + 'px'
+      elementHtml.style.top =
+        y + powerElementRect.height / 2 - rectElem.height / 2 + 'px'
+    } else if (side === 'right') {
+      elementHtml.style.left =
+        powerElementRect.left + powerElementRect.width + margin + 'px'
 
-        elementHtml.style.left =
-          x +
-          powerElement.htmlElem.offsetWidth / 2 -
-          measureEl.offsetWidth / 2 +
-          'px'
-      } else if (side === 'bottom') {
-        elementHtml.style.top =
-          powerElement.htmlElem.offsetTop +
-          powerElement.htmlElem.offsetHeight +
-          margin +
-          'px'
+      elementHtml.style.top = powerElementRect.top + 'px'
+    } else if (side === 'top') {
+      elementHtml.style.top = y - rectElem.height - margin + 'px'
 
-        elementHtml.style.left =
-          x +
-          powerElement.htmlElem.offsetWidth / 2 -
-          measureEl.offsetWidth / 2 +
-          'px'
-      }
-    })
+      elementHtml.style.left =
+        x + powerElementRect.width / 2 - rectElem.width / 2 + 'px'
+    } else if (side === 'bottom') {
+      elementHtml.style.top = powerElementRect.bottom + margin + 'px'
+
+      elementHtml.style.left =
+        x + powerElementRect.width / 2 - rectElem.width / 2 + 'px'
+    }
     return _return
   }
 
@@ -117,17 +136,31 @@ function Element(me) {
   }
 
   function rectChildren() {
-    return measureChildren(elementHtml)
+    return [...elementHtml.children].map(child => {
+      return child.getBoundingClientRect()
+    })
   }
 
   const _return = {
     inApp,
-    ...me,
+
     htmlElem: elementHtml,
     refresh,
     next_to,
     rectChildren,
     style: elementHtml.style,
+    setStyle: newStyle => {
+      Object.keys(newStyle).forEach(k => {
+        if (k === 'colorAll') {
+          elementHtml.querySelectorAll('*').forEach(c => {
+            c.style.color = newStyle[k]
+          })
+        } else {
+          elementHtml.style[k] = newStyle[k]
+        }
+      })
+      return _return
+    },
     set_width: () => {},
     move_to: powerElement => {
       // powerElement.htmlElem.
@@ -143,6 +176,7 @@ function Element(me) {
       return _return
     },
     set_x_y,
+    set_x_y_translate,
     get_x_y,
     get_props,
     save_state: () => {},
@@ -154,6 +188,7 @@ function Element(me) {
     get_left: () => elementHtml.offsetLeft,
     get_top: () => elementHtml.offsetTop,
     box_style,
+    ...me,
   }
 
   return _return
