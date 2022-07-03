@@ -151,13 +151,12 @@ function Element(me) {
     style: elementHtml.style,
     setStyle: newStyle => {
       Object.keys(newStyle).forEach(k => {
-        if (k === 'colorAll') {
+        if (k === 'color') {
           elementHtml.querySelectorAll('*').forEach(c => {
             c.style.color = newStyle[k]
           })
-        } else {
-          elementHtml.style[k] = newStyle[k]
         }
+        elementHtml.style[k] = newStyle[k]
       })
       return _return
     },
