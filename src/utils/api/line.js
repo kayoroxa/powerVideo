@@ -40,11 +40,16 @@ function Line(powerElement, op = {}) {
   function initPosition() {
     let { left, top, height } = powerElement.getRect()
 
+    const highLight = op.height ? true : false
+
+    console.log(op.height)
     anime.set(box, {
-      top: `${top - op.paddingY}px`,
+      top: `${highLight ? top + height : top - op.paddingY}px`,
       left: `${left - op.padding}px`,
       width: 0,
-      height: `${height + op.paddingY * 2}px`,
+      height: op.height
+        ? `${op.height + op.paddingY * 2}px`
+        : `${height + op.paddingY * 2}px`,
       background: op.color,
       borderRadius: `${op.radius}px`,
       zIndex: zIndex - 1,

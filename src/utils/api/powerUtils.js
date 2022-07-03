@@ -418,7 +418,14 @@ function distributeOnScreen(powerElements, op = {}) {
   })
 }
 
+const space = texts =>
+  texts.reduce((acc, text, index) => {
+    if (index >= texts.length - 1) return [...acc, text]
+    return [...acc, text, ' ']
+  }, [])
+
 module.exports = {
+  space,
   VGroup,
   GrowFromCenter,
   Scene,

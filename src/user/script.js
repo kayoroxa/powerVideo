@@ -12,5 +12,6 @@ const scriptAudioTextoVideo = require('./script-audio-texto-video')
 const textMorph = require('./script-text-morph')
 const morphLetters = require('./script-morph-letters')
 const pronounce = require('./script-pronounce')
+const styleIf = require('./script-style-if')
 
-module.exports = pronounce
+module.exports = styleIf
