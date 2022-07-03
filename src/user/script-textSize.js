@@ -1,10 +1,4 @@
-const { Enfase, sleep } = require('../utils/api/powerUtils')
-
-const space = texts =>
-  texts.reduce((acc, text, index) => {
-    if (index >= texts.length - 1) return [...acc, text]
-    return [...acc, text, ' ']
-  }, [])
+const { Enfase, sleep, space } = require('../utils/api/powerUtils')
 
 module.exports = async ({ Text2, Scene, Line }) => {
   const myText1 = Text2(space(['você', 'tem', 'feito']))
