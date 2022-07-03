@@ -1,5 +1,6 @@
 const obs = require('../observer')
 const anime = require('animejs')
+const _ = require('lodash')
 
 function VGroup() {
   const _return = {
@@ -62,23 +63,21 @@ const Scene = {
   },
   playClick: (...animations) => {
     return new Promise(resolve => {
-      document.addEventListener(
-        'keydown',
-        e => {
-          if (e.repeat) return
-          if (e.key === 'Enter') {
-            animations.forEach(animation => {
-              if (typeof animation === 'function') {
-                animation()
-                return
-              }
-              animation.play()
-            })
-            resolve()
-          }
-        },
-        { once: true }
-      )
+      const func = e => {
+        if (e.repeat) return
+        if (e.key === 'Enter' || e.key === ' ') {
+          animations.forEach(animation => {
+            if (typeof animation === 'function') {
+              animation()
+              return
+            }
+            animation.play()
+          })
+          resolve()
+          document.removeEventListener('keydown', func)
+        }
+      }
+      document.addEventListener('keydown', func)
     })
   },
   playClicks: async animations => {
@@ -424,8 +423,19 @@ const space = texts =>
     return [...acc, text, ' ']
   }, [])
 
+const cloneElement = element => {
+  const newElement = { ...element }
+  newElement.htmlElem = element.htmlElem.cloneNode(true)
+  newElement.id = _.uniqueId(newElement.id + '_clone_')
+  newElement.htmlElem.id = newElement.id
+  addOnApp(newElement.htmlElem)
+
+  return newElement
+}
+
 module.exports = {
   space,
+  cloneElement,
   VGroup,
   GrowFromCenter,
   Scene,
