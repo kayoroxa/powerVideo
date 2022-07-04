@@ -1,6 +1,7 @@
 const obs = require('../../utils/observer')
 const _ = require('lodash')
 const { isNumber } = require('lodash')
+const anime = require('animejs')
 
 function Element(me) {
   let inApp = false
@@ -141,9 +142,19 @@ function Element(me) {
     })
   }
 
+  function anime_out() {
+    anime({
+      targets: elementHtml,
+      // opacity: 0,
+      // duration: 500,
+      translateY: '500px',
+      easing: 'easeInOutQuad',
+    })
+  }
+
   const _return = {
     inApp,
-
+    anime_out,
     htmlElem: elementHtml,
     refresh,
     next_to,
