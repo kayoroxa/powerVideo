@@ -62,6 +62,9 @@ async function set_x_y(elementHtml, children, op, easing) {
   let x = null
   let y = null
 
+  if (op?.x) x = op.x
+  if (op?.y) y = op.y
+
   if (typeof op === 'string') {
     if (op === 'center') {
       x = 'center'
