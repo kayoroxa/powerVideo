@@ -67,7 +67,6 @@ function Text2(texts, type = 'div') {
 
     const currentOnlyText = prevOnlyText.replace(reg, textAfter)
     box.innerHTML = box.innerHTML.replace(/\s/, '&nbsp;')
-    // debugger
     box.innerHTML = box.innerHTML.replace(
       reg,
       `<span class="text-change">
@@ -130,7 +129,6 @@ function Text2(texts, type = 'div') {
 
     // const currentOnlyText = prevOnlyText.replace(reg, textAfter)
     box.innerHTML = box.innerHTML.replace(/\s/, '&nbsp;')
-    // debugger
     box.classList.add('text-change')
 
     box.innerHTML = box.innerHTML.replace(

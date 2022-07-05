@@ -234,7 +234,6 @@ function changeTextTo(powerElement, textAfter, style) {
   console.log(box)
 
   box.innerHTML = box.innerHTML.replace(/\s/, '&nbsp;')
-  // debugger
   box.classList.add('text-change')
 
   box.innerHTML = box.innerHTML.replace(

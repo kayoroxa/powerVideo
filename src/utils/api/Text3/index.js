@@ -24,7 +24,6 @@ function Text3(texts) {
   box.classList.add('hide')
   box.style.justifyContent = 'center'
   box.classList.add('anchor-center')
-  // debugger
 
   addOnApp(box)
 

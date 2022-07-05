@@ -29,7 +29,6 @@ function Line(powerElement, op = {}) {
   op.padding = isNumber(op.padding) ? op.padding : 10
   op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
   op.radius = isNumber(op.radius) ? op.radius : 5
-  // debugger
 
   const zIndex =
     op?.zIndex ||
@@ -96,7 +95,6 @@ function Line(powerElement, op = {}) {
 
   async function move_animate_to(newPowerElement, op = {}, delay = 0) {
     let rect
-    // debugger
     if (isArray(newPowerElement)) {
       if (!group) {
         group = Group(...newPowerElement)

@@ -31,7 +31,6 @@ function createElements(myTexts, top) {
   const indexSorted = sortByIndex(keysPt)
 
   text2.children = text2.children.map((_, index) => {
-    debugger
     return text2.children[indexSorted[index]]
   })
 
