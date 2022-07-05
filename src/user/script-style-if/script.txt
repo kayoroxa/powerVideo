@@ -1,13 +1,38 @@
+{Stay} {back}. {No}
+{Fique} {atrás}. {Não}
 
+{Don't} {come} {any} {closer}.
+{Não} {venha} {nenhum pouco} {perto}.
 
-{I'll=I Will} {handle this}, {guys}, OK?
-{Eu vou} {cuidar disso}, {pessoal}, OK?
+{Please}, {don't}.
+{Por favor}, {não}.
 
-{We} {got} {a} {tiny}, {little} | {itsybitsy} {problem} {here}, OK?
-{Nós} {temos} {um} {pequeno}, {pequeno} | {pequenino} {problema} {aqui}, Ok?
+{What are you doing}?
+{O que está você fazendo}?
 
-{Listen}, {buddy}. {Come here}.
-{Ouça}, {amigo}. {Venha aqui}.
+{No}, {please} {don't}. {That tickles}.
+{Não}, {por favor} {não}. {Isso faz cócegas}.
 
-{I'd love} {to hang out} {with} {you}
-{Eu adoraria} {sair} {com} {você}
+{No}, {get off}, {get off}. {Get off}!
+{Não}, {saia}, {saia}. {Sai fora}!
+
+{It serves you right}.
+{Acho é bom}.
+
+{like} {a} {1very good} {2wild} {3man}.
+{como} {um} {3homem} {2selvagem} {1muito 4bom}.
+
+{Stay} {away} {from} {me} | {like} {a} {3very} {4good} {5wild} {6man}.
+{Fique} {longe} {de} {mim} | {como} {um} {6homem} {5selvagem} {3muito} {4bom}.
+
+{You} {stay}. {I'm} {warning} {you}.
+{Você} {fica}. {Estou} {te} {avisando}.
+
+{My} {father} {won't} {take} {kindly} {to} {you}...
+{Meu} {pai} {não} {vai} {gostar} {de} {você}...
+
+{No}. {That's}... {That's} {close} {enough}.
+{Não}. {Isso} {é}... {Isso} {é} {perto} {o} {suficiente}.
+
+{How} {dare} {you}?
+{Como} {você} {ousa}?
