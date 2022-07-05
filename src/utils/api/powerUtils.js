@@ -51,7 +51,21 @@ function FadeIn(PowerElement) {
   }
 }
 
+const key = () =>
+  new Promise(resolve => {
+    const func = e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        document.removeEventListener('keydown', func)
+        resolve()
+      }
+    }
+    document.addEventListener('keydown', func)
+  })
+
 const Scene = {
+  setBackground: (color = '#021ff4') => {
+    document.querySelector('body').style.background = color
+  },
   show: (...PowerElements) => {
     PowerElements.forEach(PowerElement => {
       if (PowerElement.show) {
@@ -94,6 +108,7 @@ const Scene = {
     }
     animation.play()
   },
+  key,
 }
 
 function waitForElements(selectors, callBack) {

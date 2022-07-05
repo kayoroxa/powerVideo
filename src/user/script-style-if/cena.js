@@ -1,9 +1,10 @@
 const { Text3 } = require('../../utils/api/Text3')
-const { resetText } = require('./funcs')
+const { resetText, sortByIndex } = require('./funcs')
 const anime = require('animejs')
 const Group = require('../../utils/api/Group')
 const { myLine, mySublinhado, myText } = require('./elements')
-const { Scene } = require('../../utils/api/powerUtils')
+const { Scene, sleep } = require('../../utils/api/powerUtils')
+const { isArray } = require('lodash')
 
 function MainCena(op) {
   return (...params) => cena(op, ...params)
@@ -17,12 +18,22 @@ const titleStyle = {
 }
 
 function createElements(myTexts, top) {
-  const text1 = myText(myTexts[0].replace(/=[^}]+/g, ''), top)
-  const text1Clone = myText(myTexts[0].replace(/=[^}]+/g, ''), top)
+  if (isArray(top)) top = top[0]
+  const text1 = myText(myTexts[0].replace(/=[^}]+|\d+/g, ''), top)
+  // const text1Clone = myText(myTexts[0].replace(/=[^}]+/g, ''), top)
 
-  const text2 = Text3(myTexts[1])
+  const text2 = Text3(myTexts[1].replace(/\d+/g, ''))
     .setStyle(titleStyle)
     .next_to(text1, 'bottom', 20)
+
+  const keysPt = myTexts[1].match(/(?<=\{).+?(?=\})/g)
+
+  const indexSorted = sortByIndex(keysPt)
+
+  text2.children = text2.children.map((_, index) => {
+    debugger
+    return text2.children[indexSorted[index]]
+  })
 
   const group = Group(text1, text2)
 
@@ -32,6 +43,7 @@ function createElements(myTexts, top) {
   )
 
   const line = myLine(group, minLength)
+
   const sublinhado = mySublinhado(text2)
 
   anime.set(
@@ -42,73 +54,73 @@ function createElements(myTexts, top) {
   )
 
   Scene.show(text1)
-  Scene.show(text1Clone)
+  // Scene.show(text1Clone)
   Scene.show(text2)
 
-  // await Scene.playClick(() => {
-  //   morphText(text1.children[0], text3)
-  // })
-
-  resetText(text2)
-  resetText(text1)
-  resetText(text1Clone)
+  // if want show all colors previously
+  // resetText(text2, false, { shuffle: true })
+  // resetText(text1, false, { shuffle: true })
 
   Scene.show(line.animate())
   Scene.show(sublinhado.animate())
 
   return {
     text1,
-    text1Clone,
+    // text1Clone,
     text2,
     line,
     sublinhado,
+    group,
   }
 }
 
 async function cena({ Scene }, myTexts, top) {
-  // if (myTexts[0]) {
-  // const tex = Text3('I Will')
-  //   .setStyle({ ...titleStyle, color: 'white' })
-  //   .next_to(text1.children[0], 'top', 20)
+  const { text1, text2, sublinhado, group, line } = createElements(myTexts, top)
 
-  // Scene.show(tex)
+  for (const [index] of text2.children.entries()) {
+    await Scene.key()
 
-  const { text1, text1Clone, text2, sublinhado } = createElements(myTexts, top)
+    resetText(text1.children.slice(0, index + 1), false, index)
 
-  await Scene.playClicks(
-    text2.children.map((children, index) => () => {
-      const texts = [text1Clone, text2, text1]
+    await sleep(50)
 
-      texts.forEach(text => resetText(text, false, index))
+    resetText(text2.children.slice(0, index + 1), false, index)
 
-      anime({
-        targets: children.elementHtml,
-        // color: 'hsl(100, 100%, 99%)',
-        translateY: [600, 0],
-        duration: 200,
-        easing: 'spring(1, 80, 15, 0)',
-      })
-
-      // morphText(text1Clone, tex)
-
-      anime({
-        targets: [
-          text1.children[index].elementHtml,
-          text1Clone.children[index].elementHtml,
-        ],
-        // color: 'hsl(100, 100%, 99%)',
-        duration: 500,
-        easing: 'spring(1, 80, 15, 0)',
-      })
+    anime({
+      targets: text2.children[index].elementHtml,
+      translateY: [600, 0],
+      duration: 200,
+      easing: 'spring(1, 80, 15, 0)',
     })
-  )
 
-  await Scene.playClick(() => {
-    sublinhado.anime_out()
-    resetText(text2, 'hsl(12, 83%, 62%)')
-    resetText(text1, 'hsl(12, 83%, 62%)')
-    resetText(text1Clone, 'hsl(12, 83%, 62%)')
-  })
+    anime({
+      targets: [
+        text1.children[index].elementHtml,
+        // text1Clone.children[index].elementHtml,
+      ],
+      duration: 500,
+      easing: 'spring(1, 80, 15, 0)',
+    })
+  }
+
+  await Scene.key()
+
+  sublinhado.setStyle({ height: '0px' }, 'easeInQuad')
+  resetText(text2, 'hsl(222, 19%, 27%)', 'all')
+  resetText(text1, 'hsl(12, 83%, 62%)', 'all')
+  // resetText(text1Clone, 'hsl(12, 83%, 62%)', 'all')
+
+  if (isArray(top)) {
+    await Scene.key()
+    group.set_x_y({
+      x: 'center',
+      y: 100,
+    })
+    line.set_x_y({
+      x: 'center',
+      y: 50,
+    })
+  }
 }
 
 module.exports = {

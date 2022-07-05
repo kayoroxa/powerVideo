@@ -20,7 +20,7 @@ const myLine = (elem, minLength) =>
   Line(elem, {
     padding: minLength < 16 ? 200 : 50,
     paddingY: 100,
-    color: 'white',
+    color: '#d9d9d9',
     radius: 30,
   })
 

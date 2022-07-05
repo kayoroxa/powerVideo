@@ -10,12 +10,13 @@ module.exports = async ({ Scene, Line }) => {
   const myTexts = scriptParse(myScript)
 
   const cena = MainCena({ Scene, Line })
+  Scene.setBackground('#021ff4')
 
   for (let teach of myTexts) {
     if (teach[0].includes('|')) {
       await cena(
         teach.map(v => v.split('|')[0].trim()),
-        120
+        ['center', 120]
       )
       await cena(
         teach.map(v => v.split('|')[1].trim()),

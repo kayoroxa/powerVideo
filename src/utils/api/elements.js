@@ -142,14 +142,23 @@ function Element(me) {
     })
   }
 
-  function anime_out() {
-    anime({
-      targets: elementHtml,
-      // opacity: 0,
-      // duration: 500,
-      translateY: '500px',
-      easing: 'easeInOutQuad',
-    })
+  function anime_out(op) {
+    if (op === 'hide') {
+      anime({
+        targets: elementHtml,
+        opacity: 0,
+        duration: 500,
+        easing: 'easeInOutQuad',
+      })
+    } else {
+      anime({
+        targets: elementHtml,
+        // opacity: 0,
+        // duration: 500,
+        translateY: '500px',
+        easing: 'easeInOutQuad',
+      })
+    }
   }
 
   const _return = {
@@ -160,14 +169,27 @@ function Element(me) {
     next_to,
     rectChildren,
     style: elementHtml.style,
-    setStyle: newStyle => {
+    setStyle: (newStyle, easing) => {
       Object.keys(newStyle).forEach(k => {
         if (k === 'color') {
-          elementHtml.querySelectorAll('*').forEach(c => {
-            c.style.color = newStyle[k]
+          anime({
+            targets: elementHtml.querySelectorAll('*'),
+            color: newStyle[k],
           })
+          // elementHtml.querySelectorAll('*').forEach(c => {
+          //   c.style.color = newStyle[k]
+          // })
         }
-        elementHtml.style[k] = newStyle[k]
+        if (['height', 'width', 'top', 'left', 'right', 'bottom'].includes(k)) {
+          anime({
+            targets: elementHtml,
+            [k]: newStyle[k],
+            duration: 200,
+            easing: easing || 'easeInOutQuad',
+          })
+        } else {
+          elementHtml.style[k] = newStyle[k]
+        }
       })
       return _return
     },
