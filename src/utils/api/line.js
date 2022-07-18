@@ -30,18 +30,25 @@ function Line(powerElement, op = {}) {
   op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
   op.radius = isNumber(op.radius) ? op.radius : 5
 
+  const init = { left: 0, top: 0, height: 0, width: 0 }
+
   const zIndex =
     op?.zIndex ||
-    powerElement.htmlElem.zIndex ||
-    powerElement.htmlElem.parentNode?.zIndex ||
+    powerElement?.htmlElem.zIndex ||
+    powerElement?.htmlElem.parentNode?.zIndex ||
+    0
+
+  const getZIndex = () =>
+    op?.zIndex ||
+    powerElement?.htmlElem.zIndex ||
+    powerElement?.htmlElem.parentNode?.zIndex ||
     0
 
   function initPosition() {
-    let { left, top, height } = powerElement.getRect()
+    let { left, top, height } = powerElement ? powerElement.getRect() : init
 
     const highLight = op.height ? true : false
 
-    console.log(op.height)
     anime.set(box, {
       top: `${highLight ? top + height : top - op.paddingY}px`,
       left: `${left - op.padding}px`,
@@ -71,7 +78,7 @@ function Line(powerElement, op = {}) {
   })
 
   function animate() {
-    let { width } = powerElement.getRect()
+    let { width } = powerElement ? powerElement.getRect() : init
 
     anime({
       targets: box,
@@ -84,10 +91,13 @@ function Line(powerElement, op = {}) {
     return _return
   }
 
-  function close() {
+  function close(anim = 'width') {
     anime({
       targets: box,
-      width: 0,
+      width: anim === 'width' && 0,
+      height: (anim === 'height' || anim === 'translateX') && 0,
+      opacity: anim === 'opacity' && 0,
+      translateX: anim === 'right' && '300%',
       easing: 'easeInOutQuart',
     })
     return _return
@@ -115,6 +125,7 @@ function Line(powerElement, op = {}) {
     op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
     op.radius = isNumber(op.radius) ? op.radius : 5
     op.height = isNumber(op.height) ? op.height : height
+    op.zIndex = op.zIndex || getZIndex() - 1
 
     anime({
       targets: box,
@@ -123,6 +134,7 @@ function Line(powerElement, op = {}) {
       left: left - op.padding,
       width: width + op.padding * 2,
       borderRadius: `${op.radius}px`,
+      zIndex: op.zIndex,
       height: {
         value: op.height + op.paddingY * 2,
 
