@@ -52,16 +52,33 @@ function resetTexts(texts) {
   texts.forEach(texts, text => resetText(text, 'hsl(12, 83%, 62%)'))
 }
 
-function scriptParse(script) {
-  return script
+function scriptParse(script, isSubtitle = false) {
+  if (!script) return []
+  let myScript = script
     .split(/\r\n\r\n+/g)
     .map(v =>
       v
         .split('\r\n')
         .map(v => v.trim())
-        .filter(v => v.length > 0 && !v.includes('#'))
+        .filter(v => v.length > 0 && !v.includes('#') && v.includes('{'))
     )
     .filter(v => v.length > 0)
+
+  if (isSubtitle) {
+    myScript = myScript.reduce((acc, pt_en) => {
+      if (pt_en[0].includes('|')) {
+        const part1 = [pt_en[0].split('|')[0], pt_en[1].split('|')[0]]
+        const part2 = [pt_en[0].split('|')[1], pt_en[1].split('|')[1]]
+        acc.push(part1)
+        acc.push(part2)
+      } else {
+        acc.push(pt_en)
+      }
+      return acc
+    }, [])
+  }
+
+  return myScript
 }
 
 function sortByIndex(children) {
@@ -71,7 +88,10 @@ function sortByIndex(children) {
   }
   const oldList = [...children]
 
-  const listSorted = children.sort((a, b) => getNum(a) - getNum(b))
+  const listSorted = children.sort((a, b) => {
+    if (getNum(b) !== 0 && getNum(a) === 0) return 1
+    return getNum(a) - getNum(b)
+  })
 
   return listSorted.map(novo => oldList.findIndex(x => x === novo))
 }

@@ -2,7 +2,7 @@ const { Line } = require('../../utils/api/line')
 const { Text3 } = require('../../utils/api/Text3')
 
 const titleStyle = {
-  fontSize: '50px',
+  // fontSize: '50px',
   color: 'hsl(212, 14%, 19%)',
   textShadow:
     '2px 0 0 #011628, -2px 0 0 #011628, 0 2px 0 #011628, 0 -2px 0 #011628, 1px 1px #011628, -1px -1px 0 #011628, 1px -1px 0 #011628, -1px 1px 0 #011628',
@@ -18,7 +18,7 @@ const myText = (text, top) =>
 
 const myLine = (elem, minLength) =>
   Line(elem, {
-    padding: minLength < 16 ? 200 : 50,
+    padding: minLength < 18 ? 130 : 50,
     paddingY: 100,
     color: '#d9d9d9',
     radius: 30,
