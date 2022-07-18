@@ -13,5 +13,6 @@ const textMorph = require('./script-text-morph')
 const morphLetters = require('./script-morph-letters')
 const pronounce = require('./script-pronounce')
 const styleIf = require('./script-style-if')
+const wordsSounds = require('./script-words-sounds')
 
-module.exports = styleIf
+module.exports = wordsSounds
