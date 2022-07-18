@@ -90,3 +90,44 @@ body {
 /* span div:nth-child(2) {
   opacity: 0;
 } */
+.cortar {
+  position: relative;
+}
+
+.cortar::after {
+  content: "";
+  width: 0px;
+  height: 10px;
+  position: absolute;
+  transform: rotate(45deg);
+  transform-origin: left top;
+  top: 20px;
+  left: 3px;
+  border-radius: 10px;
+  background-color: black;
+  opacity: 0.5;
+
+  animation: cortar 1s ease-in-out ;
+  animation-fill-mode: forwards;
+  /* animation-delay: 2s;
+  animation: opacitsy 0.5s infinite  alternate ; */
+}
+@keyframes opacitsy {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes cortar {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 140%;
+  }
+} 
+
+
