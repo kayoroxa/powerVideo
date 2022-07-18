@@ -189,6 +189,9 @@ function Element(me) {
           })
         } else {
           elementHtml.style[k] = newStyle[k]
+          elementHtml.querySelectorAll('*').forEach(c => {
+            c.style[k] = newStyle[k]
+          })
         }
       })
       return _return
