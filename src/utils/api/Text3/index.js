@@ -5,6 +5,9 @@ const { addOnApp } = require('../powerUtils')
 const bug = require('../../bug')
 
 function generateSpanElement(child, index) {
+  const textRaw = child.innerHTML
+  child.innerHTML = child.innerHTML.replace(/[+\-*/]{2,}/g, '') //remove +-*/ in sequence
+
   return Element({
     getRect: () => {
       const rect = child.getBoundingClientRect()
@@ -13,6 +16,7 @@ function generateSpanElement(child, index) {
     },
     elementHtml: child,
     text: child.innerHTML,
+    textRaw,
     id: child.id,
     numberChild: index,
     changeTextTo,

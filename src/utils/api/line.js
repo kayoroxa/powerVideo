@@ -69,6 +69,7 @@ function Line(powerElement, op = {}) {
     id,
     animate,
     move_animate_to,
+    scratch,
     link_to: powerElement => {
       powerElement.onChange(() => {
         initPosition()
@@ -144,6 +145,50 @@ function Line(powerElement, op = {}) {
         value: highLight ? top + height : top - op.paddingY,
         // easing: 'spring(1, 80, 10, 0)',
       },
+      easing: 'easeInOutCubic',
+      duration: 500,
+      opacity: 1,
+    })
+    return _return
+  }
+
+  async function scratch(newPowerElement, op = {}, delay = 0) {
+    let rect
+    if (isArray(newPowerElement)) {
+      if (!group) {
+        group = Group(...newPowerElement)
+        rect = group.htmlElem.getBoundingClientRect()
+      } else {
+        group.refresh_to(...newPowerElement)
+        rect = group.htmlElem.getBoundingClientRect()
+      }
+    } else {
+      rect = newPowerElement.htmlElem.getBoundingClientRect()
+    }
+
+    let { left, width, height, top } = rect
+    const highLight = op.height ? true : false
+
+    op.color = op.color || 'rgba(0, 200, 0, 0.5)'
+    op.padding = isNumber(op.padding) ? op.padding : 10
+    op.paddingY = isNumber(op.paddingY) ? op.paddingY * 0.5 : 0
+    op.radius = isNumber(op.radius) ? op.radius : 5
+    op.height = isNumber(op.height) ? op.height : height
+    op.zIndex = op.zIndex || getZIndex() - 1
+
+    anime.set(box, {
+      left: left - op.padding,
+      borderRadius: `${op.radius}px`,
+      zIndex: op.zIndex,
+      height: op.height + op.paddingY * 2,
+      top: highLight ? top + height : top - op.paddingY,
+      background: op.color,
+    })
+
+    anime({
+      targets: box,
+      delay: delay,
+      width: [0, width + op.padding * 2],
       easing: 'easeInOutCubic',
       duration: 500,
       opacity: 1,
