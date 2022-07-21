@@ -23,6 +23,10 @@
   pointer-events: none;
 }
 
+.p-html {
+  background: red;
+}
+
 
 body {
   background: #e9c46a;
