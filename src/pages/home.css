@@ -10,9 +10,20 @@
 *::selection {
   /* background: pink; */
 
-  color: #fff;
+  color: rgb(0, 153, 255);
 
 
+}
+.p-box-img {
+  overflow: hidden;
+}
+
+.p-box-img img {
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
 }
 
 .p-group {
@@ -68,11 +79,6 @@ body {
 }
 
 
-.anchor-center {
-  /* top: 50%;
-  left: 50%; */
-  /* transform: translate(200); */
-}
 
 
 
@@ -96,42 +102,114 @@ body {
 } */
 .cortar {
   position: relative;
+  opacity: 1 ;
+}
+.cut-pause {
+  position: relative;
+  opacity: 1 !important;
+
+}
+
+.cut-pause::after {
+  content: "";
+  width: 500%;
+  height: 10px;
+  margin: auto;
+  text-align: center; 
+  transform-origin: left top;
+  background-color: rgb(209, 22, 22);
+  animation: cortar 1s ease-in-out ;
+  left: 65%;
+  top: -5%;
+
+  position: absolute;
+  transform: rotate(90deg);
+
 }
 
 .cortar::after {
   content: "";
-  width: 0px;
+  width: 200%;
   height: 10px;
   position: absolute;
-  transform: rotate(45deg);
+  transform: rotate(50deg);
   transform-origin: left top;
   top: 20px;
   left: 3px;
   border-radius: 10px;
-  background-color: black;
-  opacity: 0.5;
+  background-color: rgb(255, 0, 0);
+  /* opacity: 0.9; */
 
   animation: cortar 1s ease-in-out ;
   animation-fill-mode: forwards;
   /* animation-delay: 2s;
   animation: opacitsy 0.5s infinite  alternate ; */
 }
-@keyframes opacitsy {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.cortar.words-3::after {
+  transform: rotate(23deg);
+  width: 115%;
+  top: 40px;
+  left: -3px;
+}
+.cortar.words-2::after {
+  transform: rotate(30deg);
+  width: 130%;
+}
+.cortar.words-1::after {
+  transform: rotate(50deg);
+  width: 180%;
+}
+.cortar.words-half::after {
+  transform: rotate(60deg);
+  width: 290%;
+  left: -3px;
+}
+
+.cortar.i::after {
+  transform: rotate(60deg);
+  width: 340%;
+  left: -3px;
+}
+.cortar.h::after {
+  transform: rotate(50deg);
+  width: 180%;
+  left: -3px;
+}
+.cortar.th::after {
+  transform: rotate(40deg);
+  width: 135%;
+  left: -3px;
+}
+
+
+.join-words::after {
+  content: "";
+  width: 500%;
+  height: 9px;
+  position: absolute;
+  bottom: 0px;
+  left: -160%;
+  border-radius: 10px;
+  background-color: rgb(0, 153, 255);
+  opacity: 1;
+
+  animation: cortar 1s ease-in-out ;
+  animation-fill-mode: forwards;
+}
+
+
+.join-words {
+  position: relative;
+  opacity: 1 !important;
 }
 
 @keyframes cortar {
   0% {
     width: 0px;
   }
-  100% {
+  /* 100% {
     width: 140%;
-  }
+  } */
 } 
 
 
