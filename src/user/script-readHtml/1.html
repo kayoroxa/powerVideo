@@ -1,0 +1,75 @@
+<style>
+  * {
+    text-align: center;
+  }
+
+  .screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f0f0f0;
+  }
+  .title {
+    color: rgb(19, 121, 9);
+    padding: 30px 0px;
+    font-size: 1.3em;
+  }
+  .o {
+    opacity: 0;
+  }
+</style>
+
+<power>
+  <div class="screen">
+    <div class="title o">$title</div>
+    <div class="exemple o">$exemple</div>
+    <div class="exemple o">$exemple2</div>
+  </div>
+</power>
+
+<script>
+  const screen = document.querySelector('.screen')
+
+  function getTranslateYCenter(query) {
+    return (
+      screen.offsetHeight / 2 -
+      document.querySelector(query).offsetHeight / 2 -
+      document.querySelector(query).offsetTop
+    )
+  }
+
+  // anime.set('.title', {
+  //   translateY: getTranslateYCenter('.title'),
+  // })
+
+  // sleep(5000)
+
+  var tl = anime.timeline({
+    easing: 'easeOutExpo',
+    duration: 750,
+  })
+
+  tl.add({
+    targets: '.title',
+    opacity: 1,
+    translateY: ['-300%', getTranslateYCenter('.title')],
+  })
+    .add({
+      targets: '.title',
+      delay: 500,
+      opacity: 1,
+      translateY: '0%',
+    })
+    .add(
+      {
+        targets: '.exemple',
+        delay: 500,
+        opacity: 1,
+        translateY: ['-100%', '0%'],
+      },
+      '-=1000'
+    )
+</script>

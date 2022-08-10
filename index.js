@@ -16,5 +16,10 @@ app.on('ready', () => {
   mainWindow.maximize()
   mainWindow.loadURL(`file://${__dirname}/src/pages/home.html`)
 })
+
 //♪
 // /#
+// obs('PAGE').on('CHANGE_HTML', path => {
+//   console.log('Oi')
+//   mainWindow.loadURL(`file://${path}`)
+// })

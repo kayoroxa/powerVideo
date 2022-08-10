@@ -16,5 +16,6 @@ const styleIf = require('./script-style-if')
 const wordsSounds = require('./script-words-sounds')
 const lyricsHighlight = require('./script-lyrics-highlight')
 const muchacha = require('./script-muchacha')
+const readHtml = require('./script-readHtml')
 
-module.exports = lyricsHighlight
+module.exports = wordsSounds

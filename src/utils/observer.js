@@ -8,6 +8,7 @@ function Observer() {
   const esperando = []
 
   function addEventListener(evento, func, id = false) {
+    console.log('listening')
     if (id) {
       const index = esperando.findIndex(item => item.id === id)
 
@@ -23,6 +24,7 @@ function Observer() {
   }
 
   async function notify(evento, params) {
+    console.log(`${nameObserver} - ${evento}`)
     // await sleep(10)
     let result
     esperando.forEach(e => {
