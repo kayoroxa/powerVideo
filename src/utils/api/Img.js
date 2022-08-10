@@ -4,21 +4,24 @@ const anime = require('animejs')
 const { addOnApp } = require('./powerUtils')
 // const sound = require('sound-play')
 
-function createBox(htmlString) {
+function createBox(url) {
   const box = document.createElement('div')
   let id = false
-  box.classList.add('p-html')
+  box.classList.add('p-box-img')
   box.classList.add('p-absolute')
-  id = _.uniqueId('box_html_')
+  id = _.uniqueId('box_img_')
   box.id = id
 
-  box.innerHTML = htmlString
+  const imgHtml = document.createElement('img')
+  imgHtml.src = url
+
+  box.appendChild(imgHtml)
 
   return { box, id }
 }
 
-const Html = html => {
-  const { box, id } = createBox(html)
+const Img = url => {
+  const { box, id } = createBox(url)
   box.classList.add('hide')
   box.style.justifyContent = 'center'
   box.classList.add('anchor-center')
@@ -41,6 +44,20 @@ const Html = html => {
     elementHtml: box,
     close,
     id,
+    anime: animation => {
+      if (!animation) return _return
+      box.classList.remove('hide')
+      anime({
+        targets: box,
+        ...animation,
+      })
+    },
+    setStyle: style => {
+      Object.keys(style).forEach(key => {
+        box.style[key] = style[key]
+      })
+      return _return
+    },
     show: () => {
       box.classList.remove('hide')
     },
@@ -52,4 +69,4 @@ const Html = html => {
 
   return _return
 }
-module.exports = Html
+module.exports = Img

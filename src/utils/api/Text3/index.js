@@ -36,7 +36,7 @@ function Text3(texts) {
   if (typeof texts === 'string') {
     const spanTransform = texts.replace(/\{(.*?)\}/g, (match, p1) => {
       const span = document.createElement('span')
-      span.innerHTML = p1
+      span.innerHTML = p1 === ' ' ? '&nbsp;' : p1
       span.id = _.uniqueId('span_text_')
       span.classList.add('inline-block')
 
@@ -73,6 +73,19 @@ function Text3(texts) {
       const rect = box.getBoundingClientRect()
       bug(rect.left > 0, 'box: childrenRect[index] > 0')
       return rect
+    },
+    setStyle: newStyle => {
+      Object.keys(newStyle).forEach(k => {
+        if (k === 'textShadow' && newStyle[k] == 1) {
+          box.style[k] =
+            '2px 0 0 #011628, -2px 0 0 #011628, 0 2px 0 #011628, 0 -2px 0 #011628, 1px 1px #011628, -1px -1px 0 #011628, 1px -1px 0 #011628, -1px 1px 0 #011628'
+        }
+        box.style[k] = newStyle[k]
+        box.querySelectorAll('*').forEach(c => {
+          c.style[k] = newStyle[k]
+        })
+      })
+      return _return
     },
   })
 
