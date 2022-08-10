@@ -168,6 +168,14 @@ function Element(me) {
     refresh,
     next_to,
     rectChildren,
+    anime: animation => {
+      if (!animation) return _return
+      elementHtml.classList.remove('hide')
+      anime({
+        targets: elementHtml,
+        ...animation,
+      })
+    },
     style: elementHtml.style,
     setStyle: (newStyle, easing) => {
       Object.keys(newStyle).forEach(k => {
