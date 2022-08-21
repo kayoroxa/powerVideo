@@ -201,9 +201,15 @@ function backspace() {
   if (!lastText[lastText.length - 1]) return
   playAudio()
 
-  lastText[lastText.length - 1].lastChild.innerHTML = lastText[
-    lastText.length - 1
-  ].lastChild.innerHTML.slice(0, -1)
+  let lastChild = lastText[lastText.length - 1].lastChild
+
+  if (lastChild.innerHTML.length < 1) {
+    lastText[lastText.length - 1].removeChild(lastChild)
+  }
+
+  lastChild = lastText[lastText.length - 1].lastChild
+
+  lastChild.innerHTML = lastChild.innerHTML.slice(0, -1)
 }
 
 let audioRandom
