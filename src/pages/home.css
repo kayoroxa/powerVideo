@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "monkey";
+  src: url("I:/vscode/fonts/Monday Monkey.ttf");
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -5,14 +11,13 @@
   font-family: sans-serif;
   font-weight: 600;
   color: #264653;
+  white-space: pre;
 }
 
 *::selection {
-  /* background: pink; */
+  /* background: rgba(255, 238, 0, 0.479); */
 
   color: rgb(0, 153, 255);
-
-
 }
 .p-box-img {
   overflow: hidden;
@@ -48,6 +53,9 @@ body {
   width: 100vw;
   height: 100vh;
   position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 
@@ -63,7 +71,8 @@ body {
 .elemento span {
   width: 10px;
   margin: 5px;
-  background-color: white;
+  background-color: #e7e6e6;
+  /* background-color: white; */
 
 }
 
@@ -213,3 +222,73 @@ body {
 } 
 
 
+.d-text-cursor-magic {
+  position : absolute;
+  font-family: "monkey";
+  /* background : red; */
+  line-height : 0 !important;
+  width : 600vw;
+  height : 100px;
+  transform-origin: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  color: #e7e6e6;
+}
+
+.d-text-cursor-magic span {
+  color: #e7e6e6;
+  font-family: "monkey";
+  font-weight: 100;
+}
+
+span.magic-cursor.one {
+  color: #e7e6e6;
+
+}
+
+span.magic-cursor.two {
+  color: #8ac926;
+
+}
+
+span.magic-cursor.three {
+  color: #ff006e;
+
+}
+
+span.magic-cursor.four {
+  color: #3a86ff;
+
+}
+
+span.magic-cursor.five {
+  color: #ffbe0b;
+
+}
+
+span.magic-cursor.six {
+  color: #8338ec;
+
+}
+
+span.magic-cursor.seven {
+  color: #fb5607;
+
+}
+
+span.magic-cursor.eight {
+  color: #00b050;
+
+}
+
+span.magic-cursor.nine {
+  color: #ff0000;
+}
+
+span.magic-cursor.zero {
+  color: #404040;
+}

@@ -7,6 +7,7 @@ const joinPath = require('path').join
 
 let indexCena = 0
 const { isSubtitle } = require('./config')
+const obs = require('../../utils/observer')
 
 const cena = MainCena({ Scene, Line, isSubtitle })
 
@@ -56,12 +57,20 @@ function loadScript() {
   }
 }
 
+let canKeyClick = true
+
+obs('KEY').on('priority', p => {
+  if (p === false) canKeyClick = true
+  else canKeyClick = false
+})
+
 module.exports = async () => {
   const myScript = loadScript()
 
   Scene.setBackground('#021ff4')
 
   document.addEventListener('keydown', async e => {
+    if (!canKeyClick) return
     // arrow left
     async function putCena(indexCena) {
       document.querySelector('.app').innerHTML = ''

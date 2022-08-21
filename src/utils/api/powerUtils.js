@@ -50,10 +50,17 @@ function FadeIn(PowerElement) {
     },
   }
 }
+let canKeyClick = true
+
+obs('KEY').on('priority', p => {
+  if (p === false) canKeyClick = true
+  else canKeyClick = false
+})
 
 const key = () =>
   new Promise(resolve => {
     const func = e => {
+      if (!canKeyClick) return
       if (e.key === 'Enter' || e.key === ' ') {
         document.removeEventListener('keydown', func)
         resolve()
