@@ -54,13 +54,15 @@ const getNewImage = () => {
   return null
 }
 let canKeyClick = false
+let changeMousePosition = false
 
 let mousePosition = { x: false, y: false }
 let lastPosition = { x: false, y: false }
 
 document.querySelector('body').addEventListener('mousemove', function (event) {
   mousePosition = { x: event.x, y: event.y }
-  if (canKeyClick) add()
+  changeMousePosition = true
+  deleteEmptyDiv()
 })
 
 let lastText = []
@@ -111,6 +113,9 @@ document.addEventListener('keydown', async e => {
   if (e.key === '=' || e.key === '/') {
     addSpanNeutral(e.key, 'zero')
   } else if (e.key.length === 1) {
+    if (changeMousePosition) {
+      add()
+    }
     change(e.key)
   } else if (e.key === 'Backspace') {
     e.preventDefault()
@@ -190,11 +195,14 @@ function removeLastSpace() {
 }
 
 function change(key) {
+  changeMousePosition = false
   if (!lastText[lastText.length - 1]) return
+
   if (key === ' ' && lastEndWithSpace()) return
 
   playAudio()
   lastText[lastText.length - 1].lastChild.innerHTML += key
+  deleteEmptyDiv()
 }
 
 function backspace() {
@@ -215,6 +223,7 @@ function backspace() {
 let audioRandom
 
 function add(xCenter, byMouse = true) {
+  changeMousePosition = false
   let myPosition = byMouse ? mousePosition : lastPosition
 
   if (myPosition.x === false || myPosition.y === false) return
@@ -254,6 +263,15 @@ function add(xCenter, byMouse = true) {
     )
   }
   lastText.push(div)
+}
+
+function deleteEmptyDiv() {
+  const div = document.querySelectorAll('.d-text-cursor-magic')
+  div.forEach(v => {
+    if (v.innerText.length < 1) {
+      v.parentNode.removeChild(v)
+    }
+  })
 }
 
 function playAudio() {
