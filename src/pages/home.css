@@ -223,6 +223,7 @@ body {
 
 
 .d-text-cursor-magic {
+  pointer-events: none;
   position : absolute;
   font-family: "monkey";
   /* background : red; */
@@ -240,9 +241,11 @@ body {
 }
 
 .d-text-cursor-magic span {
+  pointer-events: auto;
   color: #e7e6e6;
   font-family: "monkey";
   font-weight: 100;
+  text-shadow: 2px 0 0 #011628, -2px 0 0 #011628, 0 2px 0 #011628, 0 -2px 0 #011628, 1px 1px #011628, -1px -1px 0 #011628, 1px -1px 0 #011628, -1px 1px 0 #011628;
 }
 
 span.magic-cursor.one {
@@ -262,6 +265,7 @@ span.magic-cursor.three {
 
 span.magic-cursor.four {
   color: #3a86ff;
+  color: #00a4eb;
 
 }
 
