@@ -74,10 +74,10 @@ obs('KEY').on('priority', p => {
 
 document.addEventListener('keydown', async e => {
   if (e.key === 'ArrowUp') {
-    lastPosition.y -= fontSize + 10
+    lastPosition.y -= fontSize + 5
     add(null, false)
   } else if (e.key === 'ArrowDown' || e.key === 'Enter') {
-    lastPosition.y += fontSize + 10
+    lastPosition.y += fontSize + 5
     add(null, false)
   }
 
@@ -93,7 +93,8 @@ document.addEventListener('keydown', async e => {
     setTimeout(() => obs('KEY').notify('priority', false), 50)
   }
   if (e.key === 'Home') {
-    clear()
+    // clear()
+    closeAll()
   }
   if (e.key === '9') {
     getNewImage() && writeImageFromUrl(lastNewImage.base64, 'base64')
@@ -122,11 +123,6 @@ document.addEventListener('keydown', async e => {
     backspace()
   }
 })
-
-function clear() {
-  lastText.forEach(v => v.parentNode?.removeChild(v))
-  lastText = []
-}
 
 let lastClass
 
@@ -282,4 +278,23 @@ function playAudio() {
   audioElem.onended = () => {
     audioElem.remove()
   }
+}
+
+function closeAll() {
+  const anime = require('animejs')
+
+  const div = document.querySelectorAll('.d-text-cursor-magic')
+  div.forEach(v => {
+    anime({
+      targets: v,
+      opacity: 0,
+      // translateY: '-100px',
+      scale: 0,
+      duration: 500,
+      easing: 'easeInOutBack',
+      complete: () => {
+        v.parentNode.removeChild(v)
+      },
+    })
+  })
 }
