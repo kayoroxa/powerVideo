@@ -10,49 +10,49 @@ const audiosName = [
   'key2',
 ]
 
-const writeImageFromUrl = (url, dataType) => {
-  if (url.startsWith('file://')) {
-    url = url.substr(7)
-  }
-  const img =
-    dataType === 'base64'
-      ? nativeImage.createFromDataURL(url)
-      : nativeImage.createFromPath(url)
-  clipboard.writeImage(img)
-}
+// const writeImageFromUrl = (url, dataType) => {
+//   if (url.startsWith('file://')) {
+//     url = url.substr(7)
+//   }
+//   const img =
+//     dataType === 'base64'
+//       ? nativeImage.createFromDataURL(url)
+//       : nativeImage.createFromPath(url)
+//   clipboard.writeImage(img)
+// }
 
-const getImageData = nativeImg => {
-  if (nativeImg && !nativeImg.isEmpty()) {
-    const size = nativeImg.getSize()
-    const base64 = nativeImg.toDataURL()
-    const base64Length = base64.length
-    return {
-      name: `clipboard-image-${size.width}x${size.height}.png`,
-      type: 'base64',
-      base64,
-      width: size.width,
-      height: size.height,
-      size: Math.ceil(
-        4 * (base64Length / 3) + (base64Length % 3 !== 0 ? 4 : 0)
-      ),
-    }
-  }
-  return null
-}
+// const getImageData = nativeImg => {
+//   if (nativeImg && !nativeImg.isEmpty()) {
+//     const size = nativeImg.getSize()
+//     const base64 = nativeImg.toDataURL()
+//     const base64Length = base64.length
+//     return {
+//       name: `clipboard-image-${size.width}x${size.height}.png`,
+//       type: 'base64',
+//       base64,
+//       width: size.width,
+//       height: size.height,
+//       size: Math.ceil(
+//         4 * (base64Length / 3) + (base64Length % 3 !== 0 ? 4 : 0)
+//       ),
+//     }
+//   }
+//   return null
+// }
 
-let lastNewImage = getImageData(clipboard.readImage())
-const getNewImage = () => {
-  const currentImage = getImageData(clipboard.readImage())
-  if (
-    !lastNewImage ||
-    !currentImage ||
-    currentImage.base64 !== lastNewImage.base64
-  ) {
-    lastNewImage = currentImage
-    return currentImage
-  }
-  return null
-}
+// let lastNewImage = getImageData(clipboard.readImage())
+// const getNewImage = () => {
+//   const currentImage = getImageData(clipboard.readImage())
+//   if (
+//     !lastNewImage ||
+//     !currentImage ||
+//     currentImage.base64 !== lastNewImage.base64
+//   ) {
+//     lastNewImage = currentImage
+//     return currentImage
+//   }
+//   return null
+// }
 let canKeyClick = false
 let changeMousePosition = false
 
@@ -96,9 +96,9 @@ document.addEventListener('keydown', async e => {
     // clear()
     closeAll()
   }
-  if (e.key === '9') {
-    getNewImage() && writeImageFromUrl(lastNewImage.base64, 'base64')
-  }
+  // if (e.key === '9') {
+  //   getNewImage() && writeImageFromUrl(lastNewImage.base64, 'base64')
+  // }
   if (e.key === '1') return addSpanClass('one')
   if (e.key === '2') return addSpanClass('two')
   if (e.key === '3') return addSpanClass('three')
@@ -218,7 +218,7 @@ function backspace() {
 
 let audioRandom
 
-function add(xCenter, byMouse = true) {
+function add(xCenter, byMouse = true, text) {
   changeMousePosition = false
   let myPosition = byMouse ? mousePosition : lastPosition
 
@@ -237,15 +237,24 @@ function add(xCenter, byMouse = true) {
 
   div.style.transform = 'translate(-50%, -50%)'
 
-  const span = document.createElement('span')
-  span.classList.add('magic-cursor')
-  span.classList.add('one')
+  if (!text) {
+    const span = document.createElement('span')
+    span.classList.add('magic-cursor')
+    span.classList.add('one')
 
-  // span.style.color = 'white'
-  span.innerText = ''
-  span.style.fontSize = fontSize + 'px'
-
-  div.appendChild(span)
+    // span.style.color = 'white'
+    span.innerText = ''
+    span.style.fontSize = fontSize + 'px'
+    div.appendChild(span)
+  } else {
+    div.innerHTML = convertTextInHtmlColors(text)
+    anime({
+      targets: div,
+      translateY: [600, 0],
+      opacity: [0, 1],
+      easing: 'spring(1, 80, 10, 0)',
+    })
+  }
 
   // document.querySelector('body').appendChild(div)
 
@@ -280,9 +289,27 @@ function playAudio() {
   }
 }
 
-function closeAll() {
-  const anime = require('animejs')
+const anime = require('animejs')
 
+function addAnimateLoop(elem) {
+  anime({
+    targets: elem,
+    translateX: {
+      value: '+=10',
+      duration: 1000,
+      easing: 'easeInOutSine',
+    },
+    translateY: {
+      value: '+=10',
+      duration: 1000,
+      easing: 'easeInOutSine',
+    },
+    loop: true,
+    direction: 'alternate',
+  })
+}
+
+function closeAll() {
   const div = document.querySelectorAll('.d-text-cursor-magic')
   div.forEach(v => {
     anime({
@@ -298,3 +325,40 @@ function closeAll() {
     })
   })
 }
+
+const hotkeys = require('hotkeys-js')
+
+hotkeys('ctrl+v', () => {
+  add(null, true, clipboard.readText())
+})
+hotkeys('ctrl+b', () => {
+  console.log(clipboard.readImage())
+  const img = document.createElement('img')
+  img.src = clipboard.readImage().toDataURL()
+
+  add(true, true, img)
+  // add(null, true, clipboard.readText())
+})
+hotkeys('shift+v', () => {
+  add(true, true, clipboard.readText())
+})
+
+function convertTextInHtmlColors(text) {
+  const createString = className =>
+    `<span class="magic-cursor ${className}" style="font-size:${fontSize}px">$1</span>`
+
+  let html = text
+
+  html = html.replace(/\{(.*?)\}/g, createString('two'))
+  html = html.replace(/\((.*?)\)/g, createString('three'))
+  html = html.replace(/\[(.*?)\]/g, createString('four'))
+  html = html.replace(/>\s</g, '>&nbsp;<')
+
+  // const html = `<span class="magic-cursor two" style="font-size:${fontSize}px">${text}</span>`
+
+  return html
+}
+
+// function handleCtrlV() {
+//   const
+// }
