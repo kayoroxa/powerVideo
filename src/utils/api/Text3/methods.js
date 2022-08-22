@@ -144,6 +144,7 @@ function TextMethods(box) {
 function createBox(type = 'div') {
   const box = document.createElement(type)
   let id = false
+
   box.classList.add('p-text-block')
   if (type === 'div') {
     box.classList.add('p-absolute')
