@@ -1,10 +1,12 @@
 const fs = require('fs')
 const joinPath = require('path').join
 
-const text = fs.readFileSync(joinPath(__dirname, './raw-script.txt'), 'utf8')
+const name = 'friends'
+
+const text = fs.readFileSync(joinPath(__dirname, `./${name}.txt`), 'utf8')
 
 const newText = text.replace(/[^\s!.;?,|]+/g, '{$&}')
 
-fs.writeFileSync(joinPath(__dirname, './script.txt'), newText)
+fs.writeFileSync(joinPath(__dirname, `./${name}-script.txt`), newText)
 
 console.log(newText)

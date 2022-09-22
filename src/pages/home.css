@@ -17,7 +17,8 @@
 *::selection {
   /* background: rgba(255, 238, 0, 0.479); */
 
-  color: rgb(0, 153, 255);
+  color: rgb(255, 255, 255);
+  /* color: rgb(6, 140, 250); */
 }
 .p-box-img {
   overflow: hidden;
@@ -251,6 +252,11 @@ body {
 
 .d-text-cursor-magic span {
   pointer-events: auto;
+
+}
+
+.d-text-cursor-magic span {
+  font-family: inherit !important;
 }
 
 .d-text-cursor-magic span, .d-text-cursor-magic {
@@ -258,6 +264,10 @@ body {
   color: #e7e6e6;
   font-family: "monkey";
   font-weight: 100;
+  text-shadow: 2px 0 0 #011628, -2px 0 0 #011628, 0 2px 0 #011628, 0 -2px 0 #011628, 1px 1px #011628, -1px -1px 0 #011628, 1px -1px 0 #011628, -1px 1px 0 #011628;
+}
+
+.stroke {
   text-shadow: 2px 0 0 #011628, -2px 0 0 #011628, 0 2px 0 #011628, 0 -2px 0 #011628, 1px 1px #011628, -1px -1px 0 #011628, 1px -1px 0 #011628, -1px 1px 0 #011628;
 }
 
@@ -308,4 +318,19 @@ span.magic-cursor.nine {
 
 span.magic-cursor.zero {
   color: #404040;
+}
+
+img.one {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+img.two {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+img.three {
+  max-width: 500px;
+  max-height: 500px;
 }

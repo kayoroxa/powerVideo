@@ -31,7 +31,7 @@ function AI(x, ...data) {
   return a + b * x
 }
 
-// const result = AI(130, [90, 1000], [120, 1300], [150, 1800], [100, 1200])
+// const result = AI(2, [42.8, 6], [98, 36.6667], [654, 345.556], [100, 37.7778])
 
 // console.log(result)
 

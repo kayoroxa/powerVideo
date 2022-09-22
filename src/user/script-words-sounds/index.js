@@ -16,7 +16,7 @@ const colors = {
 //   document.styleSheets[0].addRule(selector, `transform: rotate(${value});`)
 // }
 
-const fontSize = 100
+const fontSize = 90
 
 // function getRotation(width) {
 //   return AI(width, [300, 27], [122, 61], [66, 68])
@@ -26,24 +26,33 @@ module.exports = async () => {
   Scene.setBackground(colors.background)
 
   const scripts = [
-    // 'I j{u=S}s{t=_}+wan{t=_}+to apol{o=S}{gi=dja}ze',
-    // 'for {th=ð}{a=e}t+uh',
-    '{u=S}npl{ea=e}{s=z}{a=S}nt s{c=_}{e=i}n{e=_} a li{ttle=rol} {ear=ɚ}li{er=ɚ}',
-    // 'My fr{i=_}en{d=_} Harry an{d=_}+I w{oul=u}d+uh',
-    // 'l{i=ai}k{e=_}+to b{u=a}y you g{uy=a}s+a',
-    // 'r{ou=au}nd+{o=S}{f=_} b{ee=i}rs',
-    // 'jus{t=_}+t{o=S} b{u=e}ry {the=Tâh} h{a=e}{t=_}chet',
-    // 'Sea Bass {a=e}n{d=_}+the fell{a=â}s+offer{ed=t} to',
-    // 'pick+{u=â}p+o{u=_}r {ch=tch}eck',
-    // '{th=T}ey s{ai=ê}d+j{u=S}st|pu{t=r}+i{t=r}+on+{th=_}e{i=_}r t{a=e}b',
+    //
+    // 'Com{e=_}+on. {Th=T}e co{a=_}st+is cl{ea=iê}r.',
+    // '{A=o}ll+we {have=ev} t{o=S} do is get|{rid of=wRêrê} {that=Te} {th=TH}in{g=_}',
+    // 'So wait|here {while I=walai} ge{t=r}+its card',
+    // "but+she {ca=ke}n't st{a=e}y here",
+    // "{Th=T}is+is {the=TS} men's+r{oo=u}m",
+    "{That is=Daris} {the=TS} weir{d=_}est+thin{g=_} you've+ever s{ai=e}d",
   ]
+
+  // 'Now drop| {th=T}e b{oo=u}t',
+  // "{You're=ySR} s{u=S}{ch a=tcha} g{oo=u}d| boy! Yes, you {are=aR}",
+  // 'Y{ou=S}+{a=o}ll t{ire=aiR}d|from ch{a=i}sin{g=_}+{th=_}is',
+  // 'b{a=e}d|m{a=e}n+{a=o}ll+over the pl{a=ei}ce?',
+  // 'Ex{cu=kiu}s{e=_} me?',
+  // 'Nob{ody=ari} appre{ci=chi}{a=ei}tes+you, do {th=d}ey?',
+  // "com{e=_}+on. He's+a b{a=e}d hors{e=s}",
+  // 'he is n{o=S}{th=TH}in{g=_} bu{t=r}+a big+sw{ee=i}t|{heart=hoRt}',
 
   let fraseRaw = scripts[0]
     .replace(/\+/g, '{ =_}')
     .replace(/\|/g, '{ =|}')
-    .replace(/S(\S*?)\}/g, 'ə$1}')
-    .replace(/R(\S*?)\}/g, 'ɚ$1}')
-    .replace(/T(\S*?)\}/g, 'ð$1}')
+    .replace(/(=[^}]*?)S(\S*?)\}/g, '$1ə$2}')
+    .replace(/(=[^}]*?)RR(\S*?)\}/g, '$1ɚ$2}')
+    .replace(/(=[^}]*?)TH(\S*?)\}/g, '$1θ$2}')
+    .replace(/(=[^}]*?)D(\S*?)\}/g, '$1ð$2}')
+    .replace(/(=[^}]*?)T(\S*?)\}/g, '$1ð$2}')
+    .replace(/(=[^}]*?)R(\S*?)\}/g, '$1ɹ$2}')
   // .toLowerCase()
 
   // 'M{y=ai} fr{i=u}en{d=_} H{a=é}rry {a=e}n{d=_} I w{oul=â}d, uh'
@@ -88,7 +97,9 @@ module.exports = async () => {
       anime({
         targets: frase.children[index].htmlElem,
         // translateY: '90px',
-        opacity: 0.3,
+        // opacity: 0.3,
+        color: 'rgb(171 174 179)',
+        // color: '#bfc2c7',
         duration: 500,
         easing: 'linear',
       })
@@ -103,10 +114,11 @@ module.exports = async () => {
         return
       }
 
-      if (fs[index].htmlElem.textContent === 'ə') {
-        fs[index].htmlElem.style.color = colors.S
-        //text border
-        // fs[index].htmlElem.style.border = '1px solid black'
+      if (fs[index].htmlElem.textContent.includes('ə')) {
+        fs[index].htmlElem.innerHTML = fs[index].htmlElem.textContent.replace(
+          'ə',
+          '<span style="color: ' + colors.S + '">ə</span>'
+        )
       }
 
       if (fs[index].htmlElem.textContent === '_') {
@@ -192,3 +204,19 @@ module.exports = async () => {
     // morphText(fraseClone, fraseResult)
   })
 }
+
+// 'I j{u=S}s{t=_}+wan{t=_}+to apol{o=S}{gi=djai}ze',
+// 'for {th=ð}{a=e}t+uh',
+// '{u=S}npl{ea=e}{s=z}{a=S}nt s{c=_}{e=i}n{e=_} a li{ttle=rol} {ear=ɚ}li{er=ɚ}',
+// 'My fr{i=_}en{d=_} H{a=e}rry an{d=_}+I w{oul=u}d+uh',
+// 'l{i=ai}k{e=_}+to b{u=a}y you g{u=a}ys+a',
+// 'r{ou=au}nd+{o=S}{f=_} b{ee=i}rs',
+// 'jus{t=_}+t{o=S} b{u=e}ry {the=Tâh} h{a=e}chet',
+// 'S{ea=i} B{a=e}ss {a=e}n{d=_}+{the=Tâ}+fell{a=â}s+offer{ed=_}+t{o=S}',
+// 'pick+{u=â}p+o{u=_}r {ch=tch}eck',
+// '{th=T}ey s{ai=ê}d+j{u=S}st|pu{t=r}+i{t=r}+on+{th=_}e{i=_}r t{a=e}b',
+// "{Th=T}{ey're=er} very n{i=ai}{ce=s}",
+// 'S{ea=i} B{a=e}ss s{ai=e}{d=_}+{th=T}a{t=_}?',
+// 'Well, if+{u=â}h',
+// '{Th=T}{a=e}{t=_} g{uy=ai} {a=e}{t=_}+{th=T}e t{a=êi}b{le=Sl} ov{er=_}+{th=T}er{e=_} is S{ea=i} B{a=e}ss',
+// "{a=o}ll r{igh=uai}t, {i=_}f+{th=T}{a=e}t's+{what=uâ}+{he=ri} wants",

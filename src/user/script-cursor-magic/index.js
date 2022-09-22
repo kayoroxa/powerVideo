@@ -2,8 +2,11 @@ const obs = require('../../utils/observer')
 const { clipboard, nativeImage } = require('electron')
 const joinPath = require('path').join
 const _ = require('lodash')
+const AI = require('../../utils/AI')
 
 const fontSize = 150
+let lastColor = 'white'
+
 const audiosName = [
   //
   // 'key1',
@@ -72,6 +75,68 @@ obs('KEY').on('priority', p => {
   else canKeyClick = false
 })
 
+const hotkeys = require('hotkeys-js')
+
+hotkeys('ctrl+f1,ctrl+f2,ctrl+f3', (_, handler) => {
+  const img = document.createElement('img')
+  img.src = clipboard.readImage().toDataURL()
+  img.id = _.uniqueID('img-magic_')
+
+  if (handler.key === 'ctrl+f1') img.classList.add('one')
+  else if (handler.key === 'ctrl+f2') img.classList.add('one')
+  else if (handler.key === 'ctrl+f3') img.classList.add('two')
+
+  if (img.src === 'data:image/png;base64,') return
+  add(true, true, { html: img })
+})
+
+hotkeys('f1,f2,f3', (_, handler) => {
+  const img = document.createElement('img')
+  img.src = clipboard.readImage().toDataURL()
+
+  if (handler.key === 'f1') img.classList.add('one')
+  else if (handler.key === 'f2') img.classList.add('one')
+  else if (handler.key === 'f3') img.classList.add('two')
+
+  if (img.src === 'data:image/png;base64,') return
+  add(false, true, { html: img })
+})
+
+hotkeys('ctrl+v', () => {
+  canKeyClick = false
+  if (clipboard.readText().length > 0) {
+    const size = AI(clipboard.readText().length, [43, 120], [42, 128])
+    add(null, true, { text: clipboard.readText(), textSize: size })
+  } else {
+    const img = document.createElement('img')
+    img.src = clipboard.readImage().toDataURL()
+    if (img.src === 'data:image/png;base64,') return
+    // img.id = _.uniqueID('img-magic_')
+    img.classList.add('one')
+    add(null, true, { html: img })
+  }
+})
+
+hotkeys('shift+v', () => {
+  canKeyClick = false
+  if (clipboard.readText().length > 0) {
+    const size = AI(clipboard.readText().length, [43, 120], [42, 128])
+    add(null, true, { text: clipboard.readText(), textSize: size })
+  } else {
+    const img = document.createElement('img')
+    img.src = clipboard.readImage().toDataURL()
+    if (img.src === 'data:image/png;base64,') return
+    // img.id = _.uniqueID('img-magic_')
+    img.classList.add('one')
+    add(true, true, { html: img })
+  }
+})
+hotkeys('ctrl+z', () => {
+  canKeyClick = false
+  const lastDiv = document.querySelector('.d-text-cursor-magic:last-of-type')
+  close(lastDiv)
+})
+
 document.addEventListener('keydown', async e => {
   if (e.key === 'ArrowUp') {
     lastPosition.y -= fontSize + 5
@@ -109,6 +174,7 @@ document.addEventListener('keydown', async e => {
   if (e.key === '8') return addSpanClass('eight')
   if (e.key === '9') return addSpanClass('nine')
   if (e.key === '0') return addSpanClass('zero')
+  if (e.key === '[') return addSpanColor(lastColor)
 
   if (!canKeyClick) return
   if (e.key === '=' || e.key === '/') {
@@ -171,6 +237,25 @@ function addSpanClass(numberString) {
   lastDiv.appendChild(newSpan)
 }
 
+function addSpanColor(color) {
+  const lastDiv = lastText[lastText.length - 1]
+
+  if (!lastDiv) return
+
+  const newSpan = document.createElement('span')
+
+  if (lastDiv.lastChild.innerHTML.length < 1) {
+    lastDiv.removeChild(lastDiv.lastChild)
+  }
+
+  newSpan.style.fontSize = fontSize
+  newSpan.classList.add('magic-cursor')
+  newSpan.style.color = color
+  newSpan.style.fontSize = fontSize + 'px'
+
+  lastDiv.appendChild(newSpan)
+}
+
 function lastEndWithSpace() {
   const lastDiv = lastText[lastText.length - 1]
   if (!lastDiv) return
@@ -218,7 +303,8 @@ function backspace() {
 
 let audioRandom
 
-function add(xCenter, byMouse = true, text) {
+function add(xCenter, byMouse = true, param) {
+  const myFontSize = param?.fontSize || fontSize
   changeMousePosition = false
   let myPosition = byMouse ? mousePosition : lastPosition
 
@@ -233,26 +319,33 @@ function add(xCenter, byMouse = true, text) {
   div.style.top = top + 'px'
   div.style.left = left + 'px'
 
-  div.style.fontSize = fontSize + 'px'
+  div.style.fontSize = myFontSize + 'px'
 
   div.style.transform = 'translate(-50%, -50%)'
 
-  if (!text) {
+  if (!param) {
     const span = document.createElement('span')
     span.classList.add('magic-cursor')
     span.classList.add('one')
 
     // span.style.color = 'white'
     span.innerText = ''
-    span.style.fontSize = fontSize + 'px'
+    span.style.fontSize = myFontSize + 'px'
     div.appendChild(span)
-  } else {
-    div.innerHTML = convertTextInHtmlColors(text)
+  } else if (param?.text) {
+    div.innerHTML = convertTextInHtmlColors(param.text)
     anime({
       targets: div,
       translateY: [600, 0],
       opacity: [0, 1],
       easing: 'spring(1, 80, 10, 0)',
+    })
+  } else if (param?.html) {
+    div.appendChild(param.html)
+    anime({
+      targets: div,
+      scale: [0, 1],
+      easing: 'easeOutBack',
     })
   }
 
@@ -262,17 +355,18 @@ function add(xCenter, byMouse = true, text) {
 
   document.querySelector('.app').appendChild(div)
 
-  if (lastText[lastText.length - 1]?.innerText.length < 1) {
-    lastText[lastText.length - 1].parentNode.removeChild(
-      lastText[lastText.length - 1]
-    )
-  }
+  // if (lastText[lastText.length - 1]?.innerText.length < 1 && !param?.html) {
+  //   lastText[lastText.length - 1].parentNode.removeChild(
+  //     lastText[lastText.length - 1]
+  //   )
+  // }
   lastText.push(div)
 }
 
 function deleteEmptyDiv() {
   const div = document.querySelectorAll('.d-text-cursor-magic')
   div.forEach(v => {
+    if (document.querySelector('.d-text-cursor-magic img')) return
     if (v.innerText.length < 1) {
       v.parentNode.removeChild(v)
     }
@@ -290,6 +384,7 @@ function playAudio() {
 }
 
 const anime = require('animejs')
+const { debug } = require('console')
 
 function addAnimateLoop(elem) {
   anime({
@@ -326,22 +421,19 @@ function closeAll() {
   })
 }
 
-const hotkeys = require('hotkeys-js')
-
-hotkeys('ctrl+v', () => {
-  add(null, true, clipboard.readText())
-})
-hotkeys('ctrl+b', () => {
-  console.log(clipboard.readImage())
-  const img = document.createElement('img')
-  img.src = clipboard.readImage().toDataURL()
-
-  add(true, true, img)
-  // add(null, true, clipboard.readText())
-})
-hotkeys('shift+v', () => {
-  add(true, true, clipboard.readText())
-})
+function close(elem) {
+  anime({
+    targets: elem,
+    opacity: 0,
+    // translateY: '-100px',
+    scale: 0,
+    duration: 500,
+    easing: 'easeInOutBack',
+    complete: () => {
+      elem.parentNode.removeChild(elem)
+    },
+  })
+}
 
 function convertTextInHtmlColors(text) {
   const createString = className =>
@@ -358,6 +450,11 @@ function convertTextInHtmlColors(text) {
 
   return html
 }
+
+obs('COLORS').on('lastColor', color => {
+  console.log({ color })
+  lastColor = color
+})
 
 // function handleCtrlV() {
 //   const

@@ -12,7 +12,11 @@ function createBox(htmlString) {
   id = _.uniqueId('box_html_')
   box.id = id
 
-  box.innerHTML = htmlString
+  if (typeof htmlString === 'string') {
+    box.innerHTML = htmlString
+  } else {
+    box.append(htmlString)
+  }
 
   return { box, id }
 }

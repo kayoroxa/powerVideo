@@ -1,63 +1,80 @@
-/* eslint-disable */
+// /* eslint-disable */
 
-VGroup = {
-  animate: { shift },
-  scale: () => {},
-}
+// VGroup = {
+//   animate: { shift },
+//   scale: () => {},
+// }
 
-Forma = {
-  shift,
-  move_to,
-  next_to,
-}
+// Forma = {
+//   shift,
+//   move_to,
+//   next_to,
+// }
 
-questions = VGroup(
-  TexText('What', 'is', '$e^{t}$', '?'),
-  TexText('What', 'properties', 'does', '$e^{t}$', 'have?'),
-  TexText(
-    'What',
-    'property',
-    'defines',
-    '$e^{t}$',
-    '?',
-    (tex_to_color_map = { defines: BLUE })
-  ),
-  Tex()
-)
-questions.scale(2)
+// questions = VGroup(
+//   TexText('What', 'is', '$e^{t}$', '?'),
+//   TexText('What', 'properties', 'does', '$e^{t}$', 'have?'),
+//   TexText(
+//     'What',
+//     'property',
+//     'defines',
+//     '$e^{t}$',
+//     '?',
+//     (tex_to_color_map = { defines: BLUE })
+//   ),
+//   Tex()
+// )
+// questions.scale(2)
 
-async function script() {
-  await scene.add(group, dest)
+// async function script() {
+//   await scene.add(group, dest)
 
-  await scene.playClick(
-    group.animate.shift(dest.get_center() - group[2].get_center()),
+//   await scene.playClick(
+//     group.animate.shift(dest.get_center() - group[2].get_center()),
 
-    group.animate
-      .set_color(PURPLE)
-      .set_opacity(0.5)
-      .shift(2 * LEFT)
-      .scale(3),
+//     group.animate
+//       .set_color(PURPLE)
+//       .set_opacity(0.5)
+//       .shift(2 * LEFT)
+//       .scale(3),
 
-    GrowFromCenter(),
+//     GrowFromCenter(),
 
-    Write(text),
+//     Write(text),
 
-    ReplacementTransform(frameBox1, frameBox2),
-    FadeIn(text, UP * 2 + LEFT),
+//     ReplacementTransform(frameBox1, frameBox2),
+//     FadeIn(text, UP * 2 + LEFT),
 
-    FadeOut(tex[2], {
-      //target_position : Dot
-      shift: RIGHT,
-      //scale : 0.5
-    })
+//     FadeOut(tex[2], {
+//       //target_position : Dot
+//       shift: RIGHT,
+//       //scale : 0.5
+//     })
+//   )
+
+//   obj1.next_to(obj2, LEFT)
+//   obj1.set_width(0.7 * obj2.get_width())
+//   obj1.move_to(obj2) // vai pro lugar do obj2
+//   obj1.move_to(obj2.get_right()) // algo que fica do lado
+
+//   obj1.save_state() || obj1.restore()
+
+//   await scene.wait(0.5)
+// }
+
+const text = `{Você} {é} {2um} {4menino} {1tão} {3bom}! {Sim}, {você é}!`
+
+const ha = ['{}', '()', '[]']
+
+const stringRegex = ha.map(v => `(\\${v[0]}.*?\\${v[1]})`).join('|')
+
+console.log(stringRegex)
+const re = new RegExp(stringRegex, 'gi')
+
+const separado = text.split(re).filter(Boolean)
+
+console.log(
+  separado.map(
+    v => `<span class="magic-cursor s" style="font-size:spx">${v}</span>`
   )
-
-  obj1.next_to(obj2, LEFT)
-  obj1.set_width(0.7 * obj2.get_width())
-  obj1.move_to(obj2) // vai pro lugar do obj2
-  obj1.move_to(obj2.get_right()) // algo que fica do lado
-
-  obj1.save_state() || obj1.restore()
-
-  await scene.wait(0.5)
-}
+)

@@ -1,6 +1,7 @@
 const anime = require('animejs')
 const { isArray } = require('lodash')
-const _ = require('lodash')
+const obs = require('../../utils/observer')
+// const _ = require('lodash')
 
 function Colors() {
   let arr
@@ -30,11 +31,11 @@ function Colors() {
 
 const colors = Colors()
 
-function resetText(textComp, color, op) {
-  if (op.shuffle) {
+function resetText(textComp, color, opOrIndex) {
+  if (opOrIndex.shuffle) {
     colors.shuffle()
   }
-  if (op === 'all') {
+  if (opOrIndex === 'all') {
     textComp.setStyle({
       color: color ? color : 'hsl(12, 83%, 62%)',
     })
@@ -47,6 +48,8 @@ function resetText(textComp, color, op) {
       color: color ? color : colors.array[index] || 'hsl(12, 83%, 62%)',
     })
   })
+
+  obs('COLORS').notify('lastColor', colors.array[opOrIndex])
 }
 function resetTexts(texts) {
   texts.forEach(texts, text => resetText(text, 'hsl(12, 83%, 62%)'))
