@@ -334,3 +334,19 @@ img.three {
   max-width: 500px;
   max-height: 500px;
 }
+
+.files {
+  position: absolute;
+  left: 60px;
+  top: 40px;
+  overflow: auto !important;
+}
+
+.file {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.file:hover {
+  background: white;
+}
