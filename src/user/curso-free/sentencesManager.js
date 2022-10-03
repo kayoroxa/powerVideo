@@ -21,16 +21,35 @@ você quer ir?
 
 do you want to go to the restaurant?
 você quer ir ao restaurante?
+
+she wants to go to the apartment
+ela quer ir para o apartamento
+
+she wants to go home
+ela quer ir para casa
+
+she wants to go home with perfume
+ela quer ir para casa com perfume
+
 `
 
-const teach = [
-  'ir',
-  'eu quer.*',
-  'to go',
-  'você quer ir',
-  'I want',
-  'do you want',
-].sort((a, b) => a.length - b.length)
+const teach = `
+with
+com
+perfume
+she wants
+ela quer
+ir
+eu quer.*
+to go
+você quer ir
+I want
+do you want
+`
+  .split(/\n/g)
+  .filter(Boolean)
+  .map(v => v.trim())
+  .sort((a, b) => a.length - b.length)
 
 const scriptReplaced = teach.reduce((acc, cur) => {
   const reg = new RegExp(`(${cur})`, 'gi')
@@ -42,7 +61,6 @@ const script = scriptReplaced
   .split(/\n\n+/g)
   .filter(v => v.length > 0)
   .map(v => ({ pt: v.split('\n')[0].trim(), en: v.split('\n')[1].trim() }))
-debugger
 
 const scripts = [
   // {
@@ -96,8 +114,6 @@ function putInHtml(indexScript) {
     ptSplitted[index],
   ])
 
-  debugger
-
   const withoutPunctuation = enSplitted.filter(en => en !== '?')
   // const withPunctuation = enSplitted.find(en => en === '?')
   const strHtmls = splitted.map(([en, pt]) => template(en, pt))
@@ -126,12 +142,13 @@ function putInHtml(indexScript) {
 function handleOnClickInSentence(index, indexScript) {
   debugger
   const elements = Array.from(
-    document.querySelectorAll('.block:not(.fixed)')
+    document.querySelectorAll('.block.hidden:not(.fixed)')
   ).filter(
     el =>
       el.textContent.toLocaleLowerCase().trim() ===
       split(script[indexScript].en)[index].toLocaleLowerCase().trim()
   )
+  debugger
   if (!elements[0] || !elements[1]) return
 
   const prevWidth = elements[0].getBoundingClientRect().width
