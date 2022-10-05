@@ -7,6 +7,9 @@ Eu quero ir
 she wants to go
 ela quer ir
 
+to the apartment
+para o apartamento
+
 I want to go to the apartment
 Eu quero ir para o apartamento
 
@@ -28,38 +31,141 @@ ela quer ir para o apartamento
 she wants to go home
 ela quer ir para casa
 
-she wants to go home with perfume
-ela quer ir para casa com perfume
+she wants to go home with me
+ela quer ir para casa comigo
+
+she doesn't want to go
+ela não quer ir 
+
+she doesn't want to go to the supermarket
+ela não quer ir ao supermercado
+
+she doesn't want to go to the restaurant with me
+ela não quer ir ao restaurante comigo
+
+she doesn't want to go home with me
+ela não quer ir para casa comigo
+
+I would like
+eu gostaria de
+
+I would like to go to the supermarket
+eu gostaria de ir ao supermercado
+
+too
+também
+
+she would like to go too
+ela gostaria de ir também
+
+i would like to go to the market too
+eu gostaria de ir para o mercado também 
+
+she would like to go to the market with me too
+ela gostaria de ir para o mercado comigo também
+
+
+but
+mas
+
+I would like to go to a restaurant, but she doesn't want to go
+eu gostaria de ir para restaurante, mas ela não quer ir
+  
+
+
+
+
+I have to
+eu tenho que 
+
+call my mother
+chamar minha mãe
+
+I have to call my mother
+eu tenho que chamar minha mãe
+
+i have to call my mom to go home
+eu tenho que chamar minha mãe para ir pra casa
+
+she would like to go so i have to call
+ela gostaria de ir então eu tenho que chamar
+
+she doesn't want to go
+ela não quer ir
+
+she doesn't want to go but i have to call
+ela não quer ir mas eu tenho que chamar
+
+she doesn't want to go but i have to go to the restaurant
+ela não quer ir mas eu tenho que ir para o restaurante
+
+I want to go but she doesn't want to go
+eu quero ir mas ela não quer ir
+
+I want to go
+eu quero ir
+
+I want to go but my mother doesn't want to go
+eu quero ir mas minha mãe não quer ir
+
+I want to call my mother
+eu quero chamar minha mãe
+
+I want to call my mother to go with me
+eu quero chamar minha mãe para ir comigo
 
 `
 
 const teach = `
+with me
+comigo
+so
+então
+(she|you|i) (does|do)n't want
+(do|does)? (she|i|you) wants?
+(ela|eu|você) (não)? quero?
+(she|i|you) have to
+(ela|eu|você) (não)? (tem|tenho) que
+(she|i|you) would like
+(ela|eu|você) (não)? gostaria de
 with
 com
 perfume
-she wants
-ela quer
+(to)? go
 ir
-eu quer.*
-to go
-você quer ir
-I want
-do you want
+também
+too
+mas
+but
+also
 `
   .split(/\n/g)
   .filter(Boolean)
-  .map(v => v.trim())
-  .sort((a, b) => a.length - b.length)
+  .map(v =>
+    v
+      .trim()
+      .replace(/([^|()\?]+(?=[^(]*\)\?))/g, '$1 ')
+      .replace(/(\(.*?\)\?)\s/g, '$1')
+  )
 
-const scriptReplaced = teach.reduce((acc, cur) => {
-  const reg = new RegExp(`(${cur})`, 'gi')
-  return acc.replace(reg, `{$1}`).replace(/\?/g, '{?}')
-}, rawScript)
+// .sort((a, b) => b.length - a.length)
+
+const scriptReplaced = teach
+  .reduce((acc, cur) => {
+    const reg = new RegExp(`(${cur})(?![^{]*})`, 'gi')
+    // debugger
+    return acc.replace(reg, `{$1}`)
+  }, rawScript)
+  .replace(/\?/g, '{?}')
+
+console.log(scriptReplaced)
+// debugger
 
 const script = scriptReplaced
   .trim()
   .split(/\n\n+/g)
   .filter(v => v.length > 0)
+  .reverse()
   .map(v => ({ pt: v.split('\n')[0].trim(), en: v.split('\n')[1].trim() }))
 
 const scripts = [
@@ -140,15 +246,17 @@ function putInHtml(indexScript) {
 }
 
 function handleOnClickInSentence(index, indexScript) {
-  debugger
-  const elements = Array.from(
-    document.querySelectorAll('.block.hidden:not(.fixed)')
-  ).filter(
-    el =>
-      el.textContent.toLocaleLowerCase().trim() ===
-      split(script[indexScript].en)[index].toLocaleLowerCase().trim()
-  )
-  debugger
+  function find(query) {
+    return Array.from(document.querySelectorAll(query)).find(
+      el =>
+        el.textContent.toLocaleLowerCase().trim() ===
+        split(script[indexScript].en)[index].toLocaleLowerCase().trim()
+    )
+  }
+  const element0 = find('.blocks .block:not(.fixed, .resolved)')
+  const element1 = find('.waiting .block:not(.fixed, .resolved)')
+
+  const elements = [element0, element1]
   if (!elements[0] || !elements[1]) return
 
   const prevWidth = elements[0].getBoundingClientRect().width
@@ -164,6 +272,9 @@ function handleOnClickInSentence(index, indexScript) {
       elements[0].getBoundingClientRect().top,
     width: elements[1].getBoundingClientRect().width,
   })
+
+  elements[1].classList.add('resolved')
+  elements[0].classList.add('resolved')
   anime.set(elements[1], { opacity: 0 })
 
   anime({
