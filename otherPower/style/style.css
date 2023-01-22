@@ -1,0 +1,65 @@
+body {
+  background-color: #262626;
+}
+
+*::selection {
+  background-color: rgb(51, 51, 51);
+}
+
+* {
+  color: hsl(0, 0%, 100%);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sentences {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+}
+
+#en {
+  font-size: 100px;
+}
+#pt {
+  font-size: 50px;
+  opacity: 0.5;
+}
+
+.highlight {
+  color: hsl(193, 99%, 47%);
+  /* padding: 1px 10px; */
+  /* border-radius: 5px; */
+}
+
+.highlight:hover {
+  cursor: pointer;
+}
+
+.info {
+  color: red;
+}
+
+.info:focus {
+  outline: none;
+}
+
+.info::selection {
+  background: transparent;
+}
+
+.deleted {
+  opacity: 0.3;
+}
