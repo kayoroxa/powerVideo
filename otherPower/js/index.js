@@ -1,8 +1,4 @@
-import {
-  addSpanOnSelection,
-  putDeleteListening,
-  setCaretPosition,
-} from './utils.js'
+import { addSpanOnSelection, deleteElem, setCaretPosition } from './utils.js'
 
 document.onkeydown = function (e) {
   const selObj = window.getSelection()
@@ -12,24 +8,22 @@ document.onkeydown = function (e) {
 
   if (e.key === '1') {
     addSpanOnSelection('highlight')
-    putDeleteListening()
     return
   }
   if (e.key === '2') {
     addSpanOnSelection('deleted')
-    putDeleteListening()
     return
   }
 
   // adicionar text box em cima do selecionado
   if (e.key === 'e') {
     addSpanOnSelection('substitute')
-    putDeleteListening()
+
     var rect = selRange.getBoundingClientRect()
     var x = rect.x + window.scrollX
 
     let editableDiv = document.createElement('span')
-    editableDiv.className = 'info'
+    editableDiv.className = 'info clickable'
     editableDiv.contentEditable = true
 
     editableDiv.addEventListener('input', function (e) {
@@ -56,6 +50,7 @@ document.onkeydown = function (e) {
     editableDiv.style.fontSize = '50px'
     editableDiv.spellcheck = false
     editableDiv.style.caretColor = 'transparent'
+    editableDiv.onclick = () => deleteElem(editableDiv)
 
     //center
     setTimeout(() => {

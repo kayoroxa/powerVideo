@@ -8,11 +8,12 @@ body {
 }
 
 *::selection {
-  background-color: #2b2b2b;
+  /* background-color: #2b2b2b; */
+  color: hsl(0, 0%, 100%);
 }
 
 * {
-  color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 89%);
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -50,7 +51,7 @@ main {
   /* border-radius: 5px; */
 }
 
-.clickable:hover {
+.control-pressed .clickable:hover {
   cursor: pointer;
 }
 

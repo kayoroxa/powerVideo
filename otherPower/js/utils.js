@@ -33,24 +33,33 @@ export function addSpanOnSelection(className) {
     if (className) span.classList.add(className)
     span.textContent = selectedText
     range.insertNode(span)
+    putDeleteListening()
+    window.getSelection().removeAllRanges()
   }
 }
 
-let controlIsDown = false
+export let controlIsDown = false
 
 document.addEventListener('keydown', function (evt) {
   if (evt.key === 'Control') {
     controlIsDown = true
+    document.body.classList.add('control-pressed')
   }
 })
 
 document.addEventListener('keyup', function (evt) {
   if (evt.key === 'Control') {
     controlIsDown = false
+    document.body.classList.remove('control-pressed')
   }
 })
 
-export function putDeleteListening() {
+export function deleteElem(el) {
+  if (!controlIsDown) return
+  el.parentNode.removeChild(el)
+}
+
+export function putDeleteListeningIn() {
   document.querySelectorAll('.clickable').forEach(function (span) {
     span.addEventListener('click', function (e) {
       if (!controlIsDown) return
@@ -61,8 +70,20 @@ export function putDeleteListening() {
     })
   })
   document.querySelectorAll('.info').forEach(function (me) {
-    me.addEventListener('click', function () {
+    me.target.addEventListener('click', function () {
       if (!controlIsDown) return
+      me.parentNode.removeChild(me)
+    })
+  })
+}
+
+export function putDeleteListening() {
+  document.querySelectorAll('.clickable').forEach(function (span) {
+    span.addEventListener('click', function (e) {
+      if (!controlIsDown) return
+      const me = e.target
+      var spanText = me.textContent
+      me.parentNode.insertBefore(document.createTextNode(spanText), me)
       me.parentNode.removeChild(me)
     })
   })
