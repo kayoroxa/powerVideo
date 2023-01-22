@@ -1,3 +1,3 @@
 module.exports = {
-  isSubtitle: false,
+  isSubtitle: true,
 }

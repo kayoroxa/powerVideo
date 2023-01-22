@@ -49,4 +49,5 @@ async function main(params) {
   filesElement.append(...elements)
   app.append(filesElement)
 }
-module.exports = main
+// module.exports = main
+module.exports = require('./script-words-sounds')

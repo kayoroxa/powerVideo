@@ -16,23 +16,42 @@ const colors = {
 //   document.styleSheets[0].addRule(selector, `transform: rotate(${value});`)
 // }
 
-const fontSize = 90
+const fontSize = 80
 
 // function getRotation(width) {
 //   return AI(width, [300, 27], [122, 61], [66, 68])
 // }
 
+const replace = `
+sometimes = {Some=sam}t{i=ai}m{es=z}
+and = an{d=_}
+against = {a=S}g{ai=e}ns{t=_}
+world = wor{l=al}d
+kid = k{i=ê}d
+responsible = r{e=S}spons{i=S}b{le=Sl}
+`
+
 module.exports = async () => {
   Scene.setBackground(colors.background)
 
   const scripts = [
+    // "It's+me an{d=_}+you {a=S}g{ai=e}ns{t=_}+{th=T}e wor{l=al}d, k{i=ê}d",
+    // 'R{e=uâh}member {th=T}at',
+    // "{Th=T}at's dr{a=S}ma{t=r}i{c=k}. Wh{a=S}{t=r}+{a=S}bout Austin?",
+    // "I don'{t=_} wan{t=_}+{yo=_}u to+be n{e=S}rv{ou=S}s {a=S}bout+tomorrow",
+    // "-I'm not. -L{ia=ai}{r=er}.",
+    // "I'm not n{e=S}rv{ou=S}s",
+    // "but I do need+{to=S} ge{t=r}+a+g{oo=S}{d=_} n{igh=ai}t's+sleep",
+    // "you're so r{e=S}spons{i=S}b{le=Sl}",
+    "{Some=sam}t{i=ai}m{es=z}+I can't b{e=i}l{ie=i}v{e=_}+you cam{e=_}+{ou=au}{t=r}+{of=S} me.",
+
     //
     // 'Com{e=_}+on. {Th=T}e co{a=_}st+is cl{ea=iê}r.',
     // '{A=o}ll+we {have=ev} t{o=S} do is get|{rid of=wRêrê} {that=Te} {th=TH}in{g=_}',
     // 'So wait|here {while I=walai} ge{t=r}+its card',
     // "but+she {ca=ke}n't st{a=e}y here",
     // "{Th=T}is+is {the=TS} men's+r{oo=u}m",
-    "{That is=Daris} {the=TS} weir{d=_}est+thin{g=_} you've+ever s{ai=e}d",
+    // "{That is=Daris} {the=TS} weir{d=_}est+thin{g=_} you've+ever s{ai=e}d",
   ]
 
   // 'Now drop| {th=T}e b{oo=u}t',
