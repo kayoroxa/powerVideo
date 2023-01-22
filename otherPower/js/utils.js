@@ -30,10 +30,12 @@ export function addSpanOnSelection(className) {
     range.deleteContents()
     let span = document.createElement('span')
     span.classList.add('clickable')
+    span.ondragstart = () => false
     if (className) span.classList.add(className)
     span.textContent = selectedText
     range.insertNode(span)
     putDeleteListening()
+
     window.getSelection().removeAllRanges()
   }
 }
@@ -87,4 +89,8 @@ export function putDeleteListening() {
       me.parentNode.removeChild(me)
     })
   })
+}
+
+document.onmousedown = () => {
+  window.getSelection().removeAllRanges()
 }

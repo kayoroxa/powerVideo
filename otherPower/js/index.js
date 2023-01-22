@@ -1,4 +1,15 @@
+import { myScript } from '../script/myScript.js'
 import { addSpanOnSelection, deleteElem, setCaretPosition } from './utils.js'
+
+function putSentence(en, pt) {
+  const ptElem = document.querySelector('#pt')
+  const enElem = document.querySelector('#en')
+
+  enElem.innerText = en
+  ptElem.innerText = pt
+}
+
+putSentence(myScript[0][0], myScript[0][1])
 
 document.onkeydown = function (e) {
   const selObj = window.getSelection()
