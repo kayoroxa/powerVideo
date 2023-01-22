@@ -1,3 +1,8 @@
+@font-face {
+  font-family: amaranth;
+  src: url(../assets/fonts/Amaranth-Regular.ttf);
+}
+
 body {
   background-color: #262626;
 }
@@ -11,6 +16,7 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: amaranth;
 }
 
 main {
@@ -48,8 +54,13 @@ main {
   cursor: pointer;
 }
 
+.substitute {
+  opacity: 0.4;
+}
+
 .info {
   color: red;
+  z-index: 500;
 }
 
 .info:focus {
@@ -61,5 +72,5 @@ main {
 }
 
 .deleted {
-  opacity: 0.3;
+  opacity: 0.1;
 }

@@ -1,44 +1,8 @@
-let controlIsDown = false
-
-document.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Control') {
-    controlIsDown = true
-  }
-})
-
-document.addEventListener('keyup', function (evt) {
-  if (evt.key === 'Control') {
-    controlIsDown = false
-  }
-})
-
-function checkIfSelectionHasSpan() {
-  const selObj = window.getSelection()
-  if (
-    selObj.anchorNode.nodeType === Node.ELEMENT_NODE &&
-    selObj.anchorNode.tagName === 'SPAN'
-  ) {
-    return true
-  }
-  return false
-}
-
-function addSpanOnSelection(className) {
-  if (checkIfSelectionHasSpan()) {
-    return
-  }
-  const sel = window.getSelection()
-  if (sel.rangeCount) {
-    let range = sel.getRangeAt(0)
-    let selectedText = range.toString()
-    range.deleteContents()
-    let span = document.createElement('span')
-    span.classList.add('clickable')
-    if (className) span.classList.add(className)
-    span.textContent = selectedText
-    range.insertNode(span)
-  }
-}
+import {
+  addSpanOnSelection,
+  putDeleteListening,
+  setCaretPosition,
+} from './utils.js'
 
 document.onkeydown = function (e) {
   const selObj = window.getSelection()
@@ -59,49 +23,47 @@ document.onkeydown = function (e) {
 
   // adicionar text box em cima do selecionado
   if (e.key === 'e') {
-    addSpanOnSelection('deleted')
+    addSpanOnSelection('substitute')
     putDeleteListening()
     var rect = selRange.getBoundingClientRect()
     var x = rect.x + window.scrollX
 
-    let elem = document.createElement('span')
-    elem.className = 'info'
-    elem.contentEditable = true
+    let editableDiv = document.createElement('span')
+    editableDiv.className = 'info'
+    editableDiv.contentEditable = true
+
+    editableDiv.addEventListener('input', function (e) {
+      const spanEditable = e.target
+      this.innerHTML = this.innerHTML.replace(/S/g, 'ə')
+      this.innerHTML = this.innerHTML.replace(/Z/g, 'ð')
+      this.innerHTML = this.innerHTML.replace(/T/g, 'θ')
+
+      spanEditable.focus()
+      setCaretPosition(spanEditable, 1)
+    })
 
     const clientRects = selRange.getClientRects()
     const top = clientRects[clientRects.length - 1].top
 
     const w = 900
-    elem.textContent = ''
-    elem.style.position = 'absolute'
-    elem.style.width = w + 'px'
-    elem.style.bottom = window.innerHeight - top - 30 + 'px'
+    editableDiv.textContent = ''
+    editableDiv.style.position = 'absolute'
+    editableDiv.style.width = w + 'px'
+    editableDiv.style.bottom = window.innerHeight - top - 30 + 'px'
     // elem.style.bottom = window.innerHeight - y - window.scrollY - height + 'px'
-    elem.style.left = x + rect.width / 2 - w / 2 + 'px'
-    elem.style.textAlign = 'center'
-    elem.style.fontSize = '50px'
-    elem.spellcheck = false
-    elem.style.caretColor = 'transparent'
+    editableDiv.style.left = x + rect.width / 2 - w / 2 + 'px'
+    editableDiv.style.textAlign = 'center'
+    editableDiv.style.fontSize = '50px'
+    editableDiv.spellcheck = false
+    editableDiv.style.caretColor = 'transparent'
 
     //center
     setTimeout(() => {
-      elem.focus()
+      editableDiv.focus()
     }, 0)
 
     // elem.setAttribute('tabindex', '0')
 
-    parentElem.insertBefore(elem, parentElem.childNodes[0])
+    parentElem.insertBefore(editableDiv, parentElem.childNodes[0])
   }
-}
-
-function putDeleteListening() {
-  document.querySelectorAll('.clickable').forEach(function (span) {
-    span.addEventListener('click', function (e) {
-      if (!controlIsDown) return
-      const me = e.target
-      var spanText = me.textContent
-      me.parentNode.insertBefore(document.createTextNode(spanText), me)
-      me.parentNode.removeChild(me)
-    })
-  })
 }
