@@ -1,21 +1,23 @@
-import { myScript } from '../script/myScript.js'
+import { AppControl } from './appControl.js'
 import { addSpanOnSelection, deleteElem, setCaretPosition } from './utils.js'
+let edit = false
 
-function putSentence(en, pt) {
-  const ptElem = document.querySelector('#pt')
-  const enElem = document.querySelector('#en')
+const { nextSentence, prevSentence } = AppControl()
 
-  enElem.innerText = en
-  ptElem.innerText = pt
-}
-
-putSentence(myScript[0][0], myScript[0][1])
+// appControl
 
 document.onkeydown = function (e) {
   const selObj = window.getSelection()
   const selRange = selObj.getRangeAt(0)
   if (selRange.length === 0) return
   const parentElem = selObj.anchorNode.parentNode
+
+  if (e.key.toLowerCase() === 'a' && !edit) {
+    prevSentence()
+  }
+  if (e.key.toLowerCase() === 'd' && !edit) {
+    nextSentence()
+  }
 
   if (e.key === '1') {
     addSpanOnSelection('highlight')
@@ -27,7 +29,7 @@ document.onkeydown = function (e) {
   }
 
   // adicionar text box em cima do selecionado
-  if (e.key === 'e') {
+  if (e.key === '3') {
     addSpanOnSelection('substitute')
 
     var rect = selRange.getBoundingClientRect()
@@ -38,6 +40,7 @@ document.onkeydown = function (e) {
     editableDiv.contentEditable = true
 
     editableDiv.addEventListener('input', function (e) {
+      edit = true
       const spanEditable = e.target
       this.innerHTML = this.innerHTML.replace(/S/g, 'ə')
       this.innerHTML = this.innerHTML.replace(/Z/g, 'ð')
@@ -45,6 +48,10 @@ document.onkeydown = function (e) {
 
       spanEditable.focus()
       setCaretPosition(spanEditable, 1)
+    })
+
+    editableDiv.addEventListener('blur', () => {
+      edit = false
     })
 
     const clientRects = selRange.getClientRects()
