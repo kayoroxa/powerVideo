@@ -33,6 +33,7 @@ function addSpanOnSelection(className) {
     let selectedText = range.toString()
     range.deleteContents()
     let span = document.createElement('span')
+    span.classList.add('clickable')
     if (className) span.classList.add(className)
     span.textContent = selectedText
     range.insertNode(span)
@@ -45,12 +46,12 @@ document.onkeydown = function (e) {
   if (selRange.length === 0) return
   const parentElem = selObj.anchorNode.parentNode
 
-  if (e.key === 'Shift') {
+  if (e.key === '1') {
     addSpanOnSelection('highlight')
     putDeleteListening()
     return
   }
-  if (e.key === 'Alt') {
+  if (e.key === '2') {
     addSpanOnSelection('deleted')
     putDeleteListening()
     return
@@ -94,7 +95,7 @@ document.onkeydown = function (e) {
 }
 
 function putDeleteListening() {
-  document.querySelectorAll('.highlight').forEach(function (span) {
+  document.querySelectorAll('.clickable').forEach(function (span) {
     span.addEventListener('click', function (e) {
       if (!controlIsDown) return
       const me = e.target
