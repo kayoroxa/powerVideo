@@ -94,3 +94,22 @@ export function putDeleteListening() {
 document.onmousedown = () => {
   window.getSelection().removeAllRanges()
 }
+
+export function speak(phrase) {
+  const synth = window.speechSynthesis
+
+  // let voice = synth
+  //   .getVoices()
+  //   .find(voice => voice.name === 'Google US English')
+  // console.log(synth.getVoices())
+
+  // debugger
+
+  let voice = synth.getVoices().find(voice => voice.lang === 'en-US')
+  // if (!voice) {
+  //   voice = synth.getVoices().find(voice => voice.lang === 'en-US')
+  // }
+  const utterance = new SpeechSynthesisUtterance(phrase)
+  utterance.voice = voice
+  synth.speak(utterance)
+}

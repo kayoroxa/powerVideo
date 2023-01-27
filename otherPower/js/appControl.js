@@ -10,11 +10,11 @@ export function AppControl() {
 
     enElem.innerText = en
     if (en.length > 30) enElem.style.fontSize = '60px'
-    else enElem.style.fontSize = '80px'
+    else enElem.style.fontSize = '64px'
     ptElem.innerText = pt
 
-    if (pt.length > 30) ptElem.style.fontSize = '50px'
-    else ptElem.style.fontSize = '60px'
+    if (pt.length > 30) ptElem.style.fontSize = '38px'
+    else ptElem.style.fontSize = '40px'
 
     indexElem.textContent = `${index + 1}/${myScript.length}`
   }
@@ -41,5 +41,8 @@ export function AppControl() {
     },
     nextSentence,
     prevSentence,
+    getLineSentence() {
+      return { en: myScript[index][0], pt: myScript[index][1] }
+    },
   }
 }

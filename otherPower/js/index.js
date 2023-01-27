@@ -1,12 +1,18 @@
 import { AppControl } from './appControl.js'
-import { addSpanOnSelection, deleteElem, setCaretPosition } from './utils.js'
+import {
+  addSpanOnSelection,
+  deleteElem,
+  setCaretPosition,
+  speak,
+} from './utils.js'
 let edit = false
 
-const { nextSentence, prevSentence } = AppControl()
+const { nextSentence, prevSentence, getLineSentence } = AppControl()
 
 // appControl
 
-document.onkeydown = function (e) {
+document.addEventListener('keydown', e => {
+  console.log('click')
   const selObj = window.getSelection()
   const selRange = selObj.getRangeAt(0)
   if (selRange.length === 0) return
@@ -26,6 +32,11 @@ document.onkeydown = function (e) {
   if (e.key === '2') {
     addSpanOnSelection('deleted')
     return
+  }
+  if (e.key === 'Tab') {
+    e.preventDefault()
+    let selectedText = window.getSelection().toString()
+    speak(selectedText?.length > 0 ? selectedText : getLineSentence().en)
   }
 
   // adicionar text box em cima do selecionado
@@ -79,4 +90,4 @@ document.onkeydown = function (e) {
 
     parentElem.insertBefore(editableDiv, parentElem.childNodes[0])
   }
-}
+})
