@@ -62,6 +62,7 @@ document.addEventListener('keydown', e => {
       this.innerHTML = this.innerHTML.replace(/S/g, 'ə')
       this.innerHTML = this.innerHTML.replace(/Z/g, 'ð')
       this.innerHTML = this.innerHTML.replace(/T/g, 'θ')
+      this.innerHTML = this.innerHTML.replace(/R/g, 'ɹ')
 
       spanEditable.focus()
       setCaretPosition(spanEditable, 1)

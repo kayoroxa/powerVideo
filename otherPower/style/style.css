@@ -64,6 +64,8 @@ main {
   padding: 40px 50px;
   border-radius: 30px;
   box-shadow: 0px 10px 10px hsla(0, 0%, 0%, 0.514);
+  max-width: 95vw;
+  text-align: center;
 }
 #pt {
   /* font-size: 2000px; */
@@ -90,6 +92,7 @@ main {
 
 .info {
   color: red;
+  margin-bottom: -22px;
   z-index: 500;
   text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white,
     2px 2px 0 white;
