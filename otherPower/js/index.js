@@ -7,6 +7,8 @@ import {
 } from './utils.js'
 let edit = false
 
+export const fontSizeMultiplier = 1.8
+
 const { nextSentence, prevSentence, getLineSentence } = AppControl()
 
 // appControl
@@ -17,6 +19,10 @@ document.addEventListener('keydown', e => {
   const selRange = selObj.getRangeAt(0)
   if (selRange.length === 0) return
   const parentElem = selObj.anchorNode.parentNode
+
+  if (e.key === 'Escape') {
+    edit = false
+  }
 
   if (e.key.toLowerCase() === 'a' && !edit) {
     prevSentence()
@@ -49,9 +55,9 @@ document.addEventListener('keydown', e => {
     let editableDiv = document.createElement('span')
     editableDiv.className = 'info clickable'
     editableDiv.contentEditable = true
+    edit = true
 
     editableDiv.addEventListener('input', function (e) {
-      edit = true
       const spanEditable = e.target
       this.innerHTML = this.innerHTML.replace(/S/g, 'ə')
       this.innerHTML = this.innerHTML.replace(/Z/g, 'ð')
@@ -59,6 +65,10 @@ document.addEventListener('keydown', e => {
 
       spanEditable.focus()
       setCaretPosition(spanEditable, 1)
+    })
+
+    editableDiv.addEventListener('focus', () => {
+      edit = true
     })
 
     editableDiv.addEventListener('blur', () => {
@@ -76,7 +86,7 @@ document.addEventListener('keydown', e => {
     // elem.style.bottom = window.innerHeight - y - window.scrollY - height + 'px'
     editableDiv.style.left = x + rect.width / 2 - w / 2 + 'px'
     editableDiv.style.textAlign = 'center'
-    editableDiv.style.fontSize = '50px'
+    editableDiv.style.fontSize = 50 * fontSizeMultiplier + 'px'
     editableDiv.spellcheck = false
     editableDiv.style.caretColor = 'transparent'
     editableDiv.onclick = () => deleteElem(editableDiv)

@@ -1,11 +1,11 @@
 import { myScript } from '../script/ed.js'
+import { fontSizeMultiplier } from './index.js'
 
 export function AppControl() {
   let index = Math.min(
     Number(window.localStorage.getItem('index')) ?? 0,
     myScript.length - 1
   )
-  const fontSizeMultiplier = 1.8
 
   function putSentence(en, pt) {
     const ptElem = document.querySelector('#pt')
