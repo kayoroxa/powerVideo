@@ -1,7 +1,11 @@
-import { myScript } from '../script/myScript.js'
+import { myScript } from '../script/ed.js'
 
 export function AppControl() {
-  let index = Number(window.localStorage.getItem('index')) ?? 0
+  let index = Math.min(
+    Number(window.localStorage.getItem('index')) ?? 0,
+    myScript.length - 1
+  )
+  const fontSizeMultiplier = 1.8
 
   function putSentence(en, pt) {
     const ptElem = document.querySelector('#pt')
@@ -9,12 +13,12 @@ export function AppControl() {
     const indexElem = document.querySelector('#index')
 
     enElem.innerText = en
-    if (en.length > 30) enElem.style.fontSize = '60px'
-    else enElem.style.fontSize = '64px'
+    if (en.length > 30) enElem.style.fontSize = 60 * fontSizeMultiplier + 'px'
+    else enElem.style.fontSize = 64 * fontSizeMultiplier + 'px'
     ptElem.innerText = pt
 
-    if (pt.length > 30) ptElem.style.fontSize = '38px'
-    else ptElem.style.fontSize = '40px'
+    if (pt.length > 30) ptElem.style.fontSize = 38 * fontSizeMultiplier + 'px'
+    else ptElem.style.fontSize = 40 * fontSizeMultiplier + 'px'
 
     indexElem.textContent = `${index + 1}/${myScript.length}`
   }
